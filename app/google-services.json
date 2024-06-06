@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "79880686110",
+    "project_id": "tcc-d10e8",
+    "storage_bucket": "tcc-d10e8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:79880686110:android:5da45b743165bb22897c0f",
+        "android_client_info": {
+          "package_name": "br.unigran.tcc"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3dlA-PPXK855M8R4GgCywxf1vVuObL7w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
