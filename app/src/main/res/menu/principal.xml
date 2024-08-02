@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/selector1"
+        android:title="CADASTROS">
+        <menu>
+            <item
+                android:id="@+id/item1_1"
+                android:title="PRODUTOS"/>
+            <item
+                android:id="@+id/item1_2"
+                android:title="PRODUTOS P PRÓPRIO"/>
+            <item
+                android:id="@+id/item1_3"
+                android:title="EQUIPAMENTOS PARA ALUGUEL"/>
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/selector2"
+        android:title="CADASTRADOS">
+        <menu>
+            <item
+                android:id="@+id/item2_1"
+                android:title="PRODUTOS"/>
+            <item
+                android:id="@+id/item2_2"
+                android:title="PRODUTOS P PRÓPRIO"/>
+            <item
+                android:id="@+id/item2_3"
+                android:title="EQUIPAMENTOS PARA ALUGUEL"/>
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/selector3"
+        android:title="FATURAMENTO">
+        <menu>
+            <item
+                android:id="@+id/item3_1"
+                android:title="DIARIO"/>
+            <item
+                android:id="@+id/item3_2"
+                android:title="MENSAL"/>
+            <item
+                android:id="@+id/item3_3"
+                android:title="ANUAL"/>
+        </menu>
+    </item>
+
+</menu>

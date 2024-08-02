@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ViewModel.CadastroUsuario">
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/idTitulo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Cadastro de Usuário"
+                android:textSize="24sp"
+                android:textAlignment="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/idNome"
+                app:layout_constraintVertical_chainStyle="packed"
+                android:layout_marginBottom="24dp"/>
+
+            <EditText
+                android:id="@+id/idNome"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Nome Completo"
+                android:inputType="text"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/idTitulo"
+                android:layout_marginBottom="16dp"/>
+
+            <EditText
+                android:id="@+id/idCpf"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="CPF"
+                android:inputType="number"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/idNome"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:id="@+id/cpfError"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/holo_red_dark"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/idCpf"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <EditText
+                android:id="@+id/idTelefone"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Telefone (00) 00000-0000"
+                android:inputType="phone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cpfError"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:id="@+id/telefoneError"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/holo_red_dark"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/idTelefone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <EditText
+                android:id="@+id/idEstado"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Estado"
+                android:inputType="text"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/telefoneError"
+                android:layout_marginBottom="16dp"/>
+
+            <EditText
+                android:id="@+id/idCidade"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Cidade"
+                android:inputType="text"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/idEstado"
+                android:layout_marginBottom="16dp"/>
+
+            <EditText
+                android:id="@+id/idBairro"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Bairro"
+                android:inputType="text"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/idCidade"
+                android:layout_marginBottom="16dp"/>
+
+            <EditText
+                android:id="@+id/idRua"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Rua"
+                android:inputType="text"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/idBairro"
+                android:layout_marginBottom="16dp"/>
+
+            <EditText
+                android:id="@+id/idNumero"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Número"
+                android:inputType="text"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/idRua"
+                android:layout_marginBottom="16dp"/>
+
+            <EditText
+                android:id="@+id/idCadEmail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/idNumero"
+                android:layout_marginBottom="16dp"/>
+
+            <EditText
+                android:id="@+id/idcadSenha"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Senha "
+                android:inputType="textPassword"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/idCadEmail" />
+
+            <TextView
+                android:id="@+id/senhaError"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/holo_red_dark"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/idcadSenha"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <EditText
+                android:id="@+id/idConfSenha"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Confirme a Senha"
+                android:inputType="textPassword"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/senhaError"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:id="@+id/confSenhaError"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/holo_red_dark"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/idConfSenha"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <Button
+                android:id="@+id/idCadastrar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="60dp"
+                android:text="CADASTRAR"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/confSenhaError" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="16dp"
+                android:text="* A senha deve conter no mínimo Oito(8) digitos."
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/idConfSenha" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

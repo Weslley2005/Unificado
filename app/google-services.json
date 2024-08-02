@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "79880686110",
+    "firebase_url": "https://tcc-d10e8-default-rtdb.firebaseio.com",
     "project_id": "tcc-d10e8",
     "storage_bucket": "tcc-d10e8.appspot.com"
   },
@@ -12,7 +13,20 @@
           "package_name": "br.unigran.tcc"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "79880686110-aqloovl0en0rh0g13qrfd23du56n98e5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.unigran.tcc",
+            "certificate_hash": "bfdf18da3644a3cf1c876177553fdd5c3174cef4"
+          }
+        },
+        {
+          "client_id": "79880686110-q7ijta6thr4fsrsomluo1aaimkmmls31.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyA3dlA-PPXK855M8R4GgCywxf1vVuObL7w"
@@ -20,7 +34,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "79880686110-q7ijta6thr4fsrsomluo1aaimkmmls31.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

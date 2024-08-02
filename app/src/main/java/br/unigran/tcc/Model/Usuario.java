@@ -1,9 +1,9 @@
 package br.unigran.tcc.Model;
 public class Usuario {
-    private Integer id;
     private String nome;
     private String cpf;
     private String telefone;
+    private String estado;
     private String cidade;
     private String bairro;
     private String rua;
@@ -12,15 +12,6 @@ public class Usuario {
     private String senha;
     private String confSenha;
 
-
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getNome() {
         return nome;
@@ -44,6 +35,14 @@ public class Usuario {
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     public String getCidade() {

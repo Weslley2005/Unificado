@@ -1,18 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".ViewModel.MainActivity"
+    android:id="@+id/drawerLayout">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
+        <Button
+            android:id="@+id/idBtnVendas"
+            android:layout_width="186dp"
+            android:layout_height="124dp"
+            android:layout_marginStart="112dp"
+            android:layout_marginTop="60dp"
+            android:text="Vendas"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/idBtnCarrinho"
+            android:layout_width="186dp"
+            android:layout_height="124dp"
+            android:layout_marginStart="112dp"
+            android:layout_marginTop="48dp"
+            android:text="Carrinho"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/idBtnAluguel" />
+
+        <Button
+            android:id="@+id/idBtnAluguel"
+            android:layout_width="186dp"
+            android:layout_height="124dp"
+            android:layout_marginStart="112dp"
+            android:layout_marginTop="48dp"
+            android:text="Aluguel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/idBtnVendas" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:id="@+id/navView"
+        app:headerLayout="@layout/navbar"
+        app:menu="@menu/principal"
+
+        />
+
+</androidx.drawerlayout.widget.DrawerLayout>

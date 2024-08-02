@@ -4,10 +4,9 @@ public class Produtos {
     private Integer id;
     private String nome;
     private Integer qtdProduto;
-    private Float procoCompra;
-    private Float precoVenda;
+    private Float precoCompra;
+    private Double precoVenda;
     private TipoProdutos tipo;
-
     public Integer getId() {
         return id;
     }
@@ -33,18 +32,18 @@ public class Produtos {
     }
 
     public Float getProcoCompra() {
-        return procoCompra;
+        return precoCompra;
     }
 
-    public void setProcoCompra(Float procoCompra) {
-        this.procoCompra = procoCompra;
+    public void setProcoCompra(Double procoCompra) {
+        this.precoCompra = precoCompra;
     }
 
-    public Float getPrecoVenda() {
+    public Double getPrecoVenda() {
         return precoVenda;
     }
 
-    public void setPrecoVenda(Float precoVenda) {
+    public void setPrecoVenda(Double precoVenda) {
         this.precoVenda = precoVenda;
     }
 

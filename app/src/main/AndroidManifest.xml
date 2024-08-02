@@ -13,10 +13,23 @@
         android:theme="@style/Theme.TCC"
         tools:targetApi="31">
         <activity
-            android:name=".ViewModel.Usuario"
+            android:name=".ViewModel.CadastroEquipAlug"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ViewModel.CadastroProdutoPP"
+            android:exported="false" />
+        <activity
+            android:name=".ViewModel.CadastroProduto"
+            android:exported="false" />
+        <activity
+            android:name=".ViewModel.CadastroUsuario"
+            android:exported="false" />
+        <activity
+            android:name=".ViewModel.MainActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
+        <activity
+            android:name=".ViewModel.Login"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
