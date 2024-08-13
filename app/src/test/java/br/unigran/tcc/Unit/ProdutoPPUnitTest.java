@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import br.unigran.tcc.Model.ProdutoPP;
-import br.unigran.tcc.Model.TipoProdutoPP;
 
 public class ProdutoPPUnitTest {
 

@@ -7,7 +7,7 @@ public class Usuario {
     private String cidade;
     private String bairro;
     private String rua;
-    private Integer numero;
+    private String numero;
     private String email;
     private String senha;
     private String confSenha;
@@ -69,11 +69,11 @@ public class Usuario {
         this.rua = rua;
     }
 
-    public Integer getNumero() {
+    public String getNumero() {
         return numero;
     }
 
-    public void setNumero(Integer numero) {
+    public void setNumero(String numero) {
         this.numero = numero;
     }
 

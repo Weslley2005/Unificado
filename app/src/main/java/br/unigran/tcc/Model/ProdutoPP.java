@@ -1,18 +1,10 @@
 package br.unigran.tcc.Model;
 
 public class ProdutoPP {
-    private Integer id;
     private String nome;
-    private Float precoVP;
-    private TipoProdutoPP tipoProdutoPP;
+    private Float precoVenda;
+    private String tipoProdutoPP;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getNome() {
         return nome;
@@ -22,19 +14,19 @@ public class ProdutoPP {
         this.nome = nome;
     }
 
-    public Float getPrecoVP() {
-        return precoVP;
+    public Float getPrecoVenda() {
+        return precoVenda;
     }
 
-    public void setPrecoVP(Float precoVP) {
-        this.precoVP = precoVP;
+    public void setPrecoVenda(Float precoVenda) {
+        this.precoVenda = precoVenda;
     }
 
-    public TipoProdutoPP getTipoProdutoPP() {
+    public String getTipoProdutoPP() {
         return tipoProdutoPP;
     }
 
-    public void setTipoProdutoPP(TipoProdutoPP tipoProdutoPP) {
+    public void setTipoProdutoPP(String tipoProdutoPP) {
         this.tipoProdutoPP = tipoProdutoPP;
     }
 }

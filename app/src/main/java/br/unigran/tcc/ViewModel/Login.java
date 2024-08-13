@@ -42,6 +42,12 @@ public class Login extends AppCompatActivity {
         cadastrese = findViewById(R.id.idCadastrese);
         esqueceuSenha = findViewById(R.id.idEsqueceuSenha);
 
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            telaprincipal();
+            finish();
+        }
+
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

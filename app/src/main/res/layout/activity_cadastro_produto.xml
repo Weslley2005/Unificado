@@ -30,6 +30,17 @@
         app:layout_constraintTop_toBottomOf="@+id/textView2"
         android:layout_marginHorizontal="20dp" />
 
+    <TextView
+        android:id="@+id/nomeError"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="#FF0000"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/idNomeProduto"
+        android:layout_marginHorizontal="20dp" />
+
     <EditText
         android:id="@+id/idQtdProduto"
         android:layout_width="0dp"
@@ -39,7 +50,18 @@
         android:inputType="number"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idNomeProduto"
+        app:layout_constraintTop_toBottomOf="@+id/nomeError"
+        android:layout_marginHorizontal="20dp" />
+
+    <TextView
+        android:id="@+id/quantidadeError"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="#FF0000"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/idQtdProduto"
         android:layout_marginHorizontal="20dp" />
 
     <EditText
@@ -48,10 +70,21 @@
         android:layout_height="60dp"
         android:layout_marginTop="20dp"
         android:hint="Preço Compra"
-        android:inputType="number"
+        android:inputType="numberDecimal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idQtdProduto"
+        app:layout_constraintTop_toBottomOf="@+id/quantidadeError"
+        android:layout_marginHorizontal="20dp" />
+
+    <TextView
+        android:id="@+id/precoCompraError"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="#FF0000"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/idPrecoCompra"
         android:layout_marginHorizontal="20dp" />
 
     <EditText
@@ -60,10 +93,21 @@
         android:layout_height="60dp"
         android:layout_marginTop="20dp"
         android:hint="Preço de Venda"
-        android:inputType="number"
+        android:inputType="numberDecimal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idPrecoCompra"
+        app:layout_constraintTop_toBottomOf="@+id/precoCompraError"
+        android:layout_marginHorizontal="20dp" />
+
+    <TextView
+        android:id="@+id/precoVendaError"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="#FF0000"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/idPrecoVenda"
         android:layout_marginHorizontal="20dp" />
 
     <Spinner
@@ -73,7 +117,18 @@
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idPrecoVenda"
+        app:layout_constraintTop_toBottomOf="@+id/precoVendaError"
+        android:layout_marginHorizontal="20dp" />
+
+    <TextView
+        android:id="@+id/tipoError"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="#FF0000"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/idTipoProduto"
         android:layout_marginHorizontal="20dp" />
 
     <Button
@@ -84,7 +139,7 @@
         android:text="CADASTRAR"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idTipoProduto"
+        app:layout_constraintTop_toBottomOf="@+id/tipoError"
         android:layout_marginHorizontal="20dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -207,7 +207,7 @@ public class CadastroUsuario extends AppCompatActivity {
         u.setCidade(cidade.getText().toString());
         u.setBairro(bairro.getText().toString());
         u.setRua(rua.getText().toString());
-        u.setNumero(Integer.valueOf(numero.getText().toString()));
+        u.setNumero(numero.getText().toString());
         u.setEmail(email.getText().toString());
         u.setSenha(senha.getText().toString());
         u.setConfSenha(confirmarSenha.getText().toString());

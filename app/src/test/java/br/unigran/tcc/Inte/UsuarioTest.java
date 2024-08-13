@@ -19,7 +19,7 @@ public class UsuarioTest {
         usuario.setCidade("São Paulo");
         usuario.setBairro("Centro");
         usuario.setRua("Rua A");
-        usuario.setNumero(100);
+        usuario.setNumero(String.valueOf(100));
         usuario.setEmail("joao.silva@example.com");
         usuario.setSenha("senha123");
         usuario.setConfSenha("senha123");

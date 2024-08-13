@@ -4,7 +4,6 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import br.unigran.tcc.Model.Produtos;
-import br.unigran.tcc.Model.TipoProdutos;
 
 public class ProdutosUnitTest {
     @Test

@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,6 +14,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TCC"
         tools:targetApi="31">
+        <activity
+            android:name=".ViewModel.EditarUsuario"
+            android:exported="false" />
+        <activity
+            android:name=".ViewModel.ItemUsuario"
+            android:exported="false"
+            android:label="@string/title_activity_item_usuario"
+            android:theme="@style/Theme.TCC" />
+        <activity
+            android:name=".ViewModel.DadosUsuario"
+            android:exported="false" />
         <activity
             android:name=".ViewModel.CadastroEquipAlug"
             android:exported="false" />
@@ -27,7 +40,7 @@
         <activity
             android:name=".ViewModel.MainActivity"
             android:exported="false"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
         <activity
             android:name=".ViewModel.Login"
             android:exported="true">

@@ -8,13 +8,16 @@
         <menu>
             <item
                 android:id="@+id/item1_1"
-                android:title="PRODUTOS"/>
+                android:onClick="cadProduto"
+                android:title="PRODUTOS" />
             <item
                 android:id="@+id/item1_2"
-                android:title="PRODUTOS P PRÓPRIO"/>
+                android:onClick="cadProdutoPP"
+                android:title="PRODUTOS P PRÓPRIO" />
             <item
                 android:id="@+id/item1_3"
-                android:title="EQUIPAMENTOS PARA ALUGUEL"/>
+                android:onClick="cadEquipAlug"
+                android:title="EQUIPAMENTOS PARA ALUGUEL" />
         </menu>
     </item>
 
@@ -47,6 +50,22 @@
             <item
                 android:id="@+id/item3_3"
                 android:title="ANUAL"/>
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/selector4"
+        android:title="USUÁRIO">
+        <menu>
+            <item
+                android:id="@+id/item4_1"
+                android:onClick="dadosUsuario"
+                android:title="DADOS DO USUÁRIO"/>
+            <item
+                android:id="@+id/item4_2"
+                android:onClick="deslogar"
+                android:title="SAIR"/>
+
         </menu>
     </item>
 
