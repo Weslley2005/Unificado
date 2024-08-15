@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/blue_light"
     tools:context=".ViewModel.MainActivity"
     android:id="@+id/drawerLayout">
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,6 +17,7 @@
             android:layout_height="124dp"
             android:layout_marginStart="112dp"
             android:layout_marginTop="60dp"
+            android:backgroundTint="@color/Button"
             android:text="Vendas"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -26,6 +28,7 @@
             android:layout_height="124dp"
             android:layout_marginStart="112dp"
             android:layout_marginTop="48dp"
+            android:backgroundTint="@color/Button"
             android:text="Carrinho"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/idBtnAluguel" />
@@ -36,6 +39,7 @@
             android:layout_height="124dp"
             android:layout_marginStart="112dp"
             android:layout_marginTop="48dp"
+            android:backgroundTint="@color/Button"
             android:text="Aluguel"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/idBtnVendas" />
@@ -46,7 +50,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-
+        android:background="@color/Menu"
         android:id="@+id/navView"
         app:headerLayout="@layout/navbar"
         app:menu="@menu/principal"

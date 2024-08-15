@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -74,6 +75,12 @@ public class CadastroUsuario extends AppCompatActivity {
         confSenhaError = findViewById(R.id.confSenhaError);
         senhaError = findViewById(R.id.senhaError);
         telefoneError = findViewById(R.id.telefoneError);
+
+        Window window = getWindow();
+        window.setStatusBarColor(getResources().getColor(android.R.color.black));
+
+        // Deixar a barra inferior (navigation bar) preta
+        window.setNavigationBarColor(getResources().getColor(android.R.color.black));
 
         cadastrar.setOnClickListener(new View.OnClickListener() {
             @Override

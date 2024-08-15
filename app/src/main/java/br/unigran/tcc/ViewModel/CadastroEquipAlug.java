@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -73,6 +74,12 @@ public class CadastroEquipAlug extends AppCompatActivity {
         tipo.setAdapter(spinnerAdapter);
 
         adicionarTextWatchers();
+
+        Window window = getWindow();
+        window.setStatusBarColor(getResources().getColor(android.R.color.black));
+
+        // Deixar a barra inferior (navigation bar) preta
+        window.setNavigationBarColor(getResources().getColor(android.R.color.black));
     }
 
     private void adicionarTextWatchers() {

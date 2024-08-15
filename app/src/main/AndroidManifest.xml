@@ -15,6 +15,15 @@
         android:theme="@style/Theme.TCC"
         tools:targetApi="31">
         <activity
+            android:name=".menuItem"
+            android:exported="false" />
+        <activity
+            android:name=".menu_item_expanded"
+            android:exported="false" />
+        <activity
+            android:name=".menuItemIitle"
+            android:exported="false" />
+        <activity
             android:name=".ViewModel.EditarUsuario"
             android:exported="false" />
         <activity

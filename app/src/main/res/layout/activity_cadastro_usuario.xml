@@ -4,15 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/blue_light"
     tools:context=".ViewModel.CadastroUsuario">
 
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintVertical_bias="1.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -23,37 +26,38 @@
                 android:id="@+id/idTitulo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:fontFamily="sans-serif"
                 android:text="Cadastro de Usuário"
-                android:textSize="24sp"
                 android:textAlignment="center"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                android:textSize="24sp"
                 app:layout_constraintBottom_toTopOf="@id/idNome"
-                app:layout_constraintVertical_chainStyle="packed"
-                android:layout_marginBottom="24dp"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
 
             <EditText
                 android:id="@+id/idNome"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
+                android:layout_marginTop="32dp"
                 android:hint="Nome Completo"
                 android:inputType="text"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/idTitulo"
-                android:layout_marginBottom="16dp"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/idTitulo" />
 
             <EditText
                 android:id="@+id/idCpf"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
+                android:layout_marginBottom="16dp"
                 android:hint="CPF"
                 android:inputType="number"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/idNome"
-                android:layout_marginBottom="16dp"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/idNome" />
 
             <TextView
                 android:id="@+id/cpfError"
@@ -61,20 +65,20 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/holo_red_dark"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/idCpf"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/idCpf" />
 
             <EditText
                 android:id="@+id/idTelefone"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
+                android:layout_marginBottom="16dp"
                 android:hint="Telefone (00) 00000-0000"
                 android:inputType="phone"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cpfError"
-                android:layout_marginBottom="16dp"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cpfError" />
 
             <TextView
                 android:id="@+id/telefoneError"
@@ -82,80 +86,80 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/holo_red_dark"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/idTelefone"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/idTelefone" />
 
             <EditText
                 android:id="@+id/idEstado"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
+                android:layout_marginBottom="16dp"
                 android:hint="Estado"
                 android:inputType="text"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/telefoneError"
-                android:layout_marginBottom="16dp"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/telefoneError" />
 
             <EditText
                 android:id="@+id/idCidade"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
+                android:layout_marginBottom="16dp"
                 android:hint="Cidade"
                 android:inputType="text"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/idEstado"
-                android:layout_marginBottom="16dp"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/idEstado" />
 
             <EditText
                 android:id="@+id/idBairro"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
+                android:layout_marginBottom="16dp"
                 android:hint="Bairro"
                 android:inputType="text"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/idCidade"
-                android:layout_marginBottom="16dp"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/idCidade" />
 
             <EditText
                 android:id="@+id/idRua"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
+                android:layout_marginBottom="16dp"
                 android:hint="Rua"
                 android:inputType="text"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/idBairro"
-                android:layout_marginBottom="16dp"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/idBairro" />
 
             <EditText
                 android:id="@+id/idNumero"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
+                android:layout_marginBottom="16dp"
                 android:hint="Número"
                 android:inputType="number"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/idRua"
-                android:layout_marginBottom="16dp"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/idRua" />
 
             <EditText
                 android:id="@+id/idCadEmail"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
+                android:layout_marginBottom="16dp"
                 android:hint="Email"
                 android:inputType="textEmailAddress"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/idNumero"
-                android:layout_marginBottom="16dp"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/idNumero" />
 
             <EditText
                 android:id="@+id/idcadSenha"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:hint="Senha "
                 android:inputType="textPassword"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -168,20 +172,20 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/holo_red_dark"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/idcadSenha"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/idcadSenha" />
 
             <EditText
                 android:id="@+id/idConfSenha"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
+                android:layout_marginBottom="16dp"
                 android:hint="Confirme a Senha"
                 android:inputType="textPassword"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/senhaError"
-                android:layout_marginBottom="16dp"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/senhaError" />
 
             <TextView
                 android:id="@+id/confSenhaError"
@@ -189,15 +193,16 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/holo_red_dark"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/idConfSenha"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/idConfSenha" />
 
             <Button
                 android:id="@+id/idCadastrar"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:layout_marginTop="60dp"
+                android:backgroundTint="@color/Button"
                 android:text="CADASTRAR"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

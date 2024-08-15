@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -41,6 +42,12 @@ public class Login extends AppCompatActivity {
         login = findViewById(R.id.idLogin);
         cadastrese = findViewById(R.id.idCadastrese);
         esqueceuSenha = findViewById(R.id.idEsqueceuSenha);
+
+        Window window = getWindow();
+        window.setStatusBarColor(getResources().getColor(android.R.color.black));
+
+        // Deixar a barra inferior (navigation bar) preta
+        window.setNavigationBarColor(getResources().getColor(android.R.color.black));
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {

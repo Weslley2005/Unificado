@@ -8,7 +8,6 @@
     <string name="navigation_drawer_open" />
     <string name="navigation_drawer_close" />
     <string name="title_activity_item_usuario">ItemUsuario</string>
-    <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>

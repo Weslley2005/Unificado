@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.Window;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -39,6 +40,11 @@ public class MainActivity extends AppCompatActivity {
         toggle.syncState();
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
+        Window window = getWindow();
+        window.setStatusBarColor(getResources().getColor(android.R.color.black));
+
+        // Deixar a barra inferior (navigation bar) preta
+        window.setNavigationBarColor(getResources().getColor(android.R.color.black));
 
     }
 
