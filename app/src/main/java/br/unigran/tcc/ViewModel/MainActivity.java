@@ -3,6 +3,8 @@ package br.unigran.tcc.ViewModel;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
 
@@ -38,14 +40,22 @@ public class MainActivity extends AppCompatActivity {
         toggle= new ActionBarDrawerToggle(this,drawerLayout,R.string.fechar,R.string.abrir);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        //:::::::::::::::::::::::::::::::::::::;;
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
 
         Window window = getWindow();
         window.setStatusBarColor(getResources().getColor(android.R.color.black));
 
-        // Deixar a barra inferior (navigation bar) preta
+
         window.setNavigationBarColor(getResources().getColor(android.R.color.black));
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.principal, menu);
+        return true;
     }
 
     @Override
