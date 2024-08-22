@@ -6,4 +6,11 @@
         <item name="android:statusBarColor">#000000</item> <!-- Cor da barra superior -->
         <item name="android:navigationBarColor">#000000</item> <!-- Cor da barra inferior -->
     </style>
+
+    <style name="CustomSearchView">
+        <item name="android:textColor">#FFFFFF</item> <!-- Cor do texto -->
+        <item name="android:textColorHint">#FFFFFF</item> <!-- Cor do hint -->
+        <!-- Outras personalizações, se necessário -->
+    </style>
+
 </resources>

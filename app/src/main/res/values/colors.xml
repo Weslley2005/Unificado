@@ -2,7 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white"></color>
-    <color name="blue_light">#ABD7F8</color>
+    <color name="blue_light">#D5E8FA</color>
     <color name="Button">#2196F3 </color>
     <color name="Menu">#BBDEFB </color>
 

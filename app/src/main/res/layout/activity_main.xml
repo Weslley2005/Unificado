@@ -54,7 +54,8 @@
         android:id="@+id/navView"
         app:headerLayout="@layout/navbar"
         app:menu="@menu/principal"
-
         />
+
+
 
 </androidx.drawerlayout.widget.DrawerLayout>

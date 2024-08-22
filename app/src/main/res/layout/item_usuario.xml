@@ -4,10 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:layout_margin="10dp"
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/textTelefone"
+        android:id="@+id/textPrecoCompra"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -15,7 +17,7 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView15"
-        app:layout_constraintTop_toBottomOf="@+id/textCpf" />
+        app:layout_constraintTop_toBottomOf="@+id/textQtd" />
 
     <TextView
         android:id="@+id/textView21"
@@ -41,7 +43,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <TextView
-        android:id="@+id/textEmail"
+        android:id="@+id/textPrecoVenda"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -49,7 +51,7 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView16"
-        app:layout_constraintTop_toBottomOf="@+id/textTelefone" />
+        app:layout_constraintTop_toBottomOf="@+id/textPrecoCompra" />
 
     <TextView
         android:id="@+id/textView19"
@@ -71,9 +73,9 @@
         android:layout_marginEnd="8dp"
         android:textSize="18sp"
         android:text="Email:"
-        app:layout_constraintEnd_toStartOf="@+id/textEmail"
+        app:layout_constraintEnd_toStartOf="@+id/textPrecoVenda"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textTelefone" />
+        app:layout_constraintTop_toBottomOf="@+id/textPrecoCompra" />
 
     <TextView
         android:id="@+id/textView17"
@@ -83,9 +85,9 @@
         android:layout_marginEnd="8dp"
         android:textSize="18sp"
         android:text="Estado:"
-        app:layout_constraintEnd_toStartOf="@+id/textEstado"
+        app:layout_constraintEnd_toStartOf="@+id/textTipo"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/textPrecoVenda" />
 
     <TextView
         android:id="@+id/textRua"
@@ -108,7 +110,7 @@
         android:text="Cidade:"
         app:layout_constraintEnd_toStartOf="@+id/textCidade"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textEstado" />
+        app:layout_constraintTop_toBottomOf="@+id/textTipo" />
 
     <TextView
         android:id="@+id/textBairro"
@@ -122,7 +124,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textCidade" />
 
     <TextView
-        android:id="@+id/textEstado"
+        android:id="@+id/textTipo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -130,7 +132,7 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView17"
-        app:layout_constraintTop_toBottomOf="@+id/textEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/textPrecoVenda" />
 
     <TextView
         android:id="@+id/textNumero"
@@ -155,7 +157,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <TextView
-        android:id="@+id/textCpf"
+        android:id="@+id/textQtd"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -173,9 +175,9 @@
         android:layout_marginEnd="8dp"
         android:textSize="18sp"
         android:text="Telefone:"
-        app:layout_constraintEnd_toStartOf="@+id/textTelefone"
+        app:layout_constraintEnd_toStartOf="@+id/textPrecoCompra"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textCpf" />
+        app:layout_constraintTop_toBottomOf="@+id/textQtd" />
 
     <TextView
         android:id="@+id/textCidade"
@@ -186,7 +188,7 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView18"
-        app:layout_constraintTop_toBottomOf="@+id/textEstado" />
+        app:layout_constraintTop_toBottomOf="@+id/textTipo" />
 
     <TextView
         android:id="@+id/textView5"
@@ -220,7 +222,7 @@
         android:layout_marginEnd="8dp"
         android:textSize="18sp"
         android:text="Cpf:"
-        app:layout_constraintEnd_toStartOf="@+id/textCpf"
+        app:layout_constraintEnd_toStartOf="@+id/textQtd"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textNome" />
 

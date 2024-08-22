@@ -9,15 +9,18 @@
             <item
                 android:id="@+id/item1_1"
                 android:onClick="cadProduto"
-                android:title="PRODUTOS" />
+                android:icon="@drawable/cadastrar"
+                android:title="PRODUTOS"/>
             <item
                 android:id="@+id/item1_2"
                 android:onClick="cadProdutoPP"
-                android:title="PRODUTOS P PRÓPRIO" />
+                android:icon="@drawable/cadastrar"
+                android:title="PRODUTOS P PRÓPRIO"/>
             <item
                 android:id="@+id/item1_3"
                 android:onClick="cadEquipAlug"
-                android:title="EQUIPAMENTOS PARA ALUGUEL" />
+                android:icon="@drawable/cadastrar"
+                android:title="EQUIPAMENTOS PARA ALUGUEL"/>
         </menu>
     </item>
 
@@ -27,12 +30,16 @@
         <menu>
             <item
                 android:id="@+id/item2_1"
-                android:title="PRODUTOS"/>
+                android:icon="@drawable/listar"
+                android:title="PRODUTOS"
+                android:onClick="listProdutos"/>
             <item
                 android:id="@+id/item2_2"
+                android:icon="@drawable/listar"
                 android:title="PRODUTOS P PRÓPRIO"/>
             <item
                 android:id="@+id/item2_3"
+                android:icon="@drawable/listar"
                 android:title="EQUIPAMENTOS PARA ALUGUEL"/>
         </menu>
     </item>
@@ -43,12 +50,15 @@
         <menu>
             <item
                 android:id="@+id/item3_1"
-                android:title="DIARIO"/>
+                android:icon="@drawable/faturamento"
+                android:title="DIÁRIO"/>
             <item
                 android:id="@+id/item3_2"
+                android:icon="@drawable/faturamento"
                 android:title="MENSAL"/>
             <item
                 android:id="@+id/item3_3"
+                android:icon="@drawable/faturamento"
                 android:title="ANUAL"/>
         </menu>
     </item>
@@ -60,12 +70,13 @@
             <item
                 android:id="@+id/item4_1"
                 android:onClick="dadosUsuario"
+                android:icon="@drawable/usuario"
                 android:title="DADOS DO USUÁRIO"/>
             <item
                 android:id="@+id/item4_2"
                 android:onClick="deslogar"
+                android:icon="@drawable/sair"
                 android:title="SAIR"/>
-
         </menu>
     </item>
 

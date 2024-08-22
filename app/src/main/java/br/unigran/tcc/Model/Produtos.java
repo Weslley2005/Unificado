@@ -46,4 +46,8 @@ public class Produtos {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
+
+    public String getId() {
+        return null;
+    }
 }

@@ -44,7 +44,6 @@ public class DadosUsuario extends AppCompatActivity {
         Window window = getWindow();
         window.setStatusBarColor(getResources().getColor(android.R.color.black));
 
-        // Deixar a barra inferior (navigation bar) preta
         window.setNavigationBarColor(getResources().getColor(android.R.color.black));
     }
 

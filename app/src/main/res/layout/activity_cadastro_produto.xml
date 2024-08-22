@@ -138,6 +138,7 @@
         android:layout_height="60dp"
         android:layout_marginTop="50dp"
         android:text="CADASTRAR"
+        android:backgroundTint="@color/Button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tipoError"

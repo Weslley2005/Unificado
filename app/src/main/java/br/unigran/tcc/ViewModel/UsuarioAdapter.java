@@ -25,8 +25,7 @@ public class UsuarioAdapter extends RecyclerView.Adapter<UsuarioAdapter.UsuarioV
     @NonNull
     @Override
     public UsuarioViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_usuario, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_usuario, parent, false);
         return new UsuarioViewHolder(itemView);
     }
 
@@ -56,14 +55,14 @@ public class UsuarioAdapter extends RecyclerView.Adapter<UsuarioAdapter.UsuarioV
         public UsuarioViewHolder(View itemView) {
             super(itemView);
             textNome = itemView.findViewById(R.id.textNome);
-            textCpf = itemView.findViewById(R.id.textCpf);
-            textTelefone = itemView.findViewById(R.id.textTelefone);
-            textEstado = itemView.findViewById(R.id.textEstado);
+            textCpf = itemView.findViewById(R.id.textQtd);
+            textTelefone = itemView.findViewById(R.id.textPrecoCompra);
+            textEstado = itemView.findViewById(R.id.textTipo);
             textCidade = itemView.findViewById(R.id.textCidade);
             textBairro = itemView.findViewById(R.id.textBairro);
             textRua = itemView.findViewById(R.id.textRua);
             textNumero = itemView.findViewById(R.id.textNumero);
-            textEmail = itemView.findViewById(R.id.textEmail);
+            textEmail = itemView.findViewById(R.id.textPrecoVenda);
         }
     }
 

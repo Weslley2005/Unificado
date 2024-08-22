@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Layout principal com rolagem para visualizar conteúdo -->
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blue_light"
+    tools:context=".ViewModel.ListarProdutos">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Barra de ferramentas com campo de pesquisa -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black">
+
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/searchView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:queryHint="Buscar produtos"
+                style="@style/CustomSearchView" />
+        </androidx.appcompat.widget.Toolbar>
+
+        <!-- Título para a seção de alimentos -->
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Alimentos"
+            android:textSize="20sp" />
+
+        <!-- Lista de alimentos -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewAlimentos"
+            android:layout_width="match_parent"
+            android:layout_height="233dp"
+            android:layout_marginTop="8dp" />
+
+        <!-- Título para a seção de bebidas -->
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Bebidas"
+            android:textSize="20sp" />
+
+        <!-- Lista de bebidas -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewBebidas"
+            android:layout_width="match_parent"
+            android:layout_height="238dp"
+            android:layout_marginTop="8dp" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

@@ -87,4 +87,8 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+    public void listProdutos(MenuItem item) {
+        Intent intent = new Intent(this, ListarProdutos.class);
+        startActivity(intent);
+    }
 }
