@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Window;
 import android.widget.EditText;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,33 +27,22 @@ import br.unigran.tcc.R;
 
 public class ListarProdutos extends AppCompatActivity {
 
-    private AlimentoAdapter alimentoAdapter;
-    private List<Produtos> alimentoList;
-    private List<Produtos> filteredAlimentoList;
-    private BebidaAdapter bebidaAdapter;
-    private List<Produtos> bebidaList;
-    private List<Produtos> filteredBebidaList;
+    private ProdutoAdapter produtoAdapter;
+    private List<Produtos> produtoList;
+    private List<Produtos> filteredProdutoList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listar_produtos);
 
-        RecyclerView recyclerViewAlimentos = findViewById(R.id.recyclerViewAlimentos);
-        recyclerViewAlimentos.setLayoutManager(new LinearLayoutManager(this));
+        RecyclerView recyclerViewProduto = findViewById(R.id.recyclerViewProduto);
+        recyclerViewProduto.setLayoutManager(new LinearLayoutManager(this));
 
-        alimentoList = new ArrayList<>();
-        filteredAlimentoList = new ArrayList<>();
-        alimentoAdapter = new AlimentoAdapter(filteredAlimentoList);
-        recyclerViewAlimentos.setAdapter(alimentoAdapter);
-
-        RecyclerView recyclerViewBebidas = findViewById(R.id.recyclerViewBebidas);
-        recyclerViewBebidas.setLayoutManager(new LinearLayoutManager(this));
-
-        bebidaList = new ArrayList<>();
-        filteredBebidaList = new ArrayList<>();
-        bebidaAdapter = new BebidaAdapter(filteredBebidaList);
-        recyclerViewBebidas.setAdapter(bebidaAdapter);
+        produtoList = new ArrayList<>();
+        filteredProdutoList = new ArrayList<>();
+        produtoAdapter = new ProdutoAdapter(filteredProdutoList, this); // Passa a referência da atividade
+        recyclerViewProduto.setAdapter(produtoAdapter);
 
         buscarDados();
 
@@ -74,36 +64,26 @@ public class ListarProdutos extends AppCompatActivity {
 
         Window window = getWindow();
         window.setStatusBarColor(getResources().getColor(android.R.color.black));
-
         window.setNavigationBarColor(getResources().getColor(android.R.color.black));
 
         int textColor = Color.WHITE;
         int hintColor = Color.WHITE;
 
         EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
-        searchEditText.setTextColor(textColor); // Cor do texto
-        searchEditText.setHintTextColor(hintColor); // Cor do hint
+        searchEditText.setTextColor(textColor);
+        searchEditText.setHintTextColor(hintColor);
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private void filtrarProdutos(String query) {
-        filteredAlimentoList.clear();
-        filteredBebidaList.clear();
+        filteredProdutoList.clear();
 
-        for (Produtos produto : alimentoList) {
+        for (Produtos produto : produtoList) {
             if (produto.getNome().toLowerCase().contains(query.toLowerCase())) {
-                filteredAlimentoList.add(produto);
+                filteredProdutoList.add(produto);
             }
         }
-
-        for (Produtos produto : bebidaList) {
-            if (produto.getNome().toLowerCase().contains(query.toLowerCase())) {
-                filteredBebidaList.add(produto);
-            }
-        }
-
-        alimentoAdapter.notifyDataSetChanged();
-        bebidaAdapter.notifyDataSetChanged();
+        produtoAdapter.notifyDataSetChanged();
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -119,20 +99,14 @@ public class ListarProdutos extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             QuerySnapshot querySnapshot = task.getResult();
                             if (querySnapshot != null) {
-                                alimentoList.clear();
-                                bebidaList.clear();
+                                produtoList.clear();
                                 for (QueryDocumentSnapshot document : querySnapshot) {
                                     Produtos produto = document.toObject(Produtos.class);
-                                    if ("Alimento".equals(produto.getTipo())) {
-                                        alimentoList.add(produto);
-                                    } else if ("Bebida".equals(produto.getTipo())) {
-                                        bebidaList.add(produto);
-                                    }
+                                    produto.setId(document.getId()); // Definir o ID do documento
+                                    produtoList.add(produto);
                                 }
-                                filteredAlimentoList.addAll(alimentoList);
-                                filteredBebidaList.addAll(bebidaList);
-                                alimentoAdapter.notifyDataSetChanged();
-                                bebidaAdapter.notifyDataSetChanged();
+                                filteredProdutoList.addAll(produtoList);
+                                produtoAdapter.notifyDataSetChanged();
                             } else {
                                 Log.d("ListarProdutos", "Consulta retornou nulo.");
                             }
@@ -145,4 +119,33 @@ public class ListarProdutos extends AppCompatActivity {
         }
     }
 
+    // Método para mostrar o pop-up de confirmação
+    public void showConfirmationDialog(int position, Produtos produto) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirmação");
+        builder.setMessage("Você tem certeza que deseja deletar este item?");
+
+        // Botão de confirmação
+        builder.setPositiveButton("Sim", (dialog, which) -> deleteItem(position, produto));
+
+        // Botão de cancelamento
+        builder.setNegativeButton("Não", (dialog, which) -> dialog.dismiss());
+
+        // Exibir o diálogo
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    // Método para deletar o item
+    private void deleteItem(int position, Produtos produto) {
+        FirebaseFirestore.getInstance().collection("Produtos")
+                .document(produto.getId())
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    produtoList.remove(position);
+                    filteredProdutoList.remove(position);
+                    produtoAdapter.notifyItemRemoved(position);
+                })
+                .addOnFailureListener(e -> Log.e("ListarProdutos", "Erro ao deletar item", e));
+    }
 }

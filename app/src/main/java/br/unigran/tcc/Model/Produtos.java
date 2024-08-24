@@ -1,6 +1,7 @@
 package br.unigran.tcc.Model;
 
 public class Produtos {
+    private String id;
     private String nome;
     private Integer qtdProduto;
     private Float precoCompra;
@@ -48,6 +49,10 @@ public class Produtos {
     }
 
     public String getId() {
-        return null;
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

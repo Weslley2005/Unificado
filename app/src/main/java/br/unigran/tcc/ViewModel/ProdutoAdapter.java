@@ -3,6 +3,7 @@ package br.unigran.tcc.ViewModel;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,37 +14,44 @@ import java.util.List;
 import br.unigran.tcc.Model.Produtos;
 import br.unigran.tcc.R;
 
-public class AlimentoAdapter extends RecyclerView.Adapter<AlimentoAdapter.ViewHolder> {
-    private final List<Produtos> alimentoList;
+public class ProdutoAdapter extends RecyclerView.Adapter<ProdutoAdapter.ViewHolder> {
+    private final List<Produtos> produtoList;
+    private final ListarProdutos listarProdutos;
 
-    public AlimentoAdapter(List<Produtos> alimentoList) {
-        this.alimentoList = alimentoList;
+    public ProdutoAdapter(List<Produtos> produtoList, ListarProdutos listarProdutos) {
+        this.produtoList = produtoList;
+        this.listarProdutos = listarProdutos;
     }
 
     @NonNull
     @Override
-    public AlimentoAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ProdutoAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_item_produtos_alimentos, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AlimentoAdapter.ViewHolder holder, int position) {
-        Produtos produtos = alimentoList.get(position);
+    public void onBindViewHolder(@NonNull ProdutoAdapter.ViewHolder holder, int position) {
+        Produtos produtos = produtoList.get(position);
         holder.textNome.setText(produtos.getNome());
         holder.textQtd.setText(String.valueOf(produtos.getQtdProduto()));
         holder.textPrecoCompra.setText(String.valueOf(produtos.getPrecoCompra()));
         holder.textPrecoVenda.setText(String.valueOf(produtos.getPrecoVenda()));
         holder.textTipo.setText(produtos.getTipo());
+
+        holder.btnExcluir.setOnClickListener(v -> {
+            listarProdutos.showConfirmationDialog(position, produtos);
+        });
     }
 
     @Override
     public int getItemCount() {
-        return alimentoList.size(); // Retorna o tamanho da lista de alimentos
+        return produtoList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView textNome, textQtd, textPrecoCompra, textPrecoVenda, textTipo;
+        ImageButton btnExcluir;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -52,6 +60,7 @@ public class AlimentoAdapter extends RecyclerView.Adapter<AlimentoAdapter.ViewHo
             textPrecoCompra = itemView.findViewById(R.id.textPrecoCompra);
             textPrecoVenda = itemView.findViewById(R.id.textPrecoVenda);
             textTipo = itemView.findViewById(R.id.textTipo);
+            btnExcluir = itemView.findViewById(R.id.btnExcluir);
         }
     }
 }
