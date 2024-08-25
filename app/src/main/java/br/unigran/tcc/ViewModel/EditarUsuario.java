@@ -1,5 +1,6 @@
 package br.unigran.tcc.ViewModel;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -105,7 +106,7 @@ public class EditarUsuario extends AppCompatActivity {
 
     private void salvarDados() {
         if (camposVazios()) {
-            return; // Interrompe a execução se houver campos vazios.
+            return;
         }
 
         String telefoneText = telefone.getText().toString();
@@ -119,10 +120,10 @@ public class EditarUsuario extends AppCompatActivity {
             telefone.setBackgroundResource(R.drawable.borda_vermelha);
             errorTelefone.setText("Formato de telefone inválido!");
             errorTelefone.setVisibility(View.VISIBLE);
-            return; // Interrompe a execução se o telefone for inválido.
+            return;
         }
 
-        // Salvamento dos dados no Firestore...
+
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             String email = currentUser.getEmail();
@@ -144,7 +145,7 @@ public class EditarUsuario extends AppCompatActivity {
                                                 "numero", numeroText)
                                         .addOnSuccessListener(aVoid -> {
                                             Toast.makeText(EditarUsuario.this, "Dados salvos com sucesso", Toast.LENGTH_SHORT).show();
-                                            finish();
+                                            voltar();
                                         })
                                         .addOnFailureListener(e -> {
                                             Log.e("EditarUsuario", "Erro ao salvar dados", e);
@@ -295,6 +296,10 @@ public class EditarUsuario extends AppCompatActivity {
         });
 
 
+    }
+    public void voltar() {
+        Intent intent = new Intent(this, DadosUsuario.class);
+        startActivity(intent);
     }
 
 }

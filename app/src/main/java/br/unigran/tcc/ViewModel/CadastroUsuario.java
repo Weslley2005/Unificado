@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -79,7 +80,6 @@ public class CadastroUsuario extends AppCompatActivity {
         Window window = getWindow();
         window.setStatusBarColor(getResources().getColor(android.R.color.black));
 
-        // Deixar a barra inferior (navigation bar) preta
         window.setNavigationBarColor(getResources().getColor(android.R.color.black));
 
         cadastrar.setOnClickListener(new View.OnClickListener() {
@@ -125,8 +125,11 @@ public class CadastroUsuario extends AppCompatActivity {
                                             Toast.makeText(getApplicationContext(), "Erro ao obter usuário!", Toast.LENGTH_SHORT).show();
                                         }
                                     } else {
-                                        Toast.makeText(getApplicationContext(), "ERRO ao efetuar o Cadastro!", Toast.LENGTH_SHORT).show();
-                                        Log.e("CadastroUsuario", "Erro: ", task.getException());
+                                        new AlertDialog.Builder(CadastroUsuario.this)
+                                                .setTitle("Email já cadastrado")
+                                                .setMessage("Este email já está registrado. Por favor, use outro email ou faça login.")
+                                                .setPositiveButton("OK", null)
+                                                .show();
                                     }
                                 }
                             });

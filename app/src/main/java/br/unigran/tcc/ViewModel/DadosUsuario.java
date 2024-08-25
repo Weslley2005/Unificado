@@ -88,5 +88,6 @@ public class DadosUsuario extends AppCompatActivity {
     public void editarUsuario(View view) {
         Intent intent = new Intent(this, EditarUsuario.class);
         startActivity(intent);
+        finish();
     }
 }
