@@ -36,7 +36,8 @@
             <item
                 android:id="@+id/item2_2"
                 android:icon="@drawable/listar"
-                android:title="PRODUTOS P PRÓPRIO"/>
+                android:title="PRODUTOS P PRÓPRIO"
+                android:onClick="listProdutoPP"/>
             <item
                 android:id="@+id/item2_3"
                 android:icon="@drawable/listar"

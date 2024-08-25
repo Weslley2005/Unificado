@@ -1,5 +1,6 @@
 package br.unigran.tcc.ViewModel;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,9 +41,18 @@ public class ProdutoAdapter extends RecyclerView.Adapter<ProdutoAdapter.ViewHold
         holder.textTipo.setText(produtos.getTipo());
 
         holder.btnExcluir.setOnClickListener(v -> {
-            listarProdutos.showConfirmationDialog(position, produtos);
+            listarProdutos.mostrarDialogoDeConfirmacao(position, produtos);
+        });
+
+        holder.btnEditar.setOnClickListener(v -> {
+            Intent intent = new Intent(listarProdutos, CadastroProduto.class);
+            intent.putExtra("produto", produtos);
+            listarProdutos.startActivity(intent);
+            voltar();
         });
     }
+
+
 
     @Override
     public int getItemCount() {
@@ -52,6 +62,7 @@ public class ProdutoAdapter extends RecyclerView.Adapter<ProdutoAdapter.ViewHold
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView textNome, textQtd, textPrecoCompra, textPrecoVenda, textTipo;
         ImageButton btnExcluir;
+        ImageButton btnEditar;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -61,6 +72,11 @@ public class ProdutoAdapter extends RecyclerView.Adapter<ProdutoAdapter.ViewHold
             textPrecoVenda = itemView.findViewById(R.id.textPrecoVenda);
             textTipo = itemView.findViewById(R.id.textTipo);
             btnExcluir = itemView.findViewById(R.id.btnExcluir);
+            btnEditar = itemView.findViewById(R.id.btnEditar);
         }
+    }
+
+    public void voltar() {
+        listarProdutos.finish();
     }
 }

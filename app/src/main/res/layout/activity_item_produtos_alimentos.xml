@@ -123,14 +123,14 @@
         app:layout_constraintTop_toBottomOf="@+id/textPrecoCompra" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/btnEditar"
         android:layout_width="56dp"
         android:layout_height="48dp"
         android:layout_marginStart="72dp"
         android:layout_marginTop="72dp"
         android:backgroundTint="@color/Button"
         android:contentDescription="TODO"
-        android:onClick="deletar"
+        android:onClick="atualizarProduto"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textTipo"
         app:srcCompat="@drawable/editar" />
@@ -144,7 +144,7 @@
         android:backgroundTint="@color/Button"
         android:contentDescription="TODO"
         android:onClick="deletar"
-        app:layout_constraintStart_toEndOf="@+id/imageButton"
+        app:layout_constraintStart_toEndOf="@+id/btnEditar"
         app:layout_constraintTop_toBottomOf="@+id/textTipo"
         app:srcCompat="@drawable/excluir" />
 

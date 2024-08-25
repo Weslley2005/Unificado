@@ -91,4 +91,8 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ListarProdutos.class);
         startActivity(intent);
     }
+    public void listProdutoPP(MenuItem item) {
+        Intent intent = new Intent(this, ListarProdutoPP.class);
+        startActivity(intent);
+    }
 }

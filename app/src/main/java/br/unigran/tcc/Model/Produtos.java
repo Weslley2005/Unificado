@@ -1,12 +1,21 @@
 package br.unigran.tcc.Model;
 
-public class Produtos {
+import java.io.Serializable;
+
+public class Produtos implements Serializable {
     private String id;
     private String nome;
     private Integer qtdProduto;
     private Float precoCompra;
     private Float precoVenda;
     private String tipo;
+
+    public Produtos(String nomeProduto, int qtdProduto, float precoCompraProduto, float precoVendaProduto, String tipoProduto) {
+    }
+
+    public Produtos() {
+
+    }
 
     public String getNome() {
         return nome;

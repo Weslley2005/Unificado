@@ -27,9 +27,9 @@ import br.unigran.tcc.R;
 
 public class ListarProdutos extends AppCompatActivity {
 
-    private ProdutoAdapter produtoAdapter;
-    private List<Produtos> produtoList;
-    private List<Produtos> filteredProdutoList;
+    private ProdutoAdapter adaptadorProdutos;
+    private List<Produtos> listaDeProdutos;
+    private List<Produtos> listaFiltradaDeProdutos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +39,10 @@ public class ListarProdutos extends AppCompatActivity {
         RecyclerView recyclerViewProduto = findViewById(R.id.recyclerViewProduto);
         recyclerViewProduto.setLayoutManager(new LinearLayoutManager(this));
 
-        produtoList = new ArrayList<>();
-        filteredProdutoList = new ArrayList<>();
-        produtoAdapter = new ProdutoAdapter(filteredProdutoList, this); // Passa a referência da atividade
-        recyclerViewProduto.setAdapter(produtoAdapter);
+        listaDeProdutos = new ArrayList<>();
+        listaFiltradaDeProdutos = new ArrayList<>();
+        adaptadorProdutos = new ProdutoAdapter(listaFiltradaDeProdutos, this);
+        recyclerViewProduto.setAdapter(adaptadorProdutos);
 
         buscarDados();
 
@@ -56,8 +56,8 @@ public class ListarProdutos extends AppCompatActivity {
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                filtrarProdutos(newText);
+            public boolean onQueryTextChange(String novoTexto) {
+                filtrarProdutos(novoTexto);
                 return true;
             }
         });
@@ -66,52 +66,52 @@ public class ListarProdutos extends AppCompatActivity {
         window.setStatusBarColor(getResources().getColor(android.R.color.black));
         window.setNavigationBarColor(getResources().getColor(android.R.color.black));
 
-        int textColor = Color.WHITE;
-        int hintColor = Color.WHITE;
+        int corDoTexto = Color.WHITE;
+        int corDoHint = Color.WHITE;
 
-        EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
-        searchEditText.setTextColor(textColor);
-        searchEditText.setHintTextColor(hintColor);
+        EditText campoDeBusca = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+        campoDeBusca.setTextColor(corDoTexto);
+        campoDeBusca.setHintTextColor(corDoHint);
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void filtrarProdutos(String query) {
-        filteredProdutoList.clear();
+    private void filtrarProdutos(String consulta) {
+        listaFiltradaDeProdutos.clear();
 
-        for (Produtos produto : produtoList) {
-            if (produto.getNome().toLowerCase().contains(query.toLowerCase())) {
-                filteredProdutoList.add(produto);
+        for (Produtos produto : listaDeProdutos) {
+            if (produto.getNome().toLowerCase().contains(consulta.toLowerCase())) {
+                listaFiltradaDeProdutos.add(produto);
             }
         }
-        produtoAdapter.notifyDataSetChanged();
+        adaptadorProdutos.notifyDataSetChanged();
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private void buscarDados() {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser != null) {
-            String email = currentUser.getEmail();
+        FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
+        if (usuarioAtual != null) {
+            String email = usuarioAtual.getEmail();
             Log.d("ListarProdutos", "Email do usuário logado: " + email);
 
             FirebaseFirestore.getInstance().collection("Produtos")
                     .get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            QuerySnapshot querySnapshot = task.getResult();
+                    .addOnCompleteListener(tarefa -> {
+                        if (tarefa.isSuccessful()) {
+                            QuerySnapshot querySnapshot = tarefa.getResult();
                             if (querySnapshot != null) {
-                                produtoList.clear();
-                                for (QueryDocumentSnapshot document : querySnapshot) {
-                                    Produtos produto = document.toObject(Produtos.class);
-                                    produto.setId(document.getId()); // Definir o ID do documento
-                                    produtoList.add(produto);
+                                listaDeProdutos.clear();
+                                for (QueryDocumentSnapshot documento : querySnapshot) {
+                                    Produtos produto = documento.toObject(Produtos.class);
+                                    produto.setId(documento.getId());
+                                    listaDeProdutos.add(produto);
                                 }
-                                filteredProdutoList.addAll(produtoList);
-                                produtoAdapter.notifyDataSetChanged();
+                                listaFiltradaDeProdutos.addAll(listaDeProdutos);
+                                adaptadorProdutos.notifyDataSetChanged();
                             } else {
                                 Log.d("ListarProdutos", "Consulta retornou nulo.");
                             }
                         } else {
-                            Log.e("ListarProdutos", "Erro ao buscar dados", task.getException());
+                            Log.e("ListarProdutos", "Erro ao buscar dados", tarefa.getException());
                         }
                     });
         } else {
@@ -119,32 +119,27 @@ public class ListarProdutos extends AppCompatActivity {
         }
     }
 
-    // Método para mostrar o pop-up de confirmação
-    public void showConfirmationDialog(int position, Produtos produto) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Confirmação");
-        builder.setMessage("Você tem certeza que deseja deletar este item?");
+    public void mostrarDialogoDeConfirmacao(int posicao, Produtos produto) {
+        AlertDialog.Builder construtor = new AlertDialog.Builder(this);
+        construtor.setTitle("Confirmação");
+        construtor.setMessage("Você tem certeza que deseja deletar este item?");
 
-        // Botão de confirmação
-        builder.setPositiveButton("Sim", (dialog, which) -> deleteItem(position, produto));
+        construtor.setPositiveButton("Sim", (dialog, which) -> deletarItem(posicao, produto));
 
-        // Botão de cancelamento
-        builder.setNegativeButton("Não", (dialog, which) -> dialog.dismiss());
+        construtor.setNegativeButton("Não", (dialog, which) -> dialog.dismiss());
 
-        // Exibir o diálogo
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
+        AlertDialog alertaDialogo = construtor.create();
+        alertaDialogo.show();
     }
 
-    // Método para deletar o item
-    private void deleteItem(int position, Produtos produto) {
+    private void deletarItem(int posicao, Produtos produto) {
         FirebaseFirestore.getInstance().collection("Produtos")
                 .document(produto.getId())
                 .delete()
                 .addOnSuccessListener(aVoid -> {
-                    produtoList.remove(position);
-                    filteredProdutoList.remove(position);
-                    produtoAdapter.notifyItemRemoved(position);
+                    listaDeProdutos.remove(posicao);
+                    listaFiltradaDeProdutos.remove(posicao);
+                    adaptadorProdutos.notifyItemRemoved(posicao);
                 })
                 .addOnFailureListener(e -> Log.e("ListarProdutos", "Erro ao deletar item", e));
     }

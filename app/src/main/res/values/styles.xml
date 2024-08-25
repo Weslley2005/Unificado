@@ -8,9 +8,8 @@
     </style>
 
     <style name="CustomSearchView">
-        <item name="android:textColor">#FFFFFF</item> <!-- Cor do texto -->
-        <item name="android:textColorHint">#FFFFFF</item> <!-- Cor do hint -->
-        <!-- Outras personalizações, se necessário -->
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColorHint">#FFFFFF</item>
     </style>
 
 </resources>

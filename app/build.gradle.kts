@@ -54,4 +54,6 @@ dependencies {
     androidTestImplementation ("androidx.test.espresso:espresso-core:3.6.1")
     testImplementation ("org.mockito:mockito-core:5.5.0")
     androidTestImplementation ("org.mockito:mockito-android:5.5.0")
+    implementation ("org.greenrobot:eventbus:3.3.1")
+
 }
