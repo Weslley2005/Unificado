@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import br.unigran.tcc.Model.EquipamentoAluguel;
-import br.unigran.tcc.Model.TipoAluguel;
 
 public class EquipamentoAluguelTest {
     @Test

@@ -1,6 +1,7 @@
 package br.unigran.tcc.ViewModel;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,6 +11,7 @@ import android.view.Window;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -82,10 +84,21 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
     public void deslogar(MenuItem item) {
-        mAuth.signOut();
-        Intent intent = new Intent(MainActivity.this, Login.class);
-        startActivity(intent);
-        finish();
+        new AlertDialog.Builder(this)
+                .setTitle("Confirmar Logout")
+                .setMessage("Você realmente deseja sair?")
+                .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mAuth.signOut();
+                        Intent intent = new Intent(MainActivity.this, Login.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                })
+                .setNegativeButton("Não", null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
     public void listProdutos(MenuItem item) {
         Intent intent = new Intent(this, ListarProdutos.class);
@@ -93,6 +106,10 @@ public class MainActivity extends AppCompatActivity {
     }
     public void listProdutoPP(MenuItem item) {
         Intent intent = new Intent(this, ListarProdutoPP.class);
+        startActivity(intent);
+    }
+    public void listEquipAlug(MenuItem item) {
+        Intent intent = new Intent(this, ListarEquipAlug.class);
         startActivity(intent);
     }
 }

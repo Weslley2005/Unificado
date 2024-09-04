@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/selector1"
-        android:title="CADASTROS">
+        android:title="CADASTRAR">
         <menu>
             <item
                 android:id="@+id/item1_1"
@@ -41,7 +41,8 @@
             <item
                 android:id="@+id/item2_3"
                 android:icon="@drawable/listar"
-                android:title="EQUIPAMENTOS PARA ALUGUEL"/>
+                android:title="EQUIPAMENTOS PARA ALUGUEL"
+                android:onClick="listEquipAlug"/>
         </menu>
     </item>
 

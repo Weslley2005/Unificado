@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import br.unigran.tcc.Model.EquipamentoAluguel;
-import br.unigran.tcc.Model.TipoAluguel; // Certifique-se de importar a classe TipoAluguel
 
 public class EquipamentoAluguelUnitTest {
     @Test
@@ -17,7 +16,7 @@ public class EquipamentoAluguelUnitTest {
         equipamento.setNome("Equipamento A");
         equipamento.setQtdAluguel(5);
         equipamento.setPrecoAluguel(100.0f);
-        equipamento.setTipoAluguem(TipoAluguel.Meia);
+        equipamento.setTipoAluguel(TipoAluguel.Meia);
 
         assertEquals(Integer.valueOf(1), equipamento.getId());
         assertEquals("Equipamento A", equipamento.getNome());
@@ -31,7 +30,7 @@ public class EquipamentoAluguelUnitTest {
         equipamento.setNome(null);
         equipamento.setQtdAluguel(null);
         equipamento.setPrecoAluguel(null);
-        equipamento.setTipoAluguem(null);
+        equipamento.setTipoAluguel(null);
 
         assertEquals(null, equipamento.getId());
         assertEquals(null, equipamento.getNome());
