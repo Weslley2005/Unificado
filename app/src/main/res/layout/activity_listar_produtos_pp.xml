@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/blue_light"
+    android:textAlignment="center"
     tools:context=".ViewModel.ListarProdutoPP">
 
     <LinearLayout
@@ -20,25 +21,28 @@
 
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/searchView"
+                style="@style/CustomSearchView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:queryHint="Buscar produtos"
-                style="@style/CustomSearchView" />
+                app:queryHint="Buscar produtos" />
         </androidx.appcompat.widget.Toolbar>
 
         <TextView
             android:id="@+id/textView9"
             android:layout_width="wrap_content"
-            android:layout_height="38dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Lista de Produtos de Prodição Própria"
-            android:textSize="20sp" />
+            android:text="Lista de Produtos de Produção Própria"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewProdutoPP"
             android:layout_width="match_parent"
-            android:layout_height="443dp"
+            android:layout_height="577dp"
             android:layout_marginTop="8dp"
+            android:background="@drawable/borda_recycleview"
             android:textAlignment="center" />
 
     </LinearLayout>

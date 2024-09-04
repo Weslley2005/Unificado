@@ -12,46 +12,45 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:gravity="center"
         android:text="Cadastro de Produto de Produção Própria"
         android:textSize="26sp"
-        android:gravity="center"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/idNomeProdutoPP"
         android:layout_width="0dp"
         android:layout_height="60dp"
-        android:layout_marginTop="25dp"
-        android:hint="Nome"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="30dp"
         android:inputType="text"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
-        android:layout_marginHorizontal="20dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <EditText
         android:id="@+id/idPrecoVendaPP"
         android:layout_width="0dp"
         android:layout_height="60dp"
-        android:layout_marginTop="20dp"
-        android:hint="Preço de Venda"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="30dp"
         android:inputType="numberDecimal"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idNomeProdutoPP"
-        android:layout_marginHorizontal="20dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/idNomeProdutoPP" />
 
     <Spinner
         android:id="@+id/idTipoProdutoPP"
         android:layout_width="0dp"
         android:layout_height="60dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idPrecoVendaPP"
-        android:layout_marginHorizontal="20dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/idPrecoVendaPP" />
 
     <Button
         android:id="@+id/idCadastrarProdutoPP"
@@ -94,5 +93,42 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/idTipoProdutoPP"
         android:layout_marginHorizontal="20dp" />
+
+    <TextView
+        android:id="@+id/textView25"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="5dp"
+        android:text="Nome Produto"
+        app:layout_constraintBottom_toTopOf="@+id/idNomeProdutoPP"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/textView26"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:text="Preço de Venda"
+        app:layout_constraintBottom_toTopOf="@+id/idPrecoVendaPP"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/idNomeProdutoPP" />
+
+    <TextView
+        android:id="@+id/textView27"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginBottom="5dp"
+        android:text="Tipo Produto"
+        app:layout_constraintBottom_toTopOf="@+id/idTipoProdutoPP"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/idPrecoVendaPP" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
