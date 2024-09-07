@@ -18,6 +18,7 @@
             android:layout_marginStart="112dp"
             android:layout_marginTop="60dp"
             android:backgroundTint="@color/Button"
+            android:onClick="vendas"
             android:text="Vendas"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -30,6 +31,7 @@
             android:layout_marginTop="48dp"
             android:backgroundTint="@color/Button"
             android:text="Carrinho"
+            android:onClick="carrinho"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/idBtnAluguel" />
 

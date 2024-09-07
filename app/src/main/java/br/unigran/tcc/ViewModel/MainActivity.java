@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 
 import androidx.annotation.NonNull;
@@ -110,6 +111,15 @@ public class MainActivity extends AppCompatActivity {
     }
     public void listEquipAlug(MenuItem item) {
         Intent intent = new Intent(this, ListarEquipAlug.class);
+        startActivity(intent);
+    }
+
+    public void vendas(View view) {
+        Intent intent = new Intent(this, ListarPVAlimentos.class);
+        startActivity(intent);
+    }
+    public void carrinho(View view) {
+        Intent intent = new Intent(this, CarrinhoVendas.class);
         startActivity(intent);
     }
 }
