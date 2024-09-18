@@ -62,7 +62,7 @@ public class UsuarioAdapter extends RecyclerView.Adapter<UsuarioAdapter.UsuarioV
             textBairro = itemView.findViewById(R.id.textBairro);
             textRua = itemView.findViewById(R.id.textRua);
             textNumero = itemView.findViewById(R.id.textNumero);
-            textEmail = itemView.findViewById(R.id.textPrecoVenda);
+            textEmail = itemView.findViewById(R.id.textPrecoAlugM);
         }
     }
 

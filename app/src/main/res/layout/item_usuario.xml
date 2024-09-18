@@ -44,7 +44,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <TextView
-        android:id="@+id/textPrecoVenda"
+        android:id="@+id/textPrecoAlugM"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -76,7 +76,7 @@
         android:text="Email:"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/textPrecoVenda"
+        app:layout_constraintEnd_toStartOf="@+id/textPrecoAlugM"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textPrecoCompra" />
 
@@ -91,7 +91,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/textTipo"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textPrecoVenda" />
+        app:layout_constraintTop_toBottomOf="@+id/textPrecoAlugM" />
 
     <TextView
         android:id="@+id/textRua"
@@ -137,7 +137,7 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView17"
-        app:layout_constraintTop_toBottomOf="@+id/textPrecoVenda" />
+        app:layout_constraintTop_toBottomOf="@+id/textPrecoAlugM" />
 
     <TextView
         android:id="@+id/textNumero"
