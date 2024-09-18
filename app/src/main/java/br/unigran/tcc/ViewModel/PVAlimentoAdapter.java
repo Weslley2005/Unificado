@@ -36,7 +36,7 @@ public class PVAlimentoAdapter extends RecyclerView.Adapter<PVAlimentoAdapter.Vi
         Produtos produtos = produtoList.get(position);
         holder.textNome.setText(produtos.getNome());
         holder.textQtd.setText(String.valueOf(produtos.getQtdProduto()));
-        holder.textPrecoVenda.setText(String.valueOf(produtos.getPrecoVenda()));
+        holder.textPrecoVenda.setText(String.format("R$: %.2f",produtos.getPrecoVenda()));
 
         holder.itemView.setOnClickListener(view ->{
             Intent intent = new Intent(listarProdutos, ACPVAlimento.class);
