@@ -69,7 +69,7 @@ public class ProdutoAdapter extends RecyclerView.Adapter<ProdutoAdapter.ViewHold
             textNome = itemView.findViewById(R.id.textNome);
             textQtd = itemView.findViewById(R.id.textQtd);
             textPrecoCompra = itemView.findViewById(R.id.textPrecoCompra);
-            textPrecoVenda = itemView.findViewById(R.id.textPrecoVenda);
+            textPrecoVenda = itemView.findViewById(R.id.textPrecoAlugM);
             textTipo = itemView.findViewById(R.id.textTipo);
             btnExcluir = itemView.findViewById(R.id.btnExcluir);
             btnEditar = itemView.findViewById(R.id.btnEditar);
