@@ -36,7 +36,7 @@ public class ProdutoPPAdapter extends RecyclerView.Adapter<ProdutoPPAdapter.View
     public void onBindViewHolder(@NonNull ProdutoPPAdapter.ViewHolder holder, int position) {
         ProdutoPP produtoPP = produtoPPList.get(position);
         holder.textNome.setText(produtoPP.getNome());
-        holder.textPrecoVenda.setText(String.valueOf(produtoPP.getPrecoVenda()));
+        holder.textPrecoVenda.setText(String.format("R$: %.2f",produtoPP.getPrecoVenda()));
         holder.textTipo.setText(produtoPP.getTipoProdutoPP());
 
         holder.btnExcluir.setOnClickListener(v -> {
