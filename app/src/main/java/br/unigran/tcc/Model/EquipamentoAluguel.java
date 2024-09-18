@@ -6,8 +6,8 @@ public class EquipamentoAluguel implements Serializable {
     private String id;
     private String nome;
     private Integer qtdAluguel;
-    private Float precoAluguel;
-    private String tipoAluguel;
+    private Float precoAluguelM;
+    private Float precoAluguelI;
 
     public String getId() {
         return id;
@@ -33,19 +33,19 @@ public class EquipamentoAluguel implements Serializable {
         this.qtdAluguel = qtdAluguel;
     }
 
-    public Float getPrecoAluguel() {
-        return precoAluguel;
+    public Float getPrecoAluguelM() {
+        return precoAluguelM;
     }
 
-    public void setPrecoAluguel(Float precoAluguel) {
-        this.precoAluguel = precoAluguel;
+    public void setPrecoAluguelM(Float precoAluguelM) {
+        this.precoAluguelM = precoAluguelM;
     }
 
-    public String getTipoAluguel() {
-        return tipoAluguel;
+    public Float getPrecoAluguelI() {
+        return precoAluguelI;
     }
 
-    public void setTipoAluguel(String tipoAluguel) {
-        this.tipoAluguel = tipoAluguel;
+    public void setPrecoAluguelI(Float precoAluguelI) {
+        this.precoAluguelI = precoAluguelI;
     }
 }

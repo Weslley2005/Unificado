@@ -9,6 +9,19 @@
     tools:context=".ItemEquipAlug">
 
     <TextView
+        android:id="@+id/textPrecoAlugI"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="8dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/textView16"
+        app:layout_constraintTop_toBottomOf="@+id/textNome" />
+
+    <TextView
         android:id="@+id/textQtdEquip"
         android:layout_width="114dp"
         android:layout_height="26dp"
@@ -29,7 +42,7 @@
         android:text="Quantidade Equipamento:"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/textPrecoVenda"
+        app:layout_constraintEnd_toStartOf="@+id/textPrecoAlugM"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textNome" />
@@ -51,14 +64,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="44dp"
-        android:text="Preço de Aluguel:"
+        android:text="Preço de Aluguel Meia:"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@+id/textNome"
         tools:layout_editor_absoluteX="0dp" />
 
     <TextView
-        android:id="@+id/textPrecoVenda"
+        android:id="@+id/textPrecoAlugM"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -74,12 +87,12 @@
         android:layout_width="56dp"
         android:layout_height="48dp"
         android:layout_marginStart="84dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="32dp"
         android:backgroundTint="@color/Button"
         android:contentDescription="TODO"
         android:onClick="atualizarProdutoPP"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textTipo"
+        app:layout_constraintTop_toBottomOf="@+id/textView17"
         app:srcCompat="@drawable/editar" />
 
     <ImageButton
@@ -87,37 +100,24 @@
         android:layout_width="57dp"
         android:layout_height="52dp"
         android:layout_marginStart="120dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="32dp"
         android:backgroundTint="@color/Button"
         android:contentDescription="TODO"
         android:onClick="deletar"
         app:layout_constraintStart_toEndOf="@+id/btnEditar"
-        app:layout_constraintTop_toBottomOf="@+id/textTipo"
+        app:layout_constraintTop_toBottomOf="@+id/textPrecoAlugI"
         app:srcCompat="@drawable/excluir" />
-
-    <TextView
-        android:id="@+id/textTipo"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="8dp"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView17"
-        app:layout_constraintTop_toBottomOf="@+id/textPrecoVenda" />
 
     <TextView
         android:id="@+id/textView17"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="8dp"
-        android:text="Tipo:"
+        android:text="Preço Aluguel Inteira:"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/textTipo"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textPrecoVenda" />
+        app:layout_constraintTop_toBottomOf="@+id/textPrecoAlugM" />
 
     <TextView
         android:id="@+id/textView13"

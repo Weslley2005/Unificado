@@ -20,151 +20,145 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/nomeError"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textColor="#FF0000"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idNomeEqui"
-        android:layout_marginHorizontal="20dp" />
-    <TextView
-        android:id="@+id/quantidadeError"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textColor="#FF0000"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idQtdEqui"
-        android:layout_marginHorizontal="20dp" />
-    <TextView
-        android:id="@+id/precoVendaError"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textColor="#FF0000"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idPrecoEqui"
-        android:layout_marginHorizontal="20dp" />
-    <TextView
-        android:id="@+id/tipoError"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textColor="#FF0000"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idTipoEqui"
-        android:layout_marginHorizontal="20dp" />
-
-    <TextView
         android:id="@+id/textView28"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="5dp"
         android:text="Nome Equipamento"
-        app:layout_constraintBottom_toTopOf="@+id/idNomeEqui"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <TextView
-        android:id="@+id/textView30"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="9dp"
-        android:layout_marginBottom="5dp"
-        android:text="Preço Aluguel"
-        app:layout_constraintBottom_toTopOf="@+id/idPrecoEqui"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idQtdEqui"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <Spinner
-        android:id="@+id/idTipoEqui"
-        android:layout_width="0dp"
-        android:layout_height="55dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="28dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idPrecoEqui" />
-
-    <EditText
-        android:id="@+id/idQtdEqui"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="28dp"
-        android:inputType="number"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idNomeEqui" />
-
-    <Button
-        android:id="@+id/idCadastrarEqui"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="52dp"
-        android:backgroundTint="@color/Button"
-        android:text="CADASTRAR"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idTipoEqui" />
+        app:layout_constraintTop_toBottomOf="@id/textView6" />
 
     <EditText
         android:id="@+id/idNomeEqui"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="52dp"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
-
-    <EditText
-        android:id="@+id/idPrecoEqui"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="32dp"
-        android:inputType="numberDecimal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idQtdEqui" />
+        app:layout_constraintTop_toBottomOf="@id/textView28" />
 
     <TextView
-        android:id="@+id/textView31"
-        android:layout_width="wrap_content"
+        android:id="@+id/nomeError"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="7dp"
-        android:layout_marginBottom="5dp"
-        android:text="Tipo Aluguel"
-        app:layout_constraintBottom_toTopOf="@+id/idTipoEqui"
+        android:textColor="#FF0000"
+        android:visibility="gone"
+        android:layout_marginHorizontal="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idPrecoEqui"
-        app:layout_constraintVertical_bias="0.333" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/idNomeEqui" />
 
     <TextView
         android:id="@+id/textView29"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="5dp"
         android:text="Quantidade Equipamento"
-        app:layout_constraintBottom_toTopOf="@+id/idQtdEqui"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idNomeEqui"
-        app:layout_constraintVertical_bias="0.4" />
+        app:layout_constraintTop_toBottomOf="@id/idNomeEqui" />
+
+    <EditText
+        android:id="@+id/idQtdEqui"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="5dp"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView29" />
+
+    <TextView
+        android:id="@+id/quantidadeError"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="#FF0000"
+        android:visibility="gone"
+        android:layout_marginHorizontal="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/idQtdEqui" />
+
+    <TextView
+        android:id="@+id/textView30"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="5dp"
+        android:text="Preço Aluguel Meio Dia (Meia)"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/idQtdEqui" />
+
+    <EditText
+        android:id="@+id/idPrecoEquiM"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="5dp"
+        android:inputType="numberDecimal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView30" />
+
+    <TextView
+        android:id="@+id/precoAlugMError"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="#FF0000"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/idPrecoEquiM"
+        android:layout_marginHorizontal="20dp" />
+
+    <TextView
+        android:id="@+id/textView31"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:text="Preço Aluguel Dia Inteiro (Inteiro)"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/idPrecoEquiM" />
+
+    <EditText
+        android:id="@+id/idPrecoEquiI"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="5dp"
+        android:inputType="numberDecimal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView31" />
+
+    <TextView
+        android:id="@+id/precoAlugIError"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="#FF0000"
+        android:visibility="gone"
+        android:layout_marginHorizontal="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/idPrecoEquiI" />
+
+    <Button
+        android:id="@+id/idCadastrarEqui"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="43dp"
+        android:backgroundTint="@color/Button"
+        android:text="CADASTRAR"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/idPrecoEquiI" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

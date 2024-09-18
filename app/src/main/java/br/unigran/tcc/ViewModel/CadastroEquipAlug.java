@@ -8,19 +8,14 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.ArrayList;
 
 import br.unigran.tcc.Model.EquipamentoAluguel;
 import br.unigran.tcc.R;
@@ -29,10 +24,14 @@ public class CadastroEquipAlug extends AppCompatActivity {
 
     private EditText nomeEquip;
     private EditText qtdEquip;
-    private EditText precoAluguel;
-    private Spinner tipoEquip;
+    private EditText precoAluguelM;
+    private EditText precoAluguelI;
     private Button botaoSalvar;
-    private TextView erroNome, erroQuantidade, erroPrecoCompra, erroPrecoVenda, erroTipo, tituloEdicao;
+    private TextView erroNome;
+    private TextView erroQuantidade;
+    private TextView erroPrecoAlugM;
+    private TextView erroPrecoAlugI;
+    private TextView tituloEdicao;
 
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
@@ -44,25 +43,17 @@ public class CadastroEquipAlug extends AppCompatActivity {
 
         nomeEquip = findViewById(R.id.idNomeEqui);
         qtdEquip = findViewById(R.id.idQtdEqui);
-        precoAluguel = findViewById(R.id.idPrecoEqui);
-        tipoEquip = findViewById(R.id.idTipoEqui);
+        precoAluguelM = findViewById(R.id.idPrecoEquiM);
+        precoAluguelI = findViewById(R.id.idPrecoEquiI);
         botaoSalvar = findViewById(R.id.idCadastrarEqui);
         erroNome = findViewById(R.id.nomeError);
         erroQuantidade = findViewById(R.id.quantidadeError);
-        erroPrecoVenda = findViewById(R.id.precoVendaError);
-        erroTipo = findViewById(R.id.tipoError);
+        erroPrecoAlugM = findViewById(R.id.precoAlugMError);
+        erroPrecoAlugI = findViewById(R.id.precoAlugIError);
         tituloEdicao = findViewById(R.id.textView6);
 
         botaoSalvar.setOnClickListener(view -> salvarEquip());
 
-        ArrayList<String> tiposProduto = new ArrayList<>();
-        tiposProduto.add("Selecione um tipo");
-        tiposProduto.add("Meia");
-        tiposProduto.add("Inteira");
-
-        ArrayAdapter<String> adapterSpinner = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, tiposProduto);
-        adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        tipoEquip.setAdapter(adapterSpinner);
 
         adicionarObservadoresDeTexto();
 
@@ -112,15 +103,15 @@ public class CadastroEquipAlug extends AppCompatActivity {
             public void afterTextChanged(Editable s) {}
         });
 
-        precoAluguel.addTextChangedListener(new TextWatcher() {
+        precoAluguelM.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!s.toString().isEmpty()) {
-                    precoAluguel.setBackgroundResource(android.R.drawable.edit_text);
-                    erroPrecoVenda.setVisibility(View.GONE);
+                    precoAluguelM.setBackgroundResource(android.R.drawable.edit_text);
+                    erroPrecoAlugM.setVisibility(View.GONE);
                 }
             }
 
@@ -128,18 +119,22 @@ public class CadastroEquipAlug extends AppCompatActivity {
             public void afterTextChanged(Editable s) {}
         });
 
-        tipoEquip.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        precoAluguelI.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != 0) {
-                    tipoEquip.setBackgroundResource(android.R.drawable.edit_text);
-                    erroTipo.setVisibility(View.GONE);
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!s.toString().isEmpty()) {
+                    precoAluguelI.setBackgroundResource(android.R.drawable.edit_text);
+                    erroPrecoAlugI.setVisibility(View.GONE);
                 }
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void afterTextChanged(Editable s) {}
         });
+
     }
 
     private boolean verificarCampos() {
@@ -156,16 +151,16 @@ public class CadastroEquipAlug extends AppCompatActivity {
             erroQuantidade.setVisibility(View.VISIBLE);
             camposVazios = true;
         }
-        if (precoAluguel.getText().toString().isEmpty()) {
-            precoAluguel.setBackgroundResource(R.drawable.borda_vermelha);
-            erroPrecoVenda.setText("Campo obrigatório!");
-            erroPrecoVenda.setVisibility(View.VISIBLE);
+        if (precoAluguelM.getText().toString().isEmpty()) {
+            precoAluguelM.setBackgroundResource(R.drawable.borda_vermelha);
+            erroPrecoAlugM.setText("Campo obrigatório!");
+            erroPrecoAlugM.setVisibility(View.VISIBLE);
             camposVazios = true;
         }
-        if (tipoEquip.getSelectedItemPosition() == 0) {
-            tipoEquip.setBackgroundResource(R.drawable.borda_vermelha);
-            erroTipo.setText("Campo obrigatório!");
-            erroTipo.setVisibility(View.VISIBLE);
+        if (precoAluguelI.getText().toString().isEmpty()) {
+            precoAluguelI.setBackgroundResource(R.drawable.borda_vermelha);
+            erroPrecoAlugI.setText("Campo obrigatório!");
+            erroPrecoAlugI.setVisibility(View.VISIBLE);
             camposVazios = true;
         }
         return camposVazios;
@@ -174,18 +169,16 @@ public class CadastroEquipAlug extends AppCompatActivity {
     public void limparCampos() {
         nomeEquip.setText("");
         qtdEquip.setText("");
-        precoAluguel.setText("");
-        tipoEquip.setSelection(0);
+        precoAluguelM.setText("");
+        precoAluguelI.setText("");
     }
 
     private void preencherCampos(EquipamentoAluguel equipAlug) {
         nomeEquip.setText(equipAlug.getNome());
         qtdEquip.setText(String.valueOf(equipAlug.getQtdAluguel()));
-        precoAluguel.setText(String.valueOf(equipAlug.getPrecoAluguel()));
+        precoAluguelM.setText(String.valueOf(equipAlug.getPrecoAluguelM()));
+        precoAluguelI.setText(String.valueOf(equipAlug.getPrecoAluguelI()));
 
-        ArrayAdapter<String> adapterSpinner = (ArrayAdapter<String>) tipoEquip.getAdapter();
-        int posicaoSpinner = adapterSpinner.getPosition(equipAlug.getTipoAluguel());
-        tipoEquip.setSelection(posicaoSpinner);
     }
 
     private void salvarEquip() {
@@ -197,8 +190,15 @@ public class CadastroEquipAlug extends AppCompatActivity {
         EquipamentoAluguel equipAlug = new EquipamentoAluguel();
         equipAlug.setNome(nomeEquip.getText().toString());
         equipAlug.setQtdAluguel(Integer.parseInt(qtdEquip.getText().toString()));
-        equipAlug.setPrecoAluguel(Float.parseFloat(precoAluguel.getText().toString().replace(",", ".")));
-        equipAlug.setTipoAluguel(tipoEquip.getSelectedItem().toString());
+        // Format the prices with 2 decimal places
+        float precoAluguelMFloat = Float.parseFloat(precoAluguelM.getText().toString().replace(",", "."));
+        float precoAluguelIFloat = Float.parseFloat(precoAluguelI.getText().toString().replace(",", "."));
+
+        String precoAluguelMFormatted = String.format("%.2f", precoAluguelMFloat);
+        String precoAluguelIFormatted = String.format("%.2f", precoAluguelIFloat);
+
+        equipAlug.setPrecoAluguelM(Float.parseFloat(precoAluguelMFormatted));
+        equipAlug.setPrecoAluguelI(Float.parseFloat(precoAluguelIFormatted));
 
         Intent intent = getIntent();
         if (intent.hasExtra("equipAlug")) {

@@ -36,8 +36,8 @@ public class EquipAlugAdapter extends RecyclerView.Adapter<EquipAlugAdapter.View
         EquipamentoAluguel equipAlug = equipAlugList.get(position);
         holder.textNome.setText(equipAlug.getNome());
         holder.textQtdEquip.setText(String.valueOf(equipAlug.getQtdAluguel()));
-        holder.textPrecoAlugel.setText(String.valueOf(equipAlug.getPrecoAluguel()));
-        holder.textTipoAluguel.setText(equipAlug.getTipoAluguel());
+        holder.textPrecoAlugelM.setText(String.format("R$: %.2f", equipAlug.getPrecoAluguelM()));
+        holder.textPrecoAlugelI.setText(String.format("R$: %.2f", equipAlug.getPrecoAluguelI()));
 
         holder.btnExcluir.setOnClickListener(v -> {
             listarEquipAlug.showConfirmationDialog(position, equipAlug);
@@ -59,7 +59,7 @@ public class EquipAlugAdapter extends RecyclerView.Adapter<EquipAlugAdapter.View
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textNome, textQtdEquip, textPrecoAlugel, textTipoAluguel;
+        TextView textNome, textQtdEquip, textPrecoAlugelM, textPrecoAlugelI;
         ImageButton btnExcluir;
         ImageButton btnEditar;
 
@@ -67,8 +67,8 @@ public class EquipAlugAdapter extends RecyclerView.Adapter<EquipAlugAdapter.View
             super(itemView);
             textNome = itemView.findViewById(R.id.textNome);
             textQtdEquip = itemView.findViewById(R.id.textQtdEquip);
-            textPrecoAlugel = itemView.findViewById(R.id.textPrecoVenda);
-            textTipoAluguel = itemView.findViewById(R.id.textTipo);
+            textPrecoAlugelM = itemView.findViewById(R.id.textPrecoAlugM);
+            textPrecoAlugelI = itemView.findViewById(R.id.textPrecoAlugI);
             btnExcluir = itemView.findViewById(R.id.btnExcluir);
             btnEditar = itemView.findViewById(R.id.btnEditar);
         }
