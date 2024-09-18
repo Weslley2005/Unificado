@@ -31,18 +31,27 @@
 
         <EditText
             android:id="@+id/editDesconto"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Código de desconto"
-            android:inputType="text"
+            android:layout_width="143dp"
+            android:layout_height="match_parent"
             android:layout_marginTop="16dp"
-            android:padding="8dp"/>
+            android:hint="Valor Desconto"
+            android:inputType="number"
+            android:padding="8dp" />
+
+        <TextView
+            android:id="@+id/textTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total: R$0.00"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/buttonFinalizar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Finalizar Compra"
+            android:backgroundTint="@color/Button"
             android:layout_marginTop="16dp"
             android:textColor="@android:color/white" />
     </LinearLayout>

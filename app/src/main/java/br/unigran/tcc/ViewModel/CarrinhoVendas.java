@@ -1,7 +1,10 @@
 package br.unigran.tcc.ViewModel;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -31,6 +34,7 @@ public class CarrinhoVendas extends AppCompatActivity {
     private CarrinhoVendasAdapter carrinhoAdapter;
     private List<Produtos> listaCarrinho;
     private TextView textSubtotal;
+    private TextView textTotal;
     private EditText editDesconto;
     private Button buttonFinalizar;
     private double subtotal = 0.0;
@@ -42,6 +46,7 @@ public class CarrinhoVendas extends AppCompatActivity {
 
         recyclerViewCarrinho = findViewById(R.id.recyclerViewCarrinho);
         textSubtotal = findViewById(R.id.textSubtotal);
+        textTotal = findViewById(R.id.textTotal);
         editDesconto = findViewById(R.id.editDesconto);
         buttonFinalizar = findViewById(R.id.buttonFinalizar);
 
@@ -53,6 +58,28 @@ public class CarrinhoVendas extends AppCompatActivity {
         carregarCarrinho();
 
         buttonFinalizar.setOnClickListener(v -> finalizarCompra());
+
+        // Adiciona um TextWatcher para atualizar o total quando o desconto mudar
+        editDesconto.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Não é necessário implementar
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                atualizarSubtotal();  // Atualiza subtotal e total ao alterar o desconto
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Não é necessário implementar
+            }
+        });
+
+        Window janela = getWindow();
+        janela.setStatusBarColor(getResources().getColor(android.R.color.black));
+        janela.setNavigationBarColor(getResources().getColor(android.R.color.black));
     }
 
     private void carregarCarrinho() {
@@ -91,7 +118,22 @@ public class CarrinhoVendas extends AppCompatActivity {
 
     private void atualizarSubtotal() {
         textSubtotal.setText(String.format("Subtotal: R$%.2f", subtotal));
+
+        String descontoStr = editDesconto.getText().toString();
+        double desconto = 0.0;
+
+        if (!descontoStr.isEmpty()) {
+            try {
+                desconto = Double.parseDouble(descontoStr);
+            } catch (NumberFormatException e) {
+                desconto = 0.0;
+            }
+        }
+
+        double total = subtotal - desconto;
+        textTotal.setText(String.format("Total: R$%.2f", total));
     }
+
 
     private void finalizarCompra() {
         String descontoStr = editDesconto.getText().toString();

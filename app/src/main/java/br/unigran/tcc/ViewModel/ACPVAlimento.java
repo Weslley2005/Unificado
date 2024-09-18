@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -51,6 +52,10 @@ public class ACPVAlimento extends AppCompatActivity {
         nomeProduto.setText(nome);
         precoVenda.setText(String.format("Preço de Venda: R$%.2f", precoUnitario));
         precoTotal.setText(String.format("Preço Total: R$%.2f", precoUnitario * 0));
+
+        Window janela = getWindow();
+        janela.setStatusBarColor(getResources().getColor(android.R.color.black));
+        janela.setNavigationBarColor(getResources().getColor(android.R.color.black));
 
         qtdParaVenda.addTextChangedListener(new TextWatcher() {
             @Override
