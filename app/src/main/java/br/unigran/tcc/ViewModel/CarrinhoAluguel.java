@@ -25,24 +25,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import br.unigran.tcc.Model.Produtos;
+import br.unigran.tcc.Model.EquipamentoAluguel;
 import br.unigran.tcc.R;
 
-public class CarrinhoVendas extends AppCompatActivity {
+public class CarrinhoAluguel extends AppCompatActivity {
 
     private RecyclerView recyclerViewCarrinho;
-    private CarrinhoVendasAdapter carrinhoAdapter;
-    private List<Produtos> listaCarrinho;
+    private CarrinhoAluguelAdapter carrinhoAdapter;
+    private List<EquipamentoAluguel> listaCarrinho;
     private TextView textSubtotal;
     private TextView textTotal;
     private EditText editDesconto;
     private Button buttonFinalizar;
     private double subtotal = 0.0;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_carrinho_vendas);
+        setContentView(R.layout.activity_carrinho_aluguel);
 
         recyclerViewCarrinho = findViewById(R.id.recyclerViewCarrinhoAluguel);
         textSubtotal = findViewById(R.id.textSubtotal);
@@ -51,12 +50,11 @@ public class CarrinhoVendas extends AppCompatActivity {
         buttonFinalizar = findViewById(R.id.buttonFinalizar);
 
         listaCarrinho = new ArrayList<>();
-        carrinhoAdapter = new CarrinhoVendasAdapter(listaCarrinho);
+        carrinhoAdapter = new CarrinhoAluguelAdapter(listaCarrinho);
         recyclerViewCarrinho.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewCarrinho.setAdapter(carrinhoAdapter);
 
         carregarCarrinho();
-        carregarProdutosPP();
 
         buttonFinalizar.setOnClickListener(v -> finalizarCompra());
 
@@ -88,8 +86,8 @@ public class CarrinhoVendas extends AppCompatActivity {
         if (usuarioAtual != null) {
             String userId = usuarioAtual.getUid();
 
-            FirebaseFirestore.getInstance().collection("Carrinho").document(userId)
-                    .collection("Itens")
+            FirebaseFirestore.getInstance().collection("CarrinhoAluguel").document(userId)
+                    .collection("ItensAluguel")
                     .get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
@@ -97,27 +95,14 @@ public class CarrinhoVendas extends AppCompatActivity {
                             subtotal = 0.0;
                             for (QueryDocumentSnapshot documento : task.getResult()) {
                                 Map<String, Object> item = documento.getData();
-                                Produtos produto = new Produtos();
-                                produto.setNome((String) item.get("nome"));
+                                EquipamentoAluguel equipAlug = new EquipamentoAluguel();
+                                equipAlug.setNome((String) item.get("nome"));
+                                equipAlug.setPrecoAluguelI(((Double) item.get("precoTotal")).floatValue());
+                                equipAlug.setQtdAluguel(((Long) item.get("quantidade")).intValue());
+                                equipAlug.setPrecoAluguelI(((Double) item.get("precoTotal")).floatValue());
 
-                                // Verifica se o valor existe antes de tentar converter
-                                Object precoTotalObj = item.get("precoTotal");
-                                if (precoTotalObj != null) {
-                                    produto.setPrecoVenda(((Double) precoTotalObj).floatValue());
-                                } else {
-                                    produto.setPrecoVenda(0f); // valor padrão
-                                }
-
-                                // Verifica se a quantidade existe antes de tentar converter
-                                Object quantidadeObj = item.get("quantidade");
-                                if (quantidadeObj != null) {
-                                    produto.setQtdProduto(((Long) quantidadeObj).intValue());
-                                } else {
-                                    produto.setQtdProduto(0); // valor padrão
-                                }
-
-                                listaCarrinho.add(produto);
-                                subtotal += produto.getPrecoVenda();
+                                listaCarrinho.add(equipAlug);
+                                subtotal += equipAlug.getPrecoAluguelI();
                             }
                             carrinhoAdapter.notifyDataSetChanged();
                             atualizarSubtotal();
@@ -126,30 +111,7 @@ public class CarrinhoVendas extends AppCompatActivity {
                         }
                     });
         } else {
-            Toast.makeText(CarrinhoVendas.this, "Você precisa estar logado para visualizar o carrinho.", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void carregarProdutosPP() {
-        FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
-        if (usuarioAtual != null) {
-            String userId = usuarioAtual.getUid();
-            FirebaseFirestore.getInstance().collection("Carrinho").document(userId)
-                    .collection("ItensPP")
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot documento : task.getResult()) {
-                                Produtos produtoPP = documento.toObject(Produtos.class);
-                                listaCarrinho.add(produtoPP);
-                                subtotal += produtoPP.getPrecoVenda() * produtoPP.getQtdProduto();
-                            }
-                            carrinhoAdapter.notifyDataSetChanged();
-                            atualizarSubtotal();
-                        } else {
-                            Log.e("CarrinhoVendas", "Erro ao carregar produtosPP do carrinho", task.getException());
-                        }
-                    });
+            Toast.makeText(CarrinhoAluguel.this, "Você precisa estar logado para visualizar o carrinho.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -170,6 +132,7 @@ public class CarrinhoVendas extends AppCompatActivity {
         double total = subtotal - desconto;
         textTotal.setText(String.format("Total: R$%.2f", total));
     }
+
 
     private void finalizarCompra() {
         String descontoStr = editDesconto.getText().toString();
@@ -197,20 +160,20 @@ public class CarrinhoVendas extends AppCompatActivity {
             compra.put("dataHora", System.currentTimeMillis());
 
             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-            CollectionReference comprasRef = firestore.collection("Compras");
+            CollectionReference comprasRef = firestore.collection("CarrinhoAluguel");
 
             comprasRef.add(compra)
                     .addOnSuccessListener(documentReference -> {
                         String compraId = documentReference.getId();
 
-                        CollectionReference itensRef = firestore.collection("Compras").document(compraId).collection("Itens");
+                        CollectionReference itensRef = firestore.collection("CarrinhoAluguel").document(compraId).collection("ItensAluguel");
                         List<Map<String, Object>> itens = new ArrayList<>();
-                        for (Produtos produto : listaCarrinho) {
+                        for (EquipamentoAluguel equipAlug : listaCarrinho) {
                             Map<String, Object> item = new HashMap<>();
-                            item.put("nome", produto.getNome());
-                            item.put("precoUnitario", produto.getPrecoVenda());
-                            item.put("quantidade", produto.getQtdProduto());
-                            item.put("precoTotal", produto.getPrecoVenda() * produto.getQtdProduto());
+                            item.put("nome", equipAlug.getNome());
+                            item.put("precoAluguelI", equipAlug.getPrecoAluguelI());
+                            item.put("quantidade", equipAlug.getQtdAluguel());
+                            item.put("precoTotal", equipAlug.getPrecoAluguelI() * equipAlug.getQtdAluguel());
                             itens.add(item);
                         }
 
@@ -218,46 +181,46 @@ public class CarrinhoVendas extends AppCompatActivity {
                             itensRef.add(item)
                                     .addOnFailureListener(e -> {
                                         Log.e("CarrinhoActivity", "Erro ao adicionar item à compra", e);
-                                        Toast.makeText(CarrinhoVendas.this, "Erro ao finalizar compra", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(CarrinhoAluguel.this, "Erro ao finalizar compra", Toast.LENGTH_SHORT).show();
                                     });
                         }
 
-                        for (Produtos produto : listaCarrinho) {
-                            Log.d("CarrinhoActivity", "Quantidade no carrinho: " + produto.getQtdProduto());
-                            atualizarEstoque(produto);
+                        for (EquipamentoAluguel equipAlug : listaCarrinho) {
+                            Log.d("CarrinhoActivity", "Quantidade no carrinho: " + equipAlug.getQtdAluguel());
+                            atualizarEstoque(equipAlug);
                         }
 
                         limparCarrinho(userId);
-                        Toast.makeText(CarrinhoVendas.this, String.format("Compra finalizada com sucesso! Total: R$%.2f", total), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CarrinhoAluguel.this, String.format("Compra finalizada com sucesso! Total: R$%.2f", total), Toast.LENGTH_SHORT).show();
                         finish();
                     })
                     .addOnFailureListener(e -> {
                         Log.e("CarrinhoActivity", "Erro ao salvar compra", e);
-                        Toast.makeText(CarrinhoVendas.this, "Erro ao finalizar compra", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CarrinhoAluguel.this, "Erro ao finalizar compra", Toast.LENGTH_SHORT).show();
                     });
         } else {
-            Toast.makeText(CarrinhoVendas.this, "Você precisa estar logado para finalizar a compra.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(CarrinhoAluguel.this, "Você precisa estar logado para finalizar a compra.", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void atualizarEstoque(Produtos produto) {
+    private void atualizarEstoque(EquipamentoAluguel equipAlug) {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
-        firestore.collection("Produtos")
-                .whereEqualTo("nome", produto.getNome())
+        firestore.collection("EquipamentoAluguel")
+                .whereEqualTo("nome", equipAlug.getNome())
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && !task.getResult().isEmpty()) {
                         QueryDocumentSnapshot document = (QueryDocumentSnapshot) task.getResult().getDocuments().get(0);
-                        int estoqueAtual = document.getLong("qtdProduto").intValue();
+                        int estoqueAtual = document.getLong("qtdAluguel").intValue();
 
-                        Log.d("CarrinhoActivity", "Estoque atual do produto '" + produto.getNome() + "': " + estoqueAtual);
+                        Log.d("CarrinhoActivity", "Estoque atual do produto '" + equipAlug.getNome() + "': " + estoqueAtual);
 
-                        int novaQuantidadeEstoque = estoqueAtual - produto.getQtdProduto();
+                        int novaQuantidadeEstoque = estoqueAtual - equipAlug.getQtdAluguel();
 
                         Log.d("CarrinhoActivity", "Nova quantidade de estoque após subtração: " + novaQuantidadeEstoque);
 
-                        document.getReference().update("qtdProduto", novaQuantidadeEstoque)
+                        document.getReference().update("qtdAluguel", novaQuantidadeEstoque)
                                 .addOnSuccessListener(aVoid -> {
                                     Log.d("CarrinhoActivity", "Estoque atualizado com sucesso!");
                                 })
@@ -274,8 +237,8 @@ public class CarrinhoVendas extends AppCompatActivity {
 
 
     private void limparCarrinho(String userId) {
-        FirebaseFirestore.getInstance().collection("Carrinho").document(userId)
-                .collection("Itens")
+        FirebaseFirestore.getInstance().collection("CarrinhoAluguel").document(userId)
+                .collection("ItensAluguel")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -291,5 +254,6 @@ public class CarrinhoVendas extends AppCompatActivity {
                     }
                 });
     }
+
 
 }

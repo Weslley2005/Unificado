@@ -62,7 +62,7 @@ public class PVAlimentoAdapter extends RecyclerView.Adapter<PVAlimentoAdapter.Vi
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textNome = itemView.findViewById(R.id.textNome);
-            textQtd = itemView.findViewById(R.id.textQtd);
+            textQtd = itemView.findViewById(R.id.textQtdAluguel);
             textPrecoVenda = itemView.findViewById(R.id.textPrecoAlugM);
             btnExcluir = itemView.findViewById(R.id.btnExcluir);
             btnEditar = itemView.findViewById(R.id.btnEditar);

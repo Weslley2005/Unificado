@@ -119,7 +119,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
     public void carrinho(View view) {
-        Intent intent = new Intent(this, CarrinhoVendas.class);
+        Intent intent = new Intent(this, TipoCarrinho.class);
+        startActivity(intent);
+    }
+    public void Aluguel(View view) {
+        Intent intent = new Intent(this, Aluguel.class);
         startActivity(intent);
     }
 }

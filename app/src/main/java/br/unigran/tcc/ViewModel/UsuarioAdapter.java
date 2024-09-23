@@ -55,7 +55,7 @@ public class UsuarioAdapter extends RecyclerView.Adapter<UsuarioAdapter.UsuarioV
         public UsuarioViewHolder(View itemView) {
             super(itemView);
             textNome = itemView.findViewById(R.id.textNome);
-            textCpf = itemView.findViewById(R.id.textQtd);
+            textCpf = itemView.findViewById(R.id.textQtdAluguel);
             textTelefone = itemView.findViewById(R.id.textPrecoCompra);
             textEstado = itemView.findViewById(R.id.textTipo);
             textCidade = itemView.findViewById(R.id.textCidade);

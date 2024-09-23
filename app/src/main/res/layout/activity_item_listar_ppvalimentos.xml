@@ -3,9 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:background="@android:color/white"
     android:layout_margin="10dp"
-    android:layout_height="wrap_content">
+    tools:context=".ItemListarPPVAlimentos">
 
     <TextView
         android:id="@+id/textNome"
@@ -34,26 +35,15 @@
         tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/textQtdAluguel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView14"
-        app:layout_constraintTop_toBottomOf="@+id/textNome" />
-
-    <TextView
-        android:id="@+id/textView14"
+        android:id="@+id/textView16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="13dp"
         android:layout_marginEnd="8dp"
-        android:text="Quantidade de Produto:"
+        android:text="Preço de Venda:"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/textQtdAluguel"
+        app:layout_constraintEnd_toStartOf="@+id/textPrecoAlugM"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textNome" />
 
@@ -61,25 +51,11 @@
         android:id="@+id/textPrecoAlugM"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="13dp"
         android:layout_marginEnd="8dp"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView16"
-        app:layout_constraintTop_toBottomOf="@+id/textQtdAluguel" />
-
-    <TextView
-        android:id="@+id/textView16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="8dp"
-        android:text="Preço de Venda:"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/textPrecoAlugM"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView14" />
-
+        app:layout_constraintTop_toBottomOf="@+id/textNome" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

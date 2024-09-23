@@ -67,7 +67,7 @@ public class ProdutoAdapter extends RecyclerView.Adapter<ProdutoAdapter.ViewHold
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textNome = itemView.findViewById(R.id.textNome);
-            textQtd = itemView.findViewById(R.id.textQtd);
+            textQtd = itemView.findViewById(R.id.textQtdAluguel);
             textPrecoCompra = itemView.findViewById(R.id.textPrecoCompra);
             textPrecoVenda = itemView.findViewById(R.id.textPrecoAlugM);
             textTipo = itemView.findViewById(R.id.textTipo);

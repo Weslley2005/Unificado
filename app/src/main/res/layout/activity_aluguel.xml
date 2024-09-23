@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="38dp"
             android:layout_marginTop="16dp"
-            android:text="Vendas"
+            android:text="Aluguel"
             android:textAlignment="center"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -39,15 +39,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewAluguel"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/borda_recycleview"
-            android:textAlignment="center" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewPPVAlimentos"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="592dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/borda_recycleview"
             android:textAlignment="center" />

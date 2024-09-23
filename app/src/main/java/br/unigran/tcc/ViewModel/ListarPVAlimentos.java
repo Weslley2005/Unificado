@@ -21,14 +21,18 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.unigran.tcc.Model.ProdutoPP;
 import br.unigran.tcc.Model.Produtos;
 import br.unigran.tcc.R;
 
 public class ListarPVAlimentos extends AppCompatActivity {
 
     private PVAlimentoAdapter adapterPVAli;
+    private PPVAlimentosAdapter adapterPPAli;
     private List<Produtos> listaDeProdutos;
     private List<Produtos> listaFiltradaDeProdutos;
+    private List<ProdutoPP> listaDeProdutosPP;
+    private List<ProdutoPP> listaFiltradaDeProdutosPP;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -36,15 +40,24 @@ public class ListarPVAlimentos extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listar_pvalimentos);
 
-        RecyclerView recyclerViewProduto = findViewById(R.id.recyclerViewPVAlimentos);
+        RecyclerView recyclerViewProduto = findViewById(R.id.recyclerViewAluguel);
+        RecyclerView recyclerViewProdutoPP = findViewById(R.id.recyclerViewPPVAlimentos);
         recyclerViewProduto.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewProdutoPP.setLayoutManager(new LinearLayoutManager(this));
 
         listaDeProdutos = new ArrayList<>();
         listaFiltradaDeProdutos = new ArrayList<>();
+        listaDeProdutosPP = new ArrayList<>();
+        listaFiltradaDeProdutosPP = new ArrayList<>();
+
         adapterPVAli = new PVAlimentoAdapter(listaFiltradaDeProdutos, this);
+        adapterPPAli = new PPVAlimentosAdapter(listaFiltradaDeProdutosPP, this);
+
         recyclerViewProduto.setAdapter(adapterPVAli);
+        recyclerViewProdutoPP.setAdapter(adapterPPAli);
 
         buscarDados();
+        buscarDadosPP(); // Nova função para buscar produtos PP
 
         setSupportActionBar(findViewById(R.id.toolbar));
 
@@ -58,6 +71,7 @@ public class ListarPVAlimentos extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String novoTexto) {
                 filtrarProdutos(novoTexto);
+                filtrarProdutosPP(novoTexto); // Filtrar também produtos PP
                 return true;
             }
         });
@@ -77,13 +91,23 @@ public class ListarPVAlimentos extends AppCompatActivity {
     @SuppressLint("NotifyDataSetChanged")
     private void filtrarProdutos(String consulta) {
         listaFiltradaDeProdutos.clear();
-
         for (Produtos produto : listaDeProdutos) {
             if (produto.getNome().toLowerCase().contains(consulta.toLowerCase())) {
                 listaFiltradaDeProdutos.add(produto);
             }
         }
         adapterPVAli.notifyDataSetChanged();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void filtrarProdutosPP(String consulta) {
+        listaFiltradaDeProdutosPP.clear();
+        for (ProdutoPP produtoPP : listaDeProdutosPP) {
+            if (produtoPP.getNome().toLowerCase().contains(consulta.toLowerCase())) {
+                listaFiltradaDeProdutosPP.add(produtoPP);
+            }
+        }
+        adapterPPAli.notifyDataSetChanged();
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -119,4 +143,28 @@ public class ListarPVAlimentos extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    private void buscarDadosPP() {
+        FirebaseFirestore.getInstance().collection("ProdutosPP")
+                .get()
+                .addOnCompleteListener(tarefa -> {
+                    if (tarefa.isSuccessful()) {
+                        QuerySnapshot querySnapshot = tarefa.getResult();
+                        if (querySnapshot != null) {
+                            listaDeProdutosPP.clear();
+                            for (QueryDocumentSnapshot documento : querySnapshot) {
+                                ProdutoPP produtoPP = documento.toObject(ProdutoPP.class);
+                                produtoPP.setId(documento.getId());
+                                listaDeProdutosPP.add(produtoPP);
+                            }
+                            listaFiltradaDeProdutosPP.addAll(listaDeProdutosPP);
+                            adapterPPAli.notifyDataSetChanged();
+                        } else {
+                            Log.d("ListarProdutosPP", "Consulta retornou nulo.");
+                        }
+                    } else {
+                        Log.e("ListarProdutosPP", "Erro ao buscar dados", tarefa.getException());
+                    }
+                });
+    }
 }
