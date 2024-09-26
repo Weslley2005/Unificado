@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,21 +52,18 @@ public class CarrinhoVendas extends AppCompatActivity {
         buttonFinalizar = findViewById(R.id.buttonFinalizar);
 
         listaCarrinho = new ArrayList<>();
-        carrinhoAdapter = new CarrinhoVendasAdapter(listaCarrinho);
+        carrinhoAdapter = new CarrinhoVendasAdapter(listaCarrinho, this);
         recyclerViewCarrinho.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewCarrinho.setAdapter(carrinhoAdapter);
 
         carregarCarrinho();
-        carregarProdutosPP();
 
         buttonFinalizar.setOnClickListener(v -> finalizarCompra());
 
         // Adiciona um TextWatcher para atualizar o total quando o desconto mudar
         editDesconto.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // Não é necessário implementar
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -73,9 +71,7 @@ public class CarrinhoVendas extends AppCompatActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-                // Não é necessário implementar
-            }
+            public void afterTextChanged(Editable s) {}
         });
 
         Window janela = getWindow();
@@ -99,11 +95,12 @@ public class CarrinhoVendas extends AppCompatActivity {
                                 Map<String, Object> item = documento.getData();
                                 Produtos produto = new Produtos();
                                 produto.setNome((String) item.get("nome"));
+                                produto.setId(documento.getId()); // Armazena o ID do documento
 
-                                // Verifica se o valor existe antes de tentar converter
-                                Object precoTotalObj = item.get("precoTotal");
-                                if (precoTotalObj != null) {
-                                    produto.setPrecoVenda(((Double) precoTotalObj).floatValue());
+                                // Use o preço unitário ao invés do preço total
+                                Object precoUnitarioObj = item.get("precoUnitario");
+                                if (precoUnitarioObj != null) {
+                                    produto.setPrecoVenda(((Double) precoUnitarioObj).floatValue());
                                 } else {
                                     produto.setPrecoVenda(0f); // valor padrão
                                 }
@@ -117,7 +114,7 @@ public class CarrinhoVendas extends AppCompatActivity {
                                 }
 
                                 listaCarrinho.add(produto);
-                                subtotal += produto.getPrecoVenda();
+                                subtotal += produto.getPrecoVenda() * produto.getQtdProduto(); // Calcula subtotal corretamente
                             }
                             carrinhoAdapter.notifyDataSetChanged();
                             atualizarSubtotal();
@@ -127,29 +124,6 @@ public class CarrinhoVendas extends AppCompatActivity {
                     });
         } else {
             Toast.makeText(CarrinhoVendas.this, "Você precisa estar logado para visualizar o carrinho.", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void carregarProdutosPP() {
-        FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
-        if (usuarioAtual != null) {
-            String userId = usuarioAtual.getUid();
-            FirebaseFirestore.getInstance().collection("Carrinho").document(userId)
-                    .collection("ItensPP")
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot documento : task.getResult()) {
-                                Produtos produtoPP = documento.toObject(Produtos.class);
-                                listaCarrinho.add(produtoPP);
-                                subtotal += produtoPP.getPrecoVenda() * produtoPP.getQtdProduto();
-                            }
-                            carrinhoAdapter.notifyDataSetChanged();
-                            atualizarSubtotal();
-                        } else {
-                            Log.e("CarrinhoVendas", "Erro ao carregar produtosPP do carrinho", task.getException());
-                        }
-                    });
         }
     }
 
@@ -205,12 +179,12 @@ public class CarrinhoVendas extends AppCompatActivity {
 
                         CollectionReference itensRef = firestore.collection("Compras").document(compraId).collection("Itens");
                         List<Map<String, Object>> itens = new ArrayList<>();
-                        for (Produtos produto : listaCarrinho) {
+                        for (Produtos produtos : listaCarrinho) {
                             Map<String, Object> item = new HashMap<>();
-                            item.put("nome", produto.getNome());
-                            item.put("precoUnitario", produto.getPrecoVenda());
-                            item.put("quantidade", produto.getQtdProduto());
-                            item.put("precoTotal", produto.getPrecoVenda() * produto.getQtdProduto());
+                            item.put("nome", produtos.getNome());
+                            item.put("precoUnitario", produtos.getPrecoVenda()); // Preço unitário correto
+                            item.put("quantidade", produtos.getQtdProduto()); // Quantidade
+                            item.put("precoTotal", produtos.getPrecoVenda() * produtos.getQtdProduto()); // Cálculo correto do preço total
                             itens.add(item);
                         }
 
@@ -222,11 +196,12 @@ public class CarrinhoVendas extends AppCompatActivity {
                                     });
                         }
 
-                        for (Produtos produto : listaCarrinho) {
-                            Log.d("CarrinhoActivity", "Quantidade no carrinho: " + produto.getQtdProduto());
-                            atualizarEstoque(produto);
+                        for (Produtos produtos : listaCarrinho) {
+                            Log.d("CarrinhoActivity", "Quantidade no carrinho: " + produtos.getQtdProduto());
+                            atualizarEstoque(produtos);
                         }
 
+                        // Limpa o carrinho após a compra bem-sucedida
                         limparCarrinho(userId);
                         Toast.makeText(CarrinhoVendas.this, String.format("Compra finalizada com sucesso! Total: R$%.2f", total), Toast.LENGTH_SHORT).show();
                         finish();
@@ -270,9 +245,6 @@ public class CarrinhoVendas extends AppCompatActivity {
                 });
     }
 
-
-
-
     private void limparCarrinho(String userId) {
         FirebaseFirestore.getInstance().collection("Carrinho").document(userId)
                 .collection("Itens")
@@ -292,4 +264,37 @@ public class CarrinhoVendas extends AppCompatActivity {
                 });
     }
 
+    public void mostrarDialogoDeConfirmacao(int posicao, Produtos produtos) {
+        AlertDialog.Builder construtor = new AlertDialog.Builder(this);
+        construtor.setTitle("Confirmação");
+        construtor.setMessage("Você tem certeza que deseja deletar este item?");
+
+        construtor.setPositiveButton("Sim", (dialog, which) -> deletarItem(posicao, produtos));
+
+        construtor.setNegativeButton("Não", (dialog, which) -> dialog.dismiss());
+
+        AlertDialog alertaDialogo = construtor.create();
+        alertaDialogo.show();
+    }
+
+    private void deletarItem(int posicao, Produtos produtos) {
+        FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
+        if (usuarioAtual != null) {
+            String userId = usuarioAtual.getUid();
+
+            FirebaseFirestore.getInstance().collection("Carrinho")
+                    .document(userId)
+                    .collection("Itens")
+                    .document(produtos.getId())
+                    .delete()
+                    .addOnSuccessListener(aVoid -> {
+                        listaCarrinho.remove(posicao);
+                        carrinhoAdapter.notifyItemRemoved(posicao); // Notifica o adapter sobre a remoção
+                        atualizarSubtotal(); // Atualiza o subtotal após a remoção
+                    })
+                    .addOnFailureListener(e -> Log.e("CarrinhoAluguel", "Erro ao deletar item", e));
+        } else {
+            Log.e("CarrinhoAluguel", "Usuário não está logado.");
+        }
+    }
 }

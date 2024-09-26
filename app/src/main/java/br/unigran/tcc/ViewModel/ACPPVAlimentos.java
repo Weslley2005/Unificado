@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -75,7 +76,11 @@ public class ACPPVAlimentos extends AppCompatActivity {
         int quantidade = 0;
 
         if (!textoQtd.isEmpty()) {
-            quantidade = Integer.parseInt(textoQtd);
+            try {
+                quantidade = Integer.parseInt(textoQtd);
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, "Quantidade inválida.", Toast.LENGTH_SHORT).show();
+            }
         }
 
         double precoTotalCalculado = precoUnitario * quantidade;
@@ -87,23 +92,53 @@ public class ACPPVAlimentos extends AppCompatActivity {
         if (usuarioAtual != null) {
             String userId = usuarioAtual.getUid();
             String nome = nomeProduto.getText().toString();
-            int quantidadeDesejada = Integer.parseInt(qtdParaVenda.getText().toString());
-            double precoTotalCalculado = precoUnitario * quantidadeDesejada;
+            String textoQuantidade = qtdParaVenda.getText().toString();
 
-            Map<String, Object> produto = new HashMap<>();
-            produto.put("nome", nome);
-            produto.put("precoUnitario", precoUnitario);
-            produto.put("precoTotal", precoTotalCalculado);
+            if (textoQuantidade.isEmpty()) {
+                Toast.makeText(this, "Digite uma quantidade válida.", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-            FirebaseFirestore.getInstance().collection("Carrinho").document(userId)
-                    .collection("Itens")
-                    .add(produto)
-                    .addOnSuccessListener(documentReference -> {
-                        Toast.makeText(ACPPVAlimentos.this, "Produto adicionado ao carrinho", Toast.LENGTH_SHORT).show();
-                        finish();
+            int quantidadeDesejada;
+            try {
+                quantidadeDesejada = Integer.parseInt(textoQuantidade);
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, "Quantidade inválida.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            FirebaseFirestore.getInstance().collection("ProdutosPP")
+                    .whereEqualTo("nome", nome)
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            QueryDocumentSnapshot documento = (QueryDocumentSnapshot) queryDocumentSnapshots.getDocuments().get(0);
+
+                            double precoTotalCalculado = precoUnitario * quantidadeDesejada;
+
+                            Map<String, Object> produto = new HashMap<>();
+                            produto.put("id", documento.getId());
+                            produto.put("nome", nome);
+                            produto.put("precoUnitario", precoUnitario);
+                            produto.put("quantidade", quantidadeDesejada);
+                            produto.put("precoTotal", precoTotalCalculado);
+
+                            FirebaseFirestore.getInstance().collection("Carrinho").document(userId)
+                                    .collection("Itens")
+                                    .add(produto)
+                                    .addOnSuccessListener(documentReference -> {
+                                        Toast.makeText(ACPPVAlimentos.this, "Produto adicionado ao carrinho", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Toast.makeText(ACPPVAlimentos.this, "Erro ao adicionar produto ao carrinho", Toast.LENGTH_SHORT).show();
+                                    });
+                        } else {
+                            Toast.makeText(ACPPVAlimentos.this, "Produto não encontrado.", Toast.LENGTH_SHORT).show();
+                        }
                     })
                     .addOnFailureListener(e -> {
-                        Toast.makeText(ACPPVAlimentos.this, "Erro ao adicionar produto ao carrinho", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ACPPVAlimentos.this, "Erro ao verificar estoque", Toast.LENGTH_SHORT).show();
                     });
         } else {
             Toast.makeText(ACPPVAlimentos.this, "Você precisa estar logado para adicionar itens ao carrinho.", Toast.LENGTH_SHORT).show();

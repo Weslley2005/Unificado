@@ -55,5 +55,8 @@ dependencies {
     testImplementation ("org.mockito:mockito-core:5.5.0")
     androidTestImplementation ("org.mockito:mockito-android:5.5.0")
     implementation ("org.greenrobot:eventbus:3.3.1")
+    implementation ("com.google.firebase:firebase-auth:latest_version")
+    implementation ("com.google.firebase:firebase-firestore:latest_version")
+    implementation ("com.google.android.gms:play-services-auth:latest_version")
 
 }

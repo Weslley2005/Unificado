@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,7 +51,7 @@ public class CarrinhoAluguel extends AppCompatActivity {
         buttonFinalizar = findViewById(R.id.buttonFinalizar);
 
         listaCarrinho = new ArrayList<>();
-        carrinhoAdapter = new CarrinhoAluguelAdapter(listaCarrinho);
+        carrinhoAdapter = new CarrinhoAluguelAdapter(listaCarrinho, this);
         recyclerViewCarrinho.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewCarrinho.setAdapter(carrinhoAdapter);
 
@@ -94,12 +95,11 @@ public class CarrinhoAluguel extends AppCompatActivity {
                             listaCarrinho.clear();
                             subtotal = 0.0;
                             for (QueryDocumentSnapshot documento : task.getResult()) {
-                                Map<String, Object> item = documento.getData();
                                 EquipamentoAluguel equipAlug = new EquipamentoAluguel();
-                                equipAlug.setNome((String) item.get("nome"));
-                                equipAlug.setPrecoAluguelI(((Double) item.get("precoTotal")).floatValue());
-                                equipAlug.setQtdAluguel(((Long) item.get("quantidade")).intValue());
-                                equipAlug.setPrecoAluguelI(((Double) item.get("precoTotal")).floatValue());
+                                equipAlug.setId(documento.getId()); // Armazena o ID do documento
+                                equipAlug.setNome(documento.getString("nome"));
+                                equipAlug.setPrecoAluguelI(documento.getDouble("precoTotal").floatValue());
+                                equipAlug.setQtdAluguel(documento.getLong("quantidade").intValue());
 
                                 listaCarrinho.add(equipAlug);
                                 subtotal += equipAlug.getPrecoAluguelI();
@@ -114,6 +114,7 @@ public class CarrinhoAluguel extends AppCompatActivity {
             Toast.makeText(CarrinhoAluguel.this, "Você precisa estar logado para visualizar o carrinho.", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     private void atualizarSubtotal() {
         textSubtotal.setText(String.format("Subtotal: R$%.2f", subtotal));
@@ -160,13 +161,13 @@ public class CarrinhoAluguel extends AppCompatActivity {
             compra.put("dataHora", System.currentTimeMillis());
 
             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-            CollectionReference comprasRef = firestore.collection("CarrinhoAluguel");
+            CollectionReference comprasRef = firestore.collection("AluguelFinalizadas");
 
             comprasRef.add(compra)
                     .addOnSuccessListener(documentReference -> {
                         String compraId = documentReference.getId();
 
-                        CollectionReference itensRef = firestore.collection("CarrinhoAluguel").document(compraId).collection("ItensAluguel");
+                        CollectionReference itensRef = firestore.collection("AluguelFinalizadas").document(compraId).collection("ItensAluguel");
                         List<Map<String, Object>> itens = new ArrayList<>();
                         for (EquipamentoAluguel equipAlug : listaCarrinho) {
                             Map<String, Object> item = new HashMap<>();
@@ -190,6 +191,7 @@ public class CarrinhoAluguel extends AppCompatActivity {
                             atualizarEstoque(equipAlug);
                         }
 
+                        // Clear the cart after successful purchase
                         limparCarrinho(userId);
                         Toast.makeText(CarrinhoAluguel.this, String.format("Compra finalizada com sucesso! Total: R$%.2f", total), Toast.LENGTH_SHORT).show();
                         finish();
@@ -202,6 +204,7 @@ public class CarrinhoAluguel extends AppCompatActivity {
             Toast.makeText(CarrinhoAluguel.this, "Você precisa estar logado para finalizar a compra.", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     private void atualizarEstoque(EquipamentoAluguel equipAlug) {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -255,5 +258,38 @@ public class CarrinhoAluguel extends AppCompatActivity {
                 });
     }
 
+    public void mostrarDialogoDeConfirmacao(int posicao, EquipamentoAluguel equipAlug) {
+        AlertDialog.Builder construtor = new AlertDialog.Builder(this);
+        construtor.setTitle("Confirmação");
+        construtor.setMessage("Você tem certeza que deseja deletar este item?");
+
+        construtor.setPositiveButton("Sim", (dialog, which) -> deletarItem(posicao, equipAlug));
+
+        construtor.setNegativeButton("Não", (dialog, which) -> dialog.dismiss());
+
+        AlertDialog alertaDialogo = construtor.create();
+        alertaDialogo.show();
+    }
+
+    private void deletarItem(int posicao, EquipamentoAluguel equipAlug) {
+        FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
+        if (usuarioAtual != null) {
+            String userId = usuarioAtual.getUid();
+
+            FirebaseFirestore.getInstance().collection("CarrinhoAluguel")
+                    .document(userId)
+                    .collection("ItensAluguel")
+                    .document(equipAlug.getId())
+                    .delete()
+                    .addOnSuccessListener(aVoid -> {
+                        listaCarrinho.remove(posicao);
+                        carrinhoAdapter.notifyItemRemoved(posicao); // Notifica o adapter sobre a remoção
+                        atualizarSubtotal(); // Atualiza o subtotal após a remoção
+                    })
+                    .addOnFailureListener(e -> Log.e("CarrinhoAluguel", "Erro ao deletar item", e));
+        } else {
+            Log.e("CarrinhoAluguel", "Usuário não está logado.");
+        }
+    }
 
 }

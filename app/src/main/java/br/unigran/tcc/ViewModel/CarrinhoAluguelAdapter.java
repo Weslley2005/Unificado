@@ -1,5 +1,6 @@
 package br.unigran.tcc.ViewModel;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +18,11 @@ import br.unigran.tcc.R;
 public class CarrinhoAluguelAdapter extends RecyclerView.Adapter<CarrinhoAluguelAdapter.ViewHolder> {
 
     private final List<EquipamentoAluguel> listaCarrinho;
+    private final CarrinhoAluguel listarCarrinho;
 
-    public CarrinhoAluguelAdapter(List<EquipamentoAluguel> listaCarrinho) {
+    public CarrinhoAluguelAdapter(List<EquipamentoAluguel> listaCarrinho, CarrinhoAluguel listarCarrinho) {
         this.listaCarrinho = listaCarrinho;
+        this.listarCarrinho = listarCarrinho;
     }
 
     @NonNull
@@ -33,16 +36,27 @@ public class CarrinhoAluguelAdapter extends RecyclerView.Adapter<CarrinhoAluguel
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         EquipamentoAluguel equipAlug = listaCarrinho.get(position);
         holder.textNome.setText(equipAlug.getNome());
-        holder.textPreco.setText(String.format("R$%.2f", equipAlug.getPrecoAluguelI()));
+        holder.textPreco.setText(String.format("R$ %.2f", equipAlug.getPrecoAluguelI()));
         holder.textQtd.setText(String.format("Qtd: %d", equipAlug.getQtdAluguel()));
 
-        // Botão de excluir com diálogo de confirmação
+        holder.btnExcluir.setOnClickListener(v -> {
+            listarCarrinho.mostrarDialogoDeConfirmacao(position, equipAlug);
+        });
 
+        holder.btnEditar.setOnClickListener(v -> {
+            Intent intent = new Intent(listarCarrinho, ADAluguel.class);
+            intent.putExtra("id", equipAlug.getId()); // Supondo que você tenha um método getId() para obter o ID do item
+            listarCarrinho.startActivity(intent);
+            voltar();
+        });
     }
 
     @Override
     public int getItemCount() {
         return listaCarrinho.size();
+    }
+
+    public void notifyItemRemoved() {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -55,8 +69,12 @@ public class CarrinhoAluguelAdapter extends RecyclerView.Adapter<CarrinhoAluguel
             textNome = itemView.findViewById(R.id.textNome);
             textPreco = itemView.findViewById(R.id.textPreco);
             textQtd = itemView.findViewById(R.id.textQtdAluguel);
-            btnExcluir = itemView.findViewById(R.id.btnDeletarCarrinhoAluguel);  // Corrigido o ID do botão
-            btnEditar = itemView.findViewById(R.id.btnEditarCarrinhoAluguel);   // Corrigido o ID do botão
+            btnExcluir = itemView.findViewById(R.id.btnDeletarCarrinhoAluguel);
+            btnEditar = itemView.findViewById(R.id.btnEditarCarrinhoAluguel);
         }
+    }
+
+    public void voltar() {
+        listarCarrinho.finish();
     }
 }

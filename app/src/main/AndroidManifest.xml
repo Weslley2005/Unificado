@@ -39,9 +39,6 @@
             android:name=".ItemListarPPVAlimentos"
             android:exported="false" />
         <activity
-            android:name=".ItemCarrinhoVendas"
-            android:exported="false" />
-        <activity
             android:name=".ViewModel.CarrinhoVendas"
             android:exported="false" />
         <activity
@@ -51,34 +48,13 @@
             android:name=".ViewModel.ListarPVAlimentos"
             android:exported="false" />
         <activity
-            android:name=".ItemEquipAlug"
-            android:exported="false" />
-        <activity
             android:name=".ViewModel.ListarEquipAlug"
-            android:exported="false" />
-        <activity
-            android:name=".ItemProdutoPP"
             android:exported="false" />
         <activity
             android:name=".ViewModel.ListarProdutoPP"
             android:exported="false" />
         <activity
-            android:name=".ItemProdutosBebidas"
-            android:exported="false" />
-        <activity
-            android:name=".itemProdutosAlimentos"
-            android:exported="false" />
-        <activity
             android:name=".ViewModel.ListarProdutos"
-            android:exported="false" />
-        <activity
-            android:name=".menuItem"
-            android:exported="false" />
-        <activity
-            android:name=".menu_item_expanded"
-            android:exported="false" />
-        <activity
-            android:name=".menuItemIitle"
             android:exported="false" />
         <activity
             android:name=".ViewModel.EditarUsuario"

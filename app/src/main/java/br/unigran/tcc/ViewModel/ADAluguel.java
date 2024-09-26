@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -24,7 +25,6 @@ import java.util.Map;
 
 import br.unigran.tcc.Model.EquipamentoAluguel;
 import br.unigran.tcc.R;
-
 
 public class ADAluguel extends AppCompatActivity {
 
@@ -39,6 +39,9 @@ public class ADAluguel extends AppCompatActivity {
     private double precoUnitarioM;
     private double precoUnitarioI;
 
+    private FirebaseFirestore db;
+    private String itemId; // Variável para armazenar o ID do item
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,15 @@ public class ADAluguel extends AppCompatActivity {
         precoTotal = findViewById(R.id.textPrecoTotal);
         btnAdicionarCarrinho = findViewById(R.id.btnAdicionarCarrinho);
         switchTipoAluguel = findViewById(R.id.switchTipoAluguel);
+
+        db = FirebaseFirestore.getInstance();
+
+        // Obtendo o ID do item passado pelo Intent
+        itemId = getIntent().getStringExtra("id");
+
+        if (itemId != null) {
+            buscarDadosDoBanco();
+        }
 
         // Obtendo valores do Intent
         Intent intent = getIntent();
@@ -113,52 +125,119 @@ public class ADAluguel extends AppCompatActivity {
             String nome = nomeProduto.getText().toString();
             int quantidadeDesejada = Integer.parseInt(qtdParaAluguel.getText().toString());
 
-            FirebaseFirestore.getInstance().collection("EquipamentoAluguel")
-                    .whereEqualTo("nome", nome)
-                    .get()
-                    .addOnSuccessListener(queryDocumentSnapshots -> {
-                        if (!queryDocumentSnapshots.isEmpty()) {
-                            QueryDocumentSnapshot documento = (QueryDocumentSnapshot) queryDocumentSnapshots.getDocuments().get(0);
-                            EquipamentoAluguel equipAlugEstoque = documento.toObject(EquipamentoAluguel.class);
-                            int qtdDisponivel = equipAlugEstoque.getQtdAluguel();
+            // Verifica se o itemId não é nulo para editar
+            if (itemId != null) {
+                FirebaseFirestore.getInstance().collection("CarrinhoAluguel").document(userId)
+                        .collection("ItensAluguel").document(itemId)
+                        .update("quantidade", quantidadeDesejada,
+                                "tipoAluguel", switchTipoAluguel.isChecked(),
+                                "precoTotal", calcularPrecoTotal(quantidadeDesejada))
+                        .addOnSuccessListener(aVoid -> {
+                            Toast.makeText(ADAluguel.this, "Produto atualizado no carrinho", Toast.LENGTH_SHORT).show();
+                            finish();
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(ADAluguel.this, "Erro ao atualizar produto no carrinho", Toast.LENGTH_SHORT).show();
+                        });
+            } else {
+                // Se itemId for nulo, busca o item pelo nome
+                FirebaseFirestore.getInstance().collection("EquipamentoAluguel")
+                        .whereEqualTo("nome", nome)
+                        .get()
+                        .addOnSuccessListener(queryDocumentSnapshots -> {
+                            if (!queryDocumentSnapshots.isEmpty()) {
+                                QueryDocumentSnapshot documento = (QueryDocumentSnapshot) queryDocumentSnapshots.getDocuments().get(0);
+                                EquipamentoAluguel equipAlugEstoque = documento.toObject(EquipamentoAluguel.class);
+                                int qtdDisponivel = equipAlugEstoque.getQtdAluguel();
 
-                            if (quantidadeDesejada <= qtdDisponivel) {
-                                double precoTotalCalculado;
-                                if (switchTipoAluguel.isChecked()) {
-                                    precoTotalCalculado = precoUnitarioI * quantidadeDesejada;
+                                if (quantidadeDesejada <= qtdDisponivel) {
+                                    double precoTotalCalculado = calcularPrecoTotal(quantidadeDesejada);
+
+                                    // Criando o mapa com as informações do produto
+                                    Map<String, Object> produto = new HashMap<>();
+                                    produto.put("id", documento.getId()); // Adicionando o ID
+                                    produto.put("nome", nome);
+                                    produto.put("precoAluguelM", precoUnitarioM);
+                                    produto.put("precoAluguelI", precoUnitarioI);
+                                    produto.put("quantidade", quantidadeDesejada);
+                                    produto.put("precoTotal", precoTotalCalculado);
+                                    produto.put("tipoAluguel", switchTipoAluguel.isChecked()); // Salva o estado do switch
+
+                                    FirebaseFirestore.getInstance().collection("CarrinhoAluguel").document(userId)
+                                            .collection("ItensAluguel")
+                                            .add(produto)
+                                            .addOnSuccessListener(documentReference -> {
+                                                Toast.makeText(ADAluguel.this, "Produto adicionado ao carrinho", Toast.LENGTH_SHORT).show();
+                                                finish();
+                                            })
+                                            .addOnFailureListener(e -> {
+                                                Toast.makeText(ADAluguel.this, "Erro ao adicionar produto ao carrinho", Toast.LENGTH_SHORT).show();
+                                            });
                                 } else {
-                                    precoTotalCalculado = precoUnitarioM * quantidadeDesejada;
+                                    Toast.makeText(ADAluguel.this, "Estoque insuficiente para a quantidade desejada.", Toast.LENGTH_SHORT).show();
                                 }
-
-                                // Criando o mapa com as informações do produto
-                                Map<String, Object> produto = new HashMap<>();
-                                produto.put("nome", nome);
-                                produto.put("precoAluguelM", precoUnitarioM);
-                                produto.put("precoAluguelI", precoUnitarioI);
-                                produto.put("quantidade", quantidadeDesejada);
-                                produto.put("precoTotal", precoTotalCalculado);
-
-                                FirebaseFirestore.getInstance().collection("CarrinhoAluguel").document(userId)
-                                        .collection("ItensAluguel")
-                                        .add(produto)
-                                        .addOnSuccessListener(documentReference -> {
-                                            Toast.makeText(ADAluguel.this, "Produto adicionado ao carrinho", Toast.LENGTH_SHORT).show();
-                                            finish();
-                                        })
-                                        .addOnFailureListener(e -> {
-                                            Toast.makeText(ADAluguel.this, "Erro ao adicionar produto ao carrinho", Toast.LENGTH_SHORT).show();
-                                        });
-                            } else {
-                                Toast.makeText(ADAluguel.this, "Estoque insuficiente para a quantidade desejada.", Toast.LENGTH_SHORT).show();
                             }
-                        }
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(ADAluguel.this, "Erro ao verificar estoque", Toast.LENGTH_SHORT).show();
-                    });
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(ADAluguel.this, "Erro ao verificar estoque", Toast.LENGTH_SHORT).show();
+                        });
+            }
         } else {
             Toast.makeText(ADAluguel.this, "Você precisa estar logado para adicionar itens ao carrinho.", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private double calcularPrecoTotal(int quantidade) {
+        return switchTipoAluguel.isChecked() ? precoUnitarioI * quantidade : precoUnitarioM * quantidade;
+    }
+
+
+    private void buscarDadosDoBanco() {
+        FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
+        if (usuarioAtual != null) {
+            String userId = usuarioAtual.getUid();
+
+            FirebaseFirestore.getInstance().collection("CarrinhoAluguel").document(userId)
+                    .collection("ItensAluguel")
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        if (queryDocumentSnapshots.isEmpty()) {
+                            Toast.makeText(ADAluguel.this, "Nenhum item encontrado.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
+                                if (documentSnapshot.exists()) {
+                                    // Preencher os campos com os dados do documento
+                                    String nome = documentSnapshot.getString("nome");
+                                    precoUnitarioM = documentSnapshot.getDouble("precoAluguelM");
+                                    precoUnitarioI = documentSnapshot.getDouble("precoAluguelI");
+                                    int qtdAluguel = documentSnapshot.getLong("quantidade").intValue();
+                                    boolean tipoAluguel = documentSnapshot.getBoolean("tipoAluguel");
+
+                                    // Atualiza a interface com os dados
+                                    nomeProduto.setText(nome);
+                                    qtdParaAluguel.setText(String.valueOf(qtdAluguel));
+                                    precoAluguelM.setText(String.format("Preço de Aluguel M: R$%.2f", precoUnitarioM));
+                                    precoAluguelI.setText(String.format("Preço de Aluguel I: R$%.2f", precoUnitarioI));
+                                    precoTotal.setText(String.format("Preço Total: R$%.2f", calcularPrecoTotal(qtdAluguel)));
+
+                                    // Atualiza o estado do switch
+                                    switchTipoAluguel.setChecked(tipoAluguel);
+
+                                    // Exibir um Toast com os dados recuperados
+                                    Toast.makeText(ADAluguel.this, "Dados carregados com sucesso: " + nome, Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(ADAluguel.this, "Documento não existe: " + documentSnapshot.getId(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(ADAluguel.this, "Erro ao buscar dados: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+        } else {
+            Toast.makeText(ADAluguel.this, "Você precisa estar logado para buscar itens no carrinho.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
 }
