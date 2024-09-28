@@ -2,6 +2,7 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/idTela"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -31,8 +32,8 @@
 
         <EditText
             android:id="@+id/editDesconto"
-            android:layout_width="143dp"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:hint="Valor Desconto"
             android:inputType="number"
@@ -46,13 +47,58 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
+        <TextView
+            android:id="@+id/textViewNome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nome"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/idNomeAluguel"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/borda_recycleview"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/erroNomeAluguel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#FF0000"
+            android:visibility="gone"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/textViewTelefone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Telefone"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/idTelefoneAluguel"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/borda_recycleview"
+            android:hint="(99) 99999-9999"
+            android:inputType="phone" />
+
+        <TextView
+            android:id="@+id/erroTelefoneAluguel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#FF0000"
+            android:visibility="gone"
+            android:layout_marginTop="8dp" />
+
         <Button
             android:id="@+id/buttonFinalizar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Finalizar Compra"
-            android:backgroundTint="@color/Button"
             android:layout_marginTop="16dp"
+            android:backgroundTint="@color/Button"
+            android:text="Finalizar Aluguel"
             android:textColor="@android:color/white" />
     </LinearLayout>
 

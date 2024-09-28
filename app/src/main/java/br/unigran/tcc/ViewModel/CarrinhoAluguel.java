@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,9 +22,12 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import br.unigran.tcc.Model.EquipamentoAluguel;
@@ -136,6 +140,50 @@ public class CarrinhoAluguel extends AppCompatActivity {
 
 
     private void finalizarCompra() {
+        EditText editNomeAluguel = findViewById(R.id.idNomeAluguel);
+        EditText editTelefoneAluguel = findViewById(R.id.idTelefoneAluguel);
+
+        // Recuperar TextViews para exibir as mensagens de erro
+        TextView erroNomeAluguel = findViewById(R.id.erroNomeAluguel);
+        TextView erroTelefoneAluguel = findViewById(R.id.erroTelefoneAluguel);
+
+        String nomeAluguel = editNomeAluguel.getText().toString().trim();
+        String telefoneAluguel = editTelefoneAluguel.getText().toString().trim();
+
+        boolean camposVazios = false;
+
+        // Verificar se o campo nome está preenchido
+        if (nomeAluguel.isEmpty()) {
+            editNomeAluguel.setBackgroundResource(R.drawable.borda_vermelha);
+            erroNomeAluguel.setText("Campo obrigatório!");
+            erroNomeAluguel.setVisibility(View.VISIBLE);
+            camposVazios = true;
+        } else {
+            editNomeAluguel.setBackgroundResource(0);  // Remover a borda vermelha se estiver preenchido
+            erroNomeAluguel.setVisibility(View.GONE);   // Esconder a mensagem de erro
+        }
+
+        // Verificar se o campo telefone está preenchido
+        if (telefoneAluguel.isEmpty()) {
+            editTelefoneAluguel.setBackgroundResource(R.drawable.borda_vermelha);
+            erroTelefoneAluguel.setText("Campo obrigatório!");
+            erroTelefoneAluguel.setVisibility(View.VISIBLE);
+            camposVazios = true;
+        } else if (!telefoneAluguel.matches("\\(\\d{2}\\) \\d{5}-\\d{4}")) { // Validação do formato do telefone
+            editTelefoneAluguel.setBackgroundResource(R.drawable.borda_vermelha);
+            erroTelefoneAluguel.setText("Formato inválido! Use (XX) XXXXX-XXXX.");
+            erroTelefoneAluguel.setVisibility(View.VISIBLE);
+            camposVazios = true;
+        } else {
+            editTelefoneAluguel.setBackgroundResource(0);  // Remover a borda vermelha se estiver preenchido
+            erroTelefoneAluguel.setVisibility(View.GONE);   // Esconder a mensagem de erro
+        }
+
+        // Se algum campo estiver vazio, não prosseguir com a finalização
+        if (camposVazios) {
+            return; // Encerra o método se houver campos vazios
+        }
+
         String descontoStr = editDesconto.getText().toString();
         double desconto = 0.0;
 
@@ -153,12 +201,21 @@ public class CarrinhoAluguel extends AppCompatActivity {
         if (usuarioAtual != null) {
             String userId = usuarioAtual.getUid();
 
+            // Formatar data e hora
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+            String dataFormatada = dateFormat.format(new Date());
+            String horaFormatada = timeFormat.format(new Date());
+
             Map<String, Object> compra = new HashMap<>();
             compra.put("usuarioId", userId);
             compra.put("subtotal", subtotal);
             compra.put("desconto", desconto);
             compra.put("total", total);
-            compra.put("dataHora", System.currentTimeMillis());
+            compra.put("data", dataFormatada); // Salvando a data formatada
+            compra.put("hora", horaFormatada); // Salvando a hora formatada
+            compra.put("idNomenAluguel", nomeAluguel); // Adicionando o nome do aluguel
+            compra.put("idTelefoneAluguel", telefoneAluguel);
 
             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
             CollectionReference comprasRef = firestore.collection("AluguelFinalizadas");
@@ -191,7 +248,7 @@ public class CarrinhoAluguel extends AppCompatActivity {
                             atualizarEstoque(equipAlug);
                         }
 
-                        // Clear the cart after successful purchase
+                        // Limpa o carrinho após a compra bem-sucedida
                         limparCarrinho(userId);
                         Toast.makeText(CarrinhoAluguel.this, String.format("Compra finalizada com sucesso! Total: R$%.2f", total), Toast.LENGTH_SHORT).show();
                         finish();
@@ -204,6 +261,7 @@ public class CarrinhoAluguel extends AppCompatActivity {
             Toast.makeText(CarrinhoAluguel.this, "Você precisa estar logado para finalizar a compra.", Toast.LENGTH_SHORT).show();
         }
     }
+
 
 
     private void atualizarEstoque(EquipamentoAluguel equipAlug) {
