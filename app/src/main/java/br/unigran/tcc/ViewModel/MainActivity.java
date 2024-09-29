@@ -126,4 +126,8 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, Aluguel.class);
         startActivity(intent);
     }
+    public void finalizarAluguel(View view) {
+        Intent intent = new Intent(this, FinalizarAluguel.class);
+        startActivity(intent);
+    }
 }
