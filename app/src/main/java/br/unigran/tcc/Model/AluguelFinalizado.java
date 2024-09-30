@@ -1,6 +1,6 @@
 package br.unigran.tcc.Model;
 
-public class Alugueis {
+public class AluguelFinalizado {
     private String idNomenAluguel;
     private String idTelefoneAluguel;
     private String data;
@@ -10,9 +10,11 @@ public class Alugueis {
     private double total;
 
     // Construtor padrão
-    public Alugueis() {}
+    public AluguelFinalizado() {}
 
     // Getters e Setters
+
+
     public String getIdNomenAluguel() {
         return idNomenAluguel;
     }

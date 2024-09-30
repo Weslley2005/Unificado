@@ -3,8 +3,10 @@ package br.unigran.tcc.ViewModel;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +20,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.unigran.tcc.Model.AluguelFinalizado;
 import br.unigran.tcc.Model.ItemAluguel;
 import br.unigran.tcc.R;
 
@@ -28,6 +31,7 @@ public class DetalhesAluguel extends AppCompatActivity {
     private List<ItemAluguel> listaItensAlugados;
     private Button buttonFinalizarAluguel;
     private FirebaseFirestore firestore;
+    private ImageButton deletar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,7 @@ public class DetalhesAluguel extends AppCompatActivity {
         // Inicialização das variáveis
         recyclerViewItensAlugados = findViewById(R.id.recycleViewItensAlugados);
         buttonFinalizarAluguel = findViewById(R.id.buttonFinalizarAluguel);
+        deletar = findViewById(R.id.idDeletarAluguel);
         listaItensAlugados = new ArrayList<>();
         itemAluguelAdapter = new ItemAluguelAdapter(listaItensAlugados);
 
@@ -56,6 +61,11 @@ public class DetalhesAluguel extends AppCompatActivity {
             Toast.makeText(this, "ID do aluguel inválido!", Toast.LENGTH_SHORT).show();
             finish(); // Fecha a Activity se o aluguelId for inválido
         }
+
+        deletar.setOnClickListener(view -> {
+            // Exibe diálogo de confirmação antes de deletar
+            mostrarDialogoDeConfirmacao(aluguelId);
+        });
     }
 
     // Método para carregar os itens alugados
@@ -94,7 +104,6 @@ public class DetalhesAluguel extends AppCompatActivity {
         }
 
         String userId = usuarioAtual.getUid();
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
         // Devolver itens e depois deletar o aluguel
         int totalItens = listaItensAlugados.size();
@@ -114,6 +123,7 @@ public class DetalhesAluguel extends AppCompatActivity {
                     firestore.collection("CarrinhoAluguel").document(userId)
                             .delete()
                             .addOnSuccessListener(aVoid -> {
+                                salvarAluguelFinalizado(aluguelId); // Chama o método para salvar os dados
                                 Toast.makeText(this, "Aluguel finalizado com sucesso!", Toast.LENGTH_SHORT).show();
                                 finish(); // Fecha a Activity após finalizar o aluguel
                             })
@@ -126,7 +136,121 @@ public class DetalhesAluguel extends AppCompatActivity {
         }
     }
 
-    // Método para transferir itens e finalizar o aluguel
+
+    private void salvarAluguelFinalizado(String aluguelId) {
+        firestore.collection("AluguelFinalizadas").document(aluguelId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        AluguelFinalizado aluguelFinalizado = new AluguelFinalizado();
+
+                        // Verifica se os campos são nulos antes de atribuí-los
+                        if (task.getResult().getDouble("subTotal") != null) {
+                            aluguelFinalizado.setSubtotal(task.getResult().getDouble("subTotal"));
+                        } else {
+                            Log.e("DetalhesAluguel", "subTotal é nulo");
+                            aluguelFinalizado.setSubtotal(0); // ou outro valor padrão
+                        }
+
+                        if (task.getResult().getDouble("desconto") != null) {
+                            aluguelFinalizado.setDesconto(task.getResult().getDouble("desconto"));
+                        } else {
+                            Log.e("DetalhesAluguel", "desconto é nulo");
+                            aluguelFinalizado.setDesconto(0.0); // ou outro valor padrão
+                        }
+
+                        if (task.getResult().getDouble("total") != null) {
+                            aluguelFinalizado.setTotal(task.getResult().getDouble("total"));
+                        } else {
+                            Log.e("DetalhesAluguel", "total é nulo");
+                            aluguelFinalizado.setTotal(0); // ou outro valor padrão
+                        }
+
+                        aluguelFinalizado.setData(task.getResult().getString("data"));
+                        aluguelFinalizado.setHora(task.getResult().getString("hora"));
+                        aluguelFinalizado.setIdNomenAluguel(task.getResult().getString("idNomenAluguel"));
+                        aluguelFinalizado.setIdTelefoneAluguel(task.getResult().getString("idTelefoneAluguel"));
+
+                        // Salvar na coleção AlugFinaliz
+                        firestore.collection("AlugFinaliz").document(aluguelId)
+                                .set(aluguelFinalizado)
+                                .addOnSuccessListener(aVoid -> {
+                                    Log.d("DetalhesAluguel", "Aluguel finalizado salvo com sucesso!");
+
+                                    // Agora, salve os itens da coleção ItensAluguel
+                                    salvarItensAluguel(aluguelId);
+                                })
+                                .addOnFailureListener(e -> {
+                                    Log.e("DetalhesAluguel", "Erro ao salvar aluguel finalizado", e);
+                                });
+                    } else {
+                        Log.e("DetalhesAluguel", "Erro ao carregar dados do aluguel", task.getException());
+                    }
+                });
+    }
+
+    private void salvarItensAluguel(String aluguelId) {
+        CollectionReference itensRef = firestore.collection("AluguelFinalizadas")
+                .document(aluguelId)
+                .collection("ItensAluguel");
+
+        itensRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                for (QueryDocumentSnapshot documento : task.getResult()) {
+                    ItemAluguel itemAluguel = documento.toObject(ItemAluguel.class);
+                    itemAluguel.setId(documento.getId());
+
+                    // Salvar cada item na nova coleção
+                    firestore.collection("AlugFinaliz").document(aluguelId)
+                            .collection("ItensAluguel") // Nova coleção
+                            .document(itemAluguel.getId()) // O ID do item
+                            .set(itemAluguel)
+                            .addOnSuccessListener(aVoid -> {
+                                Log.d("DetalhesAluguel", "Item alugado salvo com sucesso: " + itemAluguel.getId());
+                                // Após salvar todos os itens, deletar a coleção AluguelFinalizadas
+                                deletarColecaoAluguelFinalizadas(aluguelId);
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.e("DetalhesAluguel", "Erro ao salvar item alugado", e);
+                            });
+                }
+            } else {
+                Log.e("DetalhesAluguel", "Erro ao carregar itens alugados", task.getException());
+            }
+        });
+    }
+
+    // Método para deletar a coleção AluguelFinalizadas
+    private void deletarColecaoAluguelFinalizadas(String aluguelId) {
+        CollectionReference collectionRef = firestore.collection("AluguelFinalizadas").document(aluguelId).collection("ItensAluguel");
+
+        collectionRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    document.getReference().delete()
+                            .addOnSuccessListener(aVoid -> {
+                                Log.d("DetalhesAluguel", "Documento deletado com sucesso: " + document.getId());
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.e("DetalhesAluguel", "Erro ao deletar documento: " + document.getId(), e);
+                            });
+                }
+                // Após deletar todos os documentos da coleção, deletar a própria coleção AluguelFinalizadas
+                firestore.collection("AluguelFinalizadas").document(aluguelId)
+                        .delete()
+                        .addOnSuccessListener(aVoid -> {
+                            Log.d("DetalhesAluguel", "Coleção AluguelFinalizadas deletada com sucesso!");
+                        })
+                        .addOnFailureListener(e -> {
+                            Log.e("DetalhesAluguel", "Erro ao deletar a coleção AluguelFinalizadas", e);
+                        });
+            } else {
+                Log.e("DetalhesAluguel", "Erro ao carregar documentos da coleção AluguelFinalizadas", task.getException());
+            }
+        });
+    }
+
+
 
 
     // Método para devolver um item e atualizar seu estoque no Firestore
@@ -137,27 +261,72 @@ public class DetalhesAluguel extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && !task.getResult().isEmpty()) {
                         QueryDocumentSnapshot document = (QueryDocumentSnapshot) task.getResult().getDocuments().get(0);
-                        int estoqueAtual = document.getLong("qtdAluguel").intValue();
+                        Long estoqueAtual = document.getLong("qtdAluguel"); // Mudei para Long para evitar NullPointerException
+                        if (estoqueAtual != null) {
+                            int novaQuantidadeEstoque = estoqueAtual.intValue() + itemAluguel.getQuantidade();
 
-                        Log.d("CarrinhoActivity", "Estoque atual do produto '" + itemAluguel.getNome() + "': " + estoqueAtual);
+                            Log.d("CarrinhoActivity", "Nova quantidade de estoque após adição: " + novaQuantidadeEstoque);
 
-                        int novaQuantidadeEstoque = estoqueAtual + itemAluguel.getQuantidade();
-
-                        Log.d("CarrinhoActivity", "Nova quantidade de estoque após adição: " + novaQuantidadeEstoque);
-
-                        document.getReference().update("qtdAluguel", novaQuantidadeEstoque)
-                                .addOnSuccessListener(aVoid -> {
-                                    Log.d("CarrinhoActivity", "Estoque atualizado com sucesso!");
-                                    onComplete.run(); // Chama o callback quando a atualização for bem-sucedida
-                                })
-                                .addOnFailureListener(e -> {
-                                    Log.e("CarrinhoActivity", "Erro ao atualizar estoque", e);
-                                    onComplete.run(); // Chama o callback mesmo em caso de erro para continuar o processo
-                                });
+                            document.getReference().update("qtdAluguel", novaQuantidadeEstoque)
+                                    .addOnSuccessListener(aVoid -> {
+                                        Log.d("CarrinhoActivity", "Estoque atualizado com sucesso!");
+                                        onComplete.run(); // Chama o callback quando a atualização for bem-sucedida
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Log.e("CarrinhoActivity", "Erro ao atualizar estoque", e);
+                                        onComplete.run(); // Chama o callback mesmo em caso de erro para continuar o processo
+                                    });
+                        } else {
+                            Log.e("CarrinhoActivity", "Estoque atual é nulo!");
+                            onComplete.run(); // Chama o callback para continuar o processo
+                        }
                     } else {
                         Log.e("CarrinhoActivity", "Produto não encontrado para atualizar estoque");
                         onComplete.run(); // Chama o callback para continuar o processo mesmo que o produto não tenha sido encontrado
                     }
                 });
     }
+    private void mostrarDialogoDeConfirmacao(String aluguelId) {
+        new AlertDialog.Builder(this)
+                .setTitle("Confirmar Exclusão")
+                .setMessage("Você realmente deseja deletar este aluguel?")
+                .setPositiveButton("Sim", (dialog, which) -> deletarAluguel(aluguelId))
+                .setNegativeButton("Não", null)
+                .show();
+    }
+
+    // Método para deletar o aluguel
+    // Método para deletar o aluguel
+    private void deletarAluguel(String aluguelId) {
+        // Devolver itens antes de deletar o aluguel
+        if (listaItensAlugados.isEmpty()) {
+            Toast.makeText(this, "Nenhum item para devolver!", Toast.LENGTH_SHORT).show();
+            return; // Para se não houver itens para devolver
+        }
+
+        // Contador para controlar o número de itens devolvidos
+        final int[] itensDevolvidos = {0};
+        int totalItens = listaItensAlugados.size();
+
+        for (ItemAluguel item : listaItensAlugados) {
+            devolverItem(item, () -> {
+                itensDevolvidos[0]++;
+                // Após devolver todos os itens, remove o documento do aluguel
+                if (itensDevolvidos[0] == totalItens) {
+                    firestore.collection("AluguelFinalizadas").document(aluguelId)
+                            .delete()
+                            .addOnSuccessListener(aVoid -> {
+                                Toast.makeText(this, "Aluguel deletado com sucesso!", Toast.LENGTH_SHORT).show();
+                                finish(); // Fecha a Activity após deletar
+                            })
+                            .addOnFailureListener(e -> {
+                                Toast.makeText(this, "Erro ao deletar aluguel", Toast.LENGTH_SHORT).show();
+                                Log.e("DetalhesAluguel", "Erro ao deletar aluguel", e);
+                            });
+                }
+            });
+        }
+    }
+
+
 }
