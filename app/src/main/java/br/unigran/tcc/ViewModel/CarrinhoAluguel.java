@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -59,7 +60,32 @@ public class CarrinhoAluguel extends AppCompatActivity {
         recyclerViewCarrinho.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewCarrinho.setAdapter(carrinhoAdapter);
 
-        carregarCarrinho();
+        // Verifique se o usuário está logado e chame a função apropriada
+        FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
+        if (usuarioAtual != null) {
+            String userId = usuarioAtual.getUid();
+
+            FirebaseFirestore.getInstance().collection("CarrinhoAluguel").document(userId)
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            String nomeAluguel = documentSnapshot.getString("idNomeAluguel");
+                            String telefoneAluguel = documentSnapshot.getString("idTelefoneAluguel");
+
+                            if (nomeAluguel == null && telefoneAluguel == null) {
+                                carregarCarrinho(); // Chama se ambos forem nulos
+                            } else {
+                                carregarCarrinhoEditar(); // Chama se não forem nulos
+                            }
+                        } else {
+                            Log.e("CarrinhoActivity", "Documento não encontrado.");
+                            carregarCarrinho();
+                        }
+                    })
+                    .addOnFailureListener(e -> Log.e("CarrinhoActivity", "Erro ao carregar documento", e));
+        } else {
+            Toast.makeText(CarrinhoAluguel.this, "Você precisa estar logado para visualizar o carrinho.", Toast.LENGTH_SHORT).show();
+        }
 
         buttonFinalizar.setOnClickListener(v -> finalizarCompra());
 
@@ -102,8 +128,11 @@ public class CarrinhoAluguel extends AppCompatActivity {
                                 EquipamentoAluguel equipAlug = new EquipamentoAluguel();
                                 equipAlug.setId(documento.getId()); // Armazena o ID do documento
                                 equipAlug.setNome(documento.getString("nome"));
+                                equipAlug.setPrecoAluguelM(documento.getDouble("precoAluguelM").floatValue());
+                                equipAlug.setPrecoAluguelI(documento.getDouble("precoAluguelI").floatValue());
                                 equipAlug.setPrecoAluguelI(documento.getDouble("precoTotal").floatValue());
                                 equipAlug.setQtdAluguel(documento.getLong("quantidade").intValue());
+                                equipAlug.setTipoAluguel(documento.getBoolean("tipoAluguel"));
 
                                 listaCarrinho.add(equipAlug);
                                 subtotal += equipAlug.getPrecoAluguelI();
@@ -118,6 +147,65 @@ public class CarrinhoAluguel extends AppCompatActivity {
             Toast.makeText(CarrinhoAluguel.this, "Você precisa estar logado para visualizar o carrinho.", Toast.LENGTH_SHORT).show();
         }
     }
+
+    void carregarCarrinhoEditar() {
+        FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
+        if (usuarioAtual != null) {
+            String userId = usuarioAtual.getUid();
+
+            FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
+            // Primeiro, carregar o nome e telefone do documento principal
+            firestore.collection("CarrinhoAluguel").document(userId)
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            String nomeAluguel = documentSnapshot.getString("idNomenAluguel");
+                            String telefoneAluguel = documentSnapshot.getString("idTelefoneAluguel");
+
+                            EditText editNomeAluguel = findViewById(R.id.idNomeAluguel);
+                            EditText editTelefoneAluguel = findViewById(R.id.idTelefoneAluguel);
+
+                            editNomeAluguel.setText(nomeAluguel);
+                            editTelefoneAluguel.setText(telefoneAluguel);
+                        } else {
+                            Log.e("CarrinhoActivity", "Documento não encontrado para carregar nome e telefone.");
+                        }
+                    })
+                    .addOnFailureListener(e -> Log.e("CarrinhoActivity", "Erro ao carregar nome e telefone", e));
+
+            // Em seguida, carregar os itens do carrinho
+            firestore.collection("CarrinhoAluguel").document(userId)
+                    .collection("ItensAluguel")
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            listaCarrinho.clear();
+                            subtotal = 0.0;
+                            for (QueryDocumentSnapshot documento : task.getResult()) {
+                                EquipamentoAluguel equipAlug = new EquipamentoAluguel();
+                                equipAlug.setId(documento.getId());
+                                equipAlug.setNome(documento.getString("nome"));
+                                equipAlug.setPrecoAluguelM(documento.getDouble("precoAluguelM").floatValue());
+                                equipAlug.setPrecoAluguelI(documento.getDouble("precoAluguelI").floatValue());
+                                equipAlug.setPrecoAluguelI(documento.getDouble("precoTotal").floatValue());
+                                equipAlug.setQtdAluguel(documento.getLong("quantidade").intValue());
+                                equipAlug.setTipoAluguel(documento.getBoolean("tipoAluguel"));
+
+                                listaCarrinho.add(equipAlug);
+                                subtotal += equipAlug.getPrecoAluguelI();
+                            }
+                            carrinhoAdapter.notifyDataSetChanged();
+                            atualizarSubtotal();
+                        } else {
+                            Log.e("CarrinhoActivity", "Erro ao carregar carrinho", task.getException());
+                        }
+                    });
+        } else {
+            Toast.makeText(CarrinhoAluguel.this, "Você precisa estar logado para visualizar o carrinho.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
 
     private void atualizarSubtotal() {
@@ -230,8 +318,10 @@ public class CarrinhoAluguel extends AppCompatActivity {
                             Map<String, Object> item = new HashMap<>();
                             item.put("nome", equipAlug.getNome());
                             item.put("precoAluguelI", equipAlug.getPrecoAluguelI());
+                            item.put("precoAluguelM", equipAlug.getPrecoAluguelM());
                             item.put("quantidade", equipAlug.getQtdAluguel());
                             item.put("precoTotal", equipAlug.getPrecoAluguelI() * equipAlug.getQtdAluguel());
+                            item.put("tipoAluguel", equipAlug.isTipoAluguel());
                             itens.add(item);
                         }
 
@@ -298,18 +388,31 @@ public class CarrinhoAluguel extends AppCompatActivity {
 
 
     private void limparCarrinho(String userId) {
-        FirebaseFirestore.getInstance().collection("CarrinhoAluguel").document(userId)
-                .collection("ItensAluguel")
-                .get()
+        // Referência para o documento do carrinho do usuário
+        DocumentReference carrinhoRef = FirebaseFirestore.getInstance().collection("CarrinhoAluguel").document(userId);
+
+        // Obter a coleção de itens do carrinho
+        carrinhoRef.collection("ItensAluguel").get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        // Deletar todos os itens na coleção
                         for (QueryDocumentSnapshot documento : task.getResult()) {
                             documento.getReference().delete();
                         }
+                        // Após remover todos os itens, limpar a lista e atualizar o adapter
                         listaCarrinho.clear();
                         carrinhoAdapter.notifyDataSetChanged();
                         subtotal = 0.0;
                         atualizarSubtotal();
+
+                        // Deletar o documento do carrinho
+                        carrinhoRef.delete()
+                                .addOnSuccessListener(aVoid -> {
+                                    Log.d("CarrinhoActivity", "Carrinho limpo com sucesso!");
+                                })
+                                .addOnFailureListener(e -> {
+                                    Log.e("CarrinhoActivity", "Erro ao deletar o carrinho", e);
+                                });
                     } else {
                         Log.e("CarrinhoActivity", "Erro ao limpar carrinho", task.getException());
                     }

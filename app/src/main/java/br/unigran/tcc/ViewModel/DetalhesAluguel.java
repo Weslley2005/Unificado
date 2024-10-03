@@ -16,9 +16,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import br.unigran.tcc.Model.AluguelFinalizado;
 import br.unigran.tcc.Model.ItemAluguel;
@@ -26,12 +29,13 @@ import br.unigran.tcc.R;
 
 public class DetalhesAluguel extends AppCompatActivity {
 
+    private static final int EDITAR_ALUGUEL_REQUEST_CODE = 1;
     private RecyclerView recyclerViewItensAlugados;
     private ItemAluguelAdapter itemAluguelAdapter;
     private List<ItemAluguel> listaItensAlugados;
     private Button buttonFinalizarAluguel;
     private FirebaseFirestore firestore;
-    private ImageButton deletar;
+    private ImageButton deletar, editar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,7 @@ public class DetalhesAluguel extends AppCompatActivity {
         recyclerViewItensAlugados = findViewById(R.id.recycleViewItensAlugados);
         buttonFinalizarAluguel = findViewById(R.id.buttonFinalizarAluguel);
         deletar = findViewById(R.id.idDeletarAluguel);
+        editar = findViewById(R.id.idEditarAluguel);
         listaItensAlugados = new ArrayList<>();
         itemAluguelAdapter = new ItemAluguelAdapter(listaItensAlugados);
 
@@ -51,6 +56,9 @@ public class DetalhesAluguel extends AppCompatActivity {
 
         // Inicializa o Firestore
         firestore = FirebaseFirestore.getInstance();
+
+        FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
+        String usuarioId = usuarioAtual != null ? usuarioAtual.getUid() : null;
 
         // Obtém o ID do aluguel da Intent
         String aluguelId = getIntent().getStringExtra("aluguelId");
@@ -66,6 +74,15 @@ public class DetalhesAluguel extends AppCompatActivity {
             // Exibe diálogo de confirmação antes de deletar
             mostrarDialogoDeConfirmacao(aluguelId);
         });
+
+        editar.setOnClickListener(view -> {
+            if (usuarioId != null) {
+                editarAluguel(aluguelId, usuarioId);
+            } else {
+                Toast.makeText(this, "Usuário não autenticado!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     // Método para carregar os itens alugados
@@ -295,8 +312,6 @@ public class DetalhesAluguel extends AppCompatActivity {
                 .show();
     }
 
-    // Método para deletar o aluguel
-    // Método para deletar o aluguel
     private void deletarAluguel(String aluguelId) {
         // Devolver itens antes de deletar o aluguel
         if (listaItensAlugados.isEmpty()) {
@@ -327,6 +342,75 @@ public class DetalhesAluguel extends AppCompatActivity {
             });
         }
     }
+    private void editarAluguel(String aluguelId, String usuarioId) {
+        // Referência para a coleção de itens na coleção AluguelFinalizadas
+        CollectionReference itensRef = firestore.collection("AluguelFinalizadas")
+                .document(aluguelId)
+                .collection("ItensAluguel");
+
+        // Recupera o documento AluguelFinalizadas para pegar o idNomeAluguel e idTelefoneAluguel
+        firestore.collection("AluguelFinalizadas").document(aluguelId).get()
+                .addOnCompleteListener(taskAluguel -> {
+                    if (taskAluguel.isSuccessful() && taskAluguel.getResult() != null) {
+                        // Pega os valores de idNomeAluguel e idTelefoneAluguel
+                        String idNomeAluguel = taskAluguel.getResult().getString("idNomenAluguel");
+                        String idTelefoneAluguel = taskAluguel.getResult().getString("idTelefoneAluguel");
+
+                        // Agora carrega os itens alugados
+                        itensRef.get().addOnCompleteListener(task -> {
+                            if (task.isSuccessful() && task.getResult() != null) {
+                                final int[] itensDevolvidos = {0};
+                                int totalItens = task.getResult().size();
+
+                                for (QueryDocumentSnapshot documento : task.getResult()) {
+                                    ItemAluguel itemAluguel = documento.toObject(ItemAluguel.class);
+                                    itemAluguel.setId(documento.getId());
+
+                                    // Devolver o item antes de salvar no CarrinhoAluguel
+                                    devolverItem(itemAluguel, () -> {
+                                        itensDevolvidos[0]++;
+                                        // Após devolver todos os itens, salva os dados no CarrinhoAluguel
+                                        if (itensDevolvidos[0] == totalItens) {
+                                            firestore.collection("CarrinhoAluguel").document(usuarioId)
+                                                    .collection("ItensAluguel")
+                                                    .document(itemAluguel.getId())
+                                                    .set(itemAluguel)
+                                                    .addOnSuccessListener(aVoid -> {
+                                                        // Agora adicione os campos extras ao documento CarrinhoAluguel
+                                                        Map<String, Object> dadosExtras = new HashMap<>();
+                                                        dadosExtras.put("idNomenAluguel", idNomeAluguel);
+                                                        dadosExtras.put("idTelefoneAluguel", idTelefoneAluguel);
+
+                                                        firestore.collection("CarrinhoAluguel").document(usuarioId)
+                                                                .set(dadosExtras, SetOptions.merge()) // Merge para evitar sobrescrever todo o documento
+                                                                .addOnSuccessListener(aVoid2 -> {
+                                                                    Log.d("DetalhesAluguel", "Campos adicionais salvos com sucesso!");
+                                                                    // Deletar a coleção AluguelFinalizadas após salvar os dados
+                                                                    deletarColecaoAluguelFinalizadas(aluguelId);
+                                                                })
+                                                                .addOnFailureListener(e -> Log.e("DetalhesAluguel", "Erro ao salvar campos adicionais", e));
+                                                    })
+                                                    .addOnFailureListener(e -> {
+                                                        Log.e("DetalhesAluguel", "Erro ao salvar item alugado", e);
+                                                    });
+                                        }
+                                    });
+                                }
+                            } else {
+                                Log.e("DetalhesAluguel", "Erro ao carregar itens alugados", task.getException());
+                            }
+                        });
+                    } else {
+                        Log.e("DetalhesAluguel", "Erro ao carregar documento AluguelFinalizadas", taskAluguel.getException());
+                    }
+                });
+    }
 
 
 }
+
+
+
+
+
+

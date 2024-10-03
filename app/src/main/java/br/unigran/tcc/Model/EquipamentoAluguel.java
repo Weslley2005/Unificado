@@ -8,6 +8,7 @@ public class EquipamentoAluguel implements Serializable {
     private Integer qtdAluguel;
     private Float precoAluguelM;
     private Float precoAluguelI;
+    private boolean tipoAluguel;
 
     public String getId() {
         return id;
@@ -47,5 +48,13 @@ public class EquipamentoAluguel implements Serializable {
 
     public void setPrecoAluguelI(Float precoAluguelI) {
         this.precoAluguelI = precoAluguelI;
+    }
+
+    public boolean isTipoAluguel() {
+        return tipoAluguel;
+    }
+
+    public void setTipoAluguel(boolean tipoAluguel) {
+        this.tipoAluguel = tipoAluguel;
     }
 }

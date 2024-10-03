@@ -7,6 +7,9 @@ public class FinalizarAlugueis {
     private String hora;
     private String idNomenAluguel;
     private String idTelefoneAluguel;
+    private double desconto;
+    private double subTotal;
+    private String usuarioId;
 
     // Construtor padrão (necessário para Firestore)
     public FinalizarAlugueis() {}
@@ -59,5 +62,29 @@ public class FinalizarAlugueis {
 
     public void setIdTelefoneAluguel(String idTelefoneAluguel) {
         this.idTelefoneAluguel = idTelefoneAluguel;
+    }
+
+    public double getDesconto() {
+        return desconto;
+    }
+
+    public void setDesconto(double desconto) {
+        this.desconto = desconto;
+    }
+
+    public double getSubTotal() {
+        return subTotal;
+    }
+
+    public void setSubTotal(double subTotal) {
+        this.subTotal = subTotal;
+    }
+
+    public String getUsuarioId() {
+        return usuarioId;
+    }
+
+    public void setUsuarioId(String usuarioId) {
+        this.usuarioId = usuarioId;
     }
 }
