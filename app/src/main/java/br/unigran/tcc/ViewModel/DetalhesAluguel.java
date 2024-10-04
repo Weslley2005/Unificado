@@ -36,6 +36,7 @@ public class DetalhesAluguel extends AppCompatActivity {
     private Button buttonFinalizarAluguel;
     private FirebaseFirestore firestore;
     private ImageButton deletar, editar;
+    private String usuarioId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +59,7 @@ public class DetalhesAluguel extends AppCompatActivity {
         firestore = FirebaseFirestore.getInstance();
 
         FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
-        String usuarioId = usuarioAtual != null ? usuarioAtual.getUid() : null;
+        usuarioId = usuarioAtual != null ? usuarioAtual.getUid() : null; // Definindo usuarioId aqui
 
         // Obtém o ID do aluguel da Intent
         String aluguelId = getIntent().getStringExtra("aluguelId");
@@ -140,7 +141,7 @@ public class DetalhesAluguel extends AppCompatActivity {
                     firestore.collection("CarrinhoAluguel").document(userId)
                             .delete()
                             .addOnSuccessListener(aVoid -> {
-                                salvarAluguelFinalizado(aluguelId); // Chama o método para salvar os dados
+                                salvarAluguelFinalizado(aluguelId, usuarioId); // Corrigido: usa usuarioId da classe
                                 Toast.makeText(this, "Aluguel finalizado com sucesso!", Toast.LENGTH_SHORT).show();
                                 finish(); // Fecha a Activity após finalizar o aluguel
                             })
@@ -154,7 +155,7 @@ public class DetalhesAluguel extends AppCompatActivity {
     }
 
 
-    private void salvarAluguelFinalizado(String aluguelId) {
+    private void salvarAluguelFinalizado(String aluguelId, String usuarioId) {
         firestore.collection("AluguelFinalizadas").document(aluguelId)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -188,6 +189,9 @@ public class DetalhesAluguel extends AppCompatActivity {
                         aluguelFinalizado.setIdNomenAluguel(task.getResult().getString("idNomenAluguel"));
                         aluguelFinalizado.setIdTelefoneAluguel(task.getResult().getString("idTelefoneAluguel"));
 
+                        // Adiciona o usuarioId ao objeto
+                        aluguelFinalizado.setUsuarioId(usuarioId);
+
                         // Salvar na coleção AlugFinaliz
                         firestore.collection("AlugFinaliz").document(aluguelId)
                                 .set(aluguelFinalizado)
@@ -205,6 +209,7 @@ public class DetalhesAluguel extends AppCompatActivity {
                     }
                 });
     }
+
 
     private void salvarItensAluguel(String aluguelId) {
         CollectionReference itensRef = firestore.collection("AluguelFinalizadas")

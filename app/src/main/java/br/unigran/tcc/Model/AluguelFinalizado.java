@@ -8,6 +8,7 @@ public class AluguelFinalizado {
     private Double desconto;
     private double subtotal;
     private double total;
+    private String usuarioId;
 
     // Construtor padrão
     public AluguelFinalizado() {}
@@ -69,5 +70,13 @@ public class AluguelFinalizado {
 
     public void setTotal(double total) {
         this.total = total;
+    }
+
+    public String getUsuarioId() {
+        return usuarioId;
+    }
+
+    public void setUsuarioId(String usuarioId) {
+        this.usuarioId = usuarioId;
     }
 }

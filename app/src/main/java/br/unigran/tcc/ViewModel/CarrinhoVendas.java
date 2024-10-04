@@ -21,9 +21,12 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import br.unigran.tcc.Model.Produtos;
@@ -145,6 +148,7 @@ public class CarrinhoVendas extends AppCompatActivity {
         textTotal.setText(String.format("Total: R$%.2f", total));
     }
 
+
     private void finalizarCompra() {
         String descontoStr = editDesconto.getText().toString();
         double desconto = 0.0;
@@ -163,12 +167,22 @@ public class CarrinhoVendas extends AppCompatActivity {
         if (usuarioAtual != null) {
             String userId = usuarioAtual.getUid();
 
+            // Obtém a data e hora atuais no formato desejado
+            Date dataAtual = new Date();
+            SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()); // Formato da data
+            SimpleDateFormat formatoHora = new SimpleDateFormat("mm:ss", Locale.getDefault()); // Formato da hora
+
+            String dataFormatada = formatoData.format(dataAtual); // Data no formato dd/MM/aaaa
+            String horaFormatada = formatoHora.format(dataAtual); // Hora no formato mm:ss
+
+            // Cria o mapa da compra
             Map<String, Object> compra = new HashMap<>();
             compra.put("usuarioId", userId);
             compra.put("subtotal", subtotal);
             compra.put("desconto", desconto);
             compra.put("total", total);
-            compra.put("dataHora", System.currentTimeMillis());
+            compra.put("data", dataFormatada); // Adiciona a data formatada
+            compra.put("hora", horaFormatada); // Adiciona a hora formatada
 
             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
             CollectionReference comprasRef = firestore.collection("Compras");
@@ -214,6 +228,7 @@ public class CarrinhoVendas extends AppCompatActivity {
             Toast.makeText(CarrinhoVendas.this, "Você precisa estar logado para finalizar a compra.", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     private void atualizarEstoque(Produtos produto) {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();

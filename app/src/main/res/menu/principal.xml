@@ -82,4 +82,20 @@
         </menu>
     </item>
 
+    <item
+        android:id="@+id/selector5"
+        android:title="HISTÓRICOS">
+        <menu>
+            <item
+                android:id="@+id/item5_1"
+                android:onClick="historicoVendas"
+                android:title="VENDAS"
+                />
+            <item
+                android:id="@+id/item5_2"
+                android:onClick="historicoAluguel"
+                android:title="ALUGUEL"/>
+        </menu>
+    </item>
+
 </menu>

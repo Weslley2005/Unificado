@@ -130,4 +130,12 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, FinalizarAluguel.class);
         startActivity(intent);
     }
+    public void historicoAluguel(MenuItem item) {
+        Intent intent = new Intent(this, HistiricoAluguel.class);
+        startActivity(intent);
+    }
+    public void historicoVendas(MenuItem item) {
+        Intent intent = new Intent(this, HistoricoVendas.class);
+        startActivity(intent);
+    }
 }
