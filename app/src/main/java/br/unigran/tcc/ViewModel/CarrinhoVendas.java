@@ -63,14 +63,13 @@ public class CarrinhoVendas extends AppCompatActivity {
 
         buttonFinalizar.setOnClickListener(v -> finalizarCompra());
 
-        // Adiciona um TextWatcher para atualizar o total quando o desconto mudar
         editDesconto.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                atualizarSubtotal();  // Atualiza subtotal e total ao alterar o desconto
+                atualizarSubtotal();
             }
 
             @Override
@@ -98,26 +97,24 @@ public class CarrinhoVendas extends AppCompatActivity {
                                 Map<String, Object> item = documento.getData();
                                 Produtos produto = new Produtos();
                                 produto.setNome((String) item.get("nome"));
-                                produto.setId(documento.getId()); // Armazena o ID do documento
+                                produto.setId(documento.getId());
 
-                                // Use o preço unitário ao invés do preço total
                                 Object precoUnitarioObj = item.get("precoUnitario");
                                 if (precoUnitarioObj != null) {
                                     produto.setPrecoVenda(((Double) precoUnitarioObj).floatValue());
                                 } else {
-                                    produto.setPrecoVenda(0f); // valor padrão
+                                    produto.setPrecoVenda(0f);
                                 }
 
-                                // Verifica se a quantidade existe antes de tentar converter
                                 Object quantidadeObj = item.get("quantidade");
                                 if (quantidadeObj != null) {
                                     produto.setQtdProduto(((Long) quantidadeObj).intValue());
                                 } else {
-                                    produto.setQtdProduto(0); // valor padrão
+                                    produto.setQtdProduto(0);
                                 }
 
                                 listaCarrinho.add(produto);
-                                subtotal += produto.getPrecoVenda() * produto.getQtdProduto(); // Calcula subtotal corretamente
+                                subtotal += produto.getPrecoVenda() * produto.getQtdProduto();
                             }
                             carrinhoAdapter.notifyDataSetChanged();
                             atualizarSubtotal();
@@ -167,22 +164,20 @@ public class CarrinhoVendas extends AppCompatActivity {
         if (usuarioAtual != null) {
             String userId = usuarioAtual.getUid();
 
-            // Obtém a data e hora atuais no formato desejado
             Date dataAtual = new Date();
-            SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()); // Formato da data
-            SimpleDateFormat formatoHora = new SimpleDateFormat("mm:ss", Locale.getDefault()); // Formato da hora
+            SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            SimpleDateFormat formatoHora = new SimpleDateFormat("mm:ss", Locale.getDefault());
 
-            String dataFormatada = formatoData.format(dataAtual); // Data no formato dd/MM/aaaa
-            String horaFormatada = formatoHora.format(dataAtual); // Hora no formato mm:ss
+            String dataFormatada = formatoData.format(dataAtual);
+            String horaFormatada = formatoHora.format(dataAtual);
 
-            // Cria o mapa da compra
             Map<String, Object> compra = new HashMap<>();
             compra.put("usuarioId", userId);
             compra.put("subtotal", subtotal);
             compra.put("desconto", desconto);
             compra.put("total", total);
-            compra.put("data", dataFormatada); // Adiciona a data formatada
-            compra.put("hora", horaFormatada); // Adiciona a hora formatada
+            compra.put("data", dataFormatada);
+            compra.put("hora", horaFormatada);
 
             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
             CollectionReference comprasRef = firestore.collection("Compras");
@@ -196,9 +191,9 @@ public class CarrinhoVendas extends AppCompatActivity {
                         for (Produtos produtos : listaCarrinho) {
                             Map<String, Object> item = new HashMap<>();
                             item.put("nome", produtos.getNome());
-                            item.put("precoUnitario", produtos.getPrecoVenda()); // Preço unitário correto
-                            item.put("quantidade", produtos.getQtdProduto()); // Quantidade
-                            item.put("precoTotal", produtos.getPrecoVenda() * produtos.getQtdProduto()); // Cálculo correto do preço total
+                            item.put("precoUnitario", produtos.getPrecoVenda());
+                            item.put("quantidade", produtos.getQtdProduto());
+                            item.put("precoTotal", produtos.getPrecoVenda() * produtos.getQtdProduto());
                             itens.add(item);
                         }
 
@@ -215,7 +210,6 @@ public class CarrinhoVendas extends AppCompatActivity {
                             atualizarEstoque(produtos);
                         }
 
-                        // Limpa o carrinho após a compra bem-sucedida
                         limparCarrinho(userId);
                         Toast.makeText(CarrinhoVendas.this, String.format("Compra finalizada com sucesso! Total: R$%.2f", total), Toast.LENGTH_SHORT).show();
                         finish();
@@ -304,8 +298,8 @@ public class CarrinhoVendas extends AppCompatActivity {
                     .delete()
                     .addOnSuccessListener(aVoid -> {
                         listaCarrinho.remove(posicao);
-                        carrinhoAdapter.notifyItemRemoved(posicao); // Notifica o adapter sobre a remoção
-                        atualizarSubtotal(); // Atualiza o subtotal após a remoção
+                        carrinhoAdapter.notifyItemRemoved(posicao);
+                        atualizarSubtotal();
                     })
                     .addOnFailureListener(e -> Log.e("CarrinhoAluguel", "Erro ao deletar item", e));
         } else {

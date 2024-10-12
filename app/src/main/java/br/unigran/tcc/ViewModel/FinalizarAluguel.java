@@ -3,6 +3,7 @@ package br.unigran.tcc.ViewModel;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Window;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,6 +41,10 @@ public class FinalizarAluguel extends AppCompatActivity {
         recyclerViewAlugueis.setAdapter(aluguelAdapter);
 
         carregarAlugueis();
+
+        Window janela = getWindow();
+        janela.setStatusBarColor(getResources().getColor(android.R.color.black));
+        janela.setNavigationBarColor(getResources().getColor(android.R.color.black));
     }
 
     private void carregarAlugueis() {
@@ -53,8 +58,8 @@ public class FinalizarAluguel extends AppCompatActivity {
                         if (task.isSuccessful() && task.getResult() != null) {
                             listaAlugueis.clear();
                             for (QueryDocumentSnapshot documento : task.getResult()) {
-                                FinalizarAlugueis aluguel = documento.toObject(FinalizarAlugueis.class); // Assegure-se de que esta classe está correta
-                                aluguel.setId(documento.getId()); // Certifique-se de que a classe Aluguel tem um método setId
+                                FinalizarAlugueis aluguel = documento.toObject(FinalizarAlugueis.class);
+                                aluguel.setId(documento.getId());
                                 listaAlugueis.add(aluguel);
                             }
                             aluguelAdapter.notifyDataSetChanged();

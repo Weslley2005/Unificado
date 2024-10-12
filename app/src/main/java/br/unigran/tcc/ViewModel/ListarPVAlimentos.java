@@ -57,7 +57,7 @@ public class ListarPVAlimentos extends AppCompatActivity {
         recyclerViewProdutoPP.setAdapter(adapterPPAli);
 
         buscarDados();
-        buscarDadosPP(); // Nova função para buscar produtos PP
+        buscarDadosPP();
 
         setSupportActionBar(findViewById(R.id.toolbar));
 
@@ -71,7 +71,7 @@ public class ListarPVAlimentos extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String novoTexto) {
                 filtrarProdutos(novoTexto);
-                filtrarProdutosPP(novoTexto); // Filtrar também produtos PP
+                filtrarProdutosPP(novoTexto);
                 return true;
             }
         });

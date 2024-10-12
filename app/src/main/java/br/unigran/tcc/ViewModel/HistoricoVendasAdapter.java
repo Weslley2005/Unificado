@@ -17,7 +17,7 @@ import br.unigran.tcc.Model.FinalizarVendas;
 import br.unigran.tcc.R;
 
 public class HistoricoVendasAdapter extends RecyclerView.Adapter<HistoricoVendasAdapter.AluguelViewHolder>{
-    private List<FinalizarVendas> listaVendas; // Lista de aluguéis
+    private List<FinalizarVendas> listaVendas;
     private Context context;
 
     public HistoricoVendasAdapter(List<FinalizarVendas> listaVendas, HistoricoVendas context) {
@@ -36,13 +36,11 @@ public class HistoricoVendasAdapter extends RecyclerView.Adapter<HistoricoVendas
 
     @Override
     public void onBindViewHolder(@NonNull HistoricoVendasAdapter.AluguelViewHolder holder, int position) {
-        FinalizarVendas vendas = listaVendas.get(position); // Use a classe Aluguel
+        FinalizarVendas vendas = listaVendas.get(position);
         holder.textTotal.setText(String.format("Total: R$%.2f", vendas.getTotal()));
         holder.textData.setText("Data: " + vendas.getData());
         holder.textHora.setText("Hora: " + vendas.getHora());
 
-
-        // Descomente esta parte se a Activity DetalhesAluguelActivity estiver implementada
         holder.buttonDetalhes.setOnClickListener(v -> {
             Intent intent = new Intent(context, DetalhesHistoricoVendas.class);
             intent.putExtra("aluguelId", vendas.getId());

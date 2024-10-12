@@ -60,7 +60,6 @@ public class CarrinhoAluguel extends AppCompatActivity {
         recyclerViewCarrinho.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewCarrinho.setAdapter(carrinhoAdapter);
 
-        // Verifique se o usuário está logado e chame a função apropriada
         FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
         if (usuarioAtual != null) {
             String userId = usuarioAtual.getUid();
@@ -73,9 +72,9 @@ public class CarrinhoAluguel extends AppCompatActivity {
                             String telefoneAluguel = documentSnapshot.getString("idTelefoneAluguel");
 
                             if (nomeAluguel == null && telefoneAluguel == null) {
-                                carregarCarrinho(); // Chama se ambos forem nulos
+                                carregarCarrinho();
                             } else {
-                                carregarCarrinhoEditar(); // Chama se não forem nulos
+                                carregarCarrinhoEditar();
                             }
                         } else {
                             Log.e("CarrinhoActivity", "Documento não encontrado.");
@@ -89,21 +88,18 @@ public class CarrinhoAluguel extends AppCompatActivity {
 
         buttonFinalizar.setOnClickListener(v -> finalizarCompra());
 
-        // Adiciona um TextWatcher para atualizar o total quando o desconto mudar
         editDesconto.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // Não é necessário implementar
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                atualizarSubtotal();  // Atualiza subtotal e total ao alterar o desconto
+                atualizarSubtotal();
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                // Não é necessário implementar
             }
         });
 
@@ -126,16 +122,16 @@ public class CarrinhoAluguel extends AppCompatActivity {
                             subtotal = 0.0;
                             for (QueryDocumentSnapshot documento : task.getResult()) {
                                 EquipamentoAluguel equipAlug = new EquipamentoAluguel();
-                                equipAlug.setId(documento.getId()); // Armazena o ID do documento
+                                equipAlug.setId(documento.getId());
                                 equipAlug.setNome(documento.getString("nome"));
                                 equipAlug.setPrecoAluguelM(documento.getDouble("precoAluguelM").floatValue());
                                 equipAlug.setPrecoAluguelI(documento.getDouble("precoAluguelI").floatValue());
-                                equipAlug.setPrecoAluguelI(documento.getDouble("precoTotal").floatValue());
+                                equipAlug.setTotalPreco(documento.getDouble("precoTotal").floatValue());
                                 equipAlug.setQtdAluguel(documento.getLong("quantidade").intValue());
                                 equipAlug.setTipoAluguel(documento.getBoolean("tipoAluguel"));
 
                                 listaCarrinho.add(equipAlug);
-                                subtotal += equipAlug.getPrecoAluguelI();
+                                subtotal += equipAlug.getTotalPreco();
                             }
                             carrinhoAdapter.notifyDataSetChanged();
                             atualizarSubtotal();
@@ -155,7 +151,6 @@ public class CarrinhoAluguel extends AppCompatActivity {
 
             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
-            // Primeiro, carregar o nome e telefone do documento principal
             firestore.collection("CarrinhoAluguel").document(userId)
                     .get()
                     .addOnSuccessListener(documentSnapshot -> {
@@ -174,7 +169,6 @@ public class CarrinhoAluguel extends AppCompatActivity {
                     })
                     .addOnFailureListener(e -> Log.e("CarrinhoActivity", "Erro ao carregar nome e telefone", e));
 
-            // Em seguida, carregar os itens do carrinho
             firestore.collection("CarrinhoAluguel").document(userId)
                     .collection("ItensAluguel")
                     .get()
@@ -188,12 +182,12 @@ public class CarrinhoAluguel extends AppCompatActivity {
                                 equipAlug.setNome(documento.getString("nome"));
                                 equipAlug.setPrecoAluguelM(documento.getDouble("precoAluguelM").floatValue());
                                 equipAlug.setPrecoAluguelI(documento.getDouble("precoAluguelI").floatValue());
-                                equipAlug.setPrecoAluguelI(documento.getDouble("precoTotal").floatValue());
+                                equipAlug.setTotalPreco(documento.getDouble("precoTotal").floatValue());
                                 equipAlug.setQtdAluguel(documento.getLong("quantidade").intValue());
                                 equipAlug.setTipoAluguel(documento.getBoolean("tipoAluguel"));
 
                                 listaCarrinho.add(equipAlug);
-                                subtotal += equipAlug.getPrecoAluguelI();
+                                subtotal += equipAlug.getTotalPreco();
                             }
                             carrinhoAdapter.notifyDataSetChanged();
                             atualizarSubtotal();
@@ -230,8 +224,6 @@ public class CarrinhoAluguel extends AppCompatActivity {
     private void finalizarCompra() {
         EditText editNomeAluguel = findViewById(R.id.idNomeAluguel);
         EditText editTelefoneAluguel = findViewById(R.id.idTelefoneAluguel);
-
-        // Recuperar TextViews para exibir as mensagens de erro
         TextView erroNomeAluguel = findViewById(R.id.erroNomeAluguel);
         TextView erroTelefoneAluguel = findViewById(R.id.erroTelefoneAluguel);
 
@@ -240,36 +232,33 @@ public class CarrinhoAluguel extends AppCompatActivity {
 
         boolean camposVazios = false;
 
-        // Verificar se o campo nome está preenchido
         if (nomeAluguel.isEmpty()) {
             editNomeAluguel.setBackgroundResource(R.drawable.borda_vermelha);
             erroNomeAluguel.setText("Campo obrigatório!");
             erroNomeAluguel.setVisibility(View.VISIBLE);
             camposVazios = true;
         } else {
-            editNomeAluguel.setBackgroundResource(0);  // Remover a borda vermelha se estiver preenchido
-            erroNomeAluguel.setVisibility(View.GONE);   // Esconder a mensagem de erro
+            editNomeAluguel.setBackgroundResource(0);
+            erroNomeAluguel.setVisibility(View.GONE);
         }
 
-        // Verificar se o campo telefone está preenchido
         if (telefoneAluguel.isEmpty()) {
             editTelefoneAluguel.setBackgroundResource(R.drawable.borda_vermelha);
             erroTelefoneAluguel.setText("Campo obrigatório!");
             erroTelefoneAluguel.setVisibility(View.VISIBLE);
             camposVazios = true;
-        } else if (!telefoneAluguel.matches("\\(\\d{2}\\) \\d{5}-\\d{4}")) { // Validação do formato do telefone
+        } else if (!telefoneAluguel.matches("\\(\\d{2}\\) \\d{5}-\\d{4}")) {
             editTelefoneAluguel.setBackgroundResource(R.drawable.borda_vermelha);
             erroTelefoneAluguel.setText("Formato inválido! Use (XX) XXXXX-XXXX.");
             erroTelefoneAluguel.setVisibility(View.VISIBLE);
             camposVazios = true;
         } else {
-            editTelefoneAluguel.setBackgroundResource(0);  // Remover a borda vermelha se estiver preenchido
-            erroTelefoneAluguel.setVisibility(View.GONE);   // Esconder a mensagem de erro
+            editTelefoneAluguel.setBackgroundResource(0);
+            erroTelefoneAluguel.setVisibility(View.GONE);
         }
 
-        // Se algum campo estiver vazio, não prosseguir com a finalização
         if (camposVazios) {
-            return; // Encerra o método se houver campos vazios
+            return;
         }
 
         String descontoStr = editDesconto.getText().toString();
@@ -289,7 +278,6 @@ public class CarrinhoAluguel extends AppCompatActivity {
         if (usuarioAtual != null) {
             String userId = usuarioAtual.getUid();
 
-            // Formatar data e hora
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
             SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
             String dataFormatada = dateFormat.format(new Date());
@@ -300,9 +288,9 @@ public class CarrinhoAluguel extends AppCompatActivity {
             compra.put("subtotal", subtotal);
             compra.put("desconto", desconto);
             compra.put("total", total);
-            compra.put("data", dataFormatada); // Salvando a data formatada
-            compra.put("hora", horaFormatada); // Salvando a hora formatada
-            compra.put("idNomenAluguel", nomeAluguel); // Adicionando o nome do aluguel
+            compra.put("data", dataFormatada);
+            compra.put("hora", horaFormatada);
+            compra.put("idNomenAluguel", nomeAluguel);
             compra.put("idTelefoneAluguel", telefoneAluguel);
 
             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -320,7 +308,7 @@ public class CarrinhoAluguel extends AppCompatActivity {
                             item.put("precoAluguelI", equipAlug.getPrecoAluguelI());
                             item.put("precoAluguelM", equipAlug.getPrecoAluguelM());
                             item.put("quantidade", equipAlug.getQtdAluguel());
-                            item.put("precoTotal", equipAlug.getPrecoAluguelI() * equipAlug.getQtdAluguel());
+                            item.put("precoTotal", equipAlug.getTotalPreco());
                             item.put("tipoAluguel", equipAlug.isTipoAluguel());
                             itens.add(item);
                         }
@@ -338,7 +326,6 @@ public class CarrinhoAluguel extends AppCompatActivity {
                             atualizarEstoque(equipAlug);
                         }
 
-                        // Limpa o carrinho após a compra bem-sucedida
                         limparCarrinho(userId);
                         Toast.makeText(CarrinhoAluguel.this, String.format("Compra finalizada com sucesso! Total: R$%.2f", total), Toast.LENGTH_SHORT).show();
                         finish();
@@ -388,24 +375,19 @@ public class CarrinhoAluguel extends AppCompatActivity {
 
 
     private void limparCarrinho(String userId) {
-        // Referência para o documento do carrinho do usuário
         DocumentReference carrinhoRef = FirebaseFirestore.getInstance().collection("CarrinhoAluguel").document(userId);
 
-        // Obter a coleção de itens do carrinho
         carrinhoRef.collection("ItensAluguel").get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        // Deletar todos os itens na coleção
                         for (QueryDocumentSnapshot documento : task.getResult()) {
                             documento.getReference().delete();
                         }
-                        // Após remover todos os itens, limpar a lista e atualizar o adapter
                         listaCarrinho.clear();
                         carrinhoAdapter.notifyDataSetChanged();
                         subtotal = 0.0;
                         atualizarSubtotal();
 
-                        // Deletar o documento do carrinho
                         carrinhoRef.delete()
                                 .addOnSuccessListener(aVoid -> {
                                     Log.d("CarrinhoActivity", "Carrinho limpo com sucesso!");
@@ -444,8 +426,8 @@ public class CarrinhoAluguel extends AppCompatActivity {
                     .delete()
                     .addOnSuccessListener(aVoid -> {
                         listaCarrinho.remove(posicao);
-                        carrinhoAdapter.notifyItemRemoved(posicao); // Notifica o adapter sobre a remoção
-                        atualizarSubtotal(); // Atualiza o subtotal após a remoção
+                        carrinhoAdapter.notifyItemRemoved(posicao);
+                        atualizarSubtotal();
                     })
                     .addOnFailureListener(e -> Log.e("CarrinhoAluguel", "Erro ao deletar item", e));
         } else {

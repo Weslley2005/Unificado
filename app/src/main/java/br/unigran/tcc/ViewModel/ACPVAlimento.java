@@ -38,14 +38,12 @@ public class ACPVAlimento extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_acpvalimento);
 
-        // Inicializando as views
         nomeProduto = findViewById(R.id.textNomeProduto);
         precoVenda = findViewById(R.id.textPrecoAluguelM);
         qtdParaVenda = findViewById(R.id.editQtdAluguel);
         precoTotal = findViewById(R.id.textPrecoTotal);
         btnAdicionarCarrinho = findViewById(R.id.btnAdicionarCarrinho);
 
-        // Obtendo dados passados via Intent
         Intent intent = getIntent();
         String nome = intent.getStringExtra("nome");
         precoUnitario = intent.getFloatExtra("precoVenda", 0);
@@ -55,12 +53,10 @@ public class ACPVAlimento extends AppCompatActivity {
         precoVenda.setText(String.format("Preço de Venda: R$%.2f", precoUnitario));
         precoTotal.setText(String.format("Preço Total: R$%.2f", 0.0));
 
-        // Personalizando a barra de status e de navegação
         Window janela = getWindow();
         janela.setStatusBarColor(getResources().getColor(android.R.color.black));
         janela.setNavigationBarColor(getResources().getColor(android.R.color.black));
 
-        // Atualizando preço total com base na quantidade
         qtdParaVenda.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -74,16 +70,13 @@ public class ACPVAlimento extends AppCompatActivity {
             public void afterTextChanged(Editable s) {}
         });
 
-        // Adicionando produto ao carrinho
         btnAdicionarCarrinho.setOnClickListener(v -> adicionarAoCarrinho());
 
-        // Se um ID foi passado, buscar os dados do banco
         if (itemId != null) {
             buscarDadosDoBanco();
         }
     }
 
-    // Atualiza o preço total com base na quantidade inserida
     private void atualizarPrecoTotal() {
         String textoQtd = qtdParaVenda.getText().toString();
         int quantidade = 0;
@@ -96,7 +89,6 @@ public class ACPVAlimento extends AppCompatActivity {
         precoTotal.setText(String.format("Preço Total: R$%.2f", precoTotalCalculado));
     }
 
-    // Adiciona ou atualiza o produto no carrinho
     private void adicionarAoCarrinho() {
         FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
         if (usuarioAtual != null) {
@@ -104,7 +96,6 @@ public class ACPVAlimento extends AppCompatActivity {
             String nome = nomeProduto.getText().toString();
             int quantidadeDesejada = Integer.parseInt(qtdParaVenda.getText().toString());
 
-            // Verifica se o item já está no carrinho e atualiza
             if (itemId != null) {
                 FirebaseFirestore.getInstance().collection("Carrinho").document(userId)
                         .collection("Itens").document(itemId)
@@ -113,7 +104,7 @@ public class ACPVAlimento extends AppCompatActivity {
                         .addOnSuccessListener(aVoid -> {
                             Toast.makeText(ACPVAlimento.this, "Produto atualizado no carrinho", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(ACPVAlimento.this, CarrinhoVendas.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  // Limpa a pilha de atividades para evitar duplicatas
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
                             finish();
                         })
@@ -121,7 +112,6 @@ public class ACPVAlimento extends AppCompatActivity {
                             Toast.makeText(ACPVAlimento.this, "Erro ao atualizar produto no carrinho", Toast.LENGTH_SHORT).show();
                         });
             } else {
-                // Busca o item pelo nome no estoque antes de adicionar
                 FirebaseFirestore.getInstance().collection("Produtos")
                         .whereEqualTo("nome", nome)
                         .get()
@@ -134,7 +124,6 @@ public class ACPVAlimento extends AppCompatActivity {
                                 if (quantidadeDesejada <= qtdDisponivel) {
                                     double precoTotalCalculado = precoUnitario * quantidadeDesejada;
 
-                                    // Cria um mapa com as informações do produto
                                     Map<String, Object> produto = new HashMap<>();
                                     produto.put("id", documento.getId());
                                     produto.put("nome", nome);
@@ -166,7 +155,6 @@ public class ACPVAlimento extends AppCompatActivity {
         }
     }
 
-    // Busca dados no banco para preencher os campos
     private void buscarDadosDoBanco() {
         FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
         if (usuarioAtual != null) {
@@ -178,7 +166,6 @@ public class ACPVAlimento extends AppCompatActivity {
                     .get()
                     .addOnSuccessListener(documentSnapshot -> {
                         if (documentSnapshot.exists()) {
-                            // Preenche os campos com os dados recuperados
                             String nome = documentSnapshot.getString("nome");
                             precoUnitario = documentSnapshot.getDouble("precoUnitario");
                             int qtdAluguel = documentSnapshot.getLong("quantidade").intValue();
@@ -199,7 +186,6 @@ public class ACPVAlimento extends AppCompatActivity {
         }
     }
 
-    // Função auxiliar para calcular o preço total
     private double calcularPrecoTotalC(int quantidade) {
         return precoUnitario * quantidade;
     }

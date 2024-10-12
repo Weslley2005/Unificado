@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,8 +32,8 @@ public class HistiricoAluguel extends AppCompatActivity {
     private RecyclerView recyclerViewHistoricoAlugueis;
     private HistoricoAluguelAdapter aluguelAdapter;
     private List<FinalizarAlugueis> listaAlugueis;
-    private TextView textViewData; // TextView para mostrar a data selecionada
-    private ImageView imageViewCalendario; // ImageView como botão para abrir o calendário
+    private TextView textViewData;
+    private ImageView imageViewCalendario;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -47,14 +48,18 @@ public class HistiricoAluguel extends AppCompatActivity {
         recyclerViewHistoricoAlugueis.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewHistoricoAlugueis.setAdapter(aluguelAdapter);
 
-        textViewData = findViewById(R.id.textViewData); // Inicializando TextView
-        imageViewCalendario = findViewById(R.id.imageViewCalendario); // Inicializando ImageView
+        textViewData = findViewById(R.id.textViewData);
+        imageViewCalendario = findViewById(R.id.imageViewCalendario);
 
         imageViewCalendario.setOnClickListener(v -> showDatePickerDialog());
 
         textViewData.setOnClickListener(v -> showDatePickerDialog());
 
         carregarAlugueis();
+
+        Window window = getWindow();
+        window.setStatusBarColor(getResources().getColor(android.R.color.black));
+        window.setNavigationBarColor(getResources().getColor(android.R.color.black));
     }
 
     private void showDatePickerDialog() {
@@ -67,7 +72,7 @@ public class HistiricoAluguel extends AppCompatActivity {
                 (view, selectedYear, selectedMonth, selectedDay) -> {
                     String selectedDate = String.format("%02d/%02d/%d", selectedDay, selectedMonth + 1, selectedYear);
                     textViewData.setText(selectedDate);
-                    filtrarVendasPorData(selectedDate); // Chamar método para filtrar imediatamente após a seleção
+                    filtrarVendasPorData(selectedDate);
                 }, year, month, day);
         datePickerDialog.show();
     }
@@ -105,7 +110,7 @@ public class HistiricoAluguel extends AppCompatActivity {
                                 aluguel.setId(documento.getId());
 
                                 try {
-                                    Date dataVenda = sdf.parse(aluguel.getData()); // Assegure-se de que a classe FinalizarVendas possui o método getData
+                                    Date dataVenda = sdf.parse(aluguel.getData());
                                     if (dataVenda != null && dataVenda.equals(dataFiltro)) {
                                         listaAlugueis.add(aluguel);
                                     }
@@ -133,8 +138,8 @@ public class HistiricoAluguel extends AppCompatActivity {
                         if (task.isSuccessful() && task.getResult() != null) {
                             listaAlugueis.clear();
                             for (QueryDocumentSnapshot documento : task.getResult()) {
-                                FinalizarAlugueis aluguel = documento.toObject(FinalizarAlugueis.class); // Assegure-se de que esta classe está correta
-                                aluguel.setId(documento.getId()); // Certifique-se de que a classe Aluguel tem um método setId
+                                FinalizarAlugueis aluguel = documento.toObject(FinalizarAlugueis.class);
+                                aluguel.setId(documento.getId());
                                 listaAlugueis.add(aluguel);
                             }
                             aluguelAdapter.notifyDataSetChanged();

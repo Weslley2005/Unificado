@@ -36,7 +36,7 @@ public class CarrinhoAluguelAdapter extends RecyclerView.Adapter<CarrinhoAluguel
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         EquipamentoAluguel equipAlug = listaCarrinho.get(position);
         holder.textNome.setText(equipAlug.getNome());
-        holder.textPreco.setText(String.format("R$ %.2f", equipAlug.getPrecoAluguelI()));
+        holder.textPreco.setText(String.format("R$ %.2f", equipAlug.getTotalPreco()));
         holder.textQtd.setText(String.format("Qtd: %d", equipAlug.getQtdAluguel()));
 
         holder.btnExcluir.setOnClickListener(v -> {
@@ -45,7 +45,7 @@ public class CarrinhoAluguelAdapter extends RecyclerView.Adapter<CarrinhoAluguel
 
         holder.btnEditar.setOnClickListener(v -> {
             Intent intent = new Intent(listarCarrinho, ADAluguel.class);
-            intent.putExtra("id", equipAlug.getId()); // Supondo que você tenha um método getId() para obter o ID do item
+            intent.putExtra("id", equipAlug.getId());
             listarCarrinho.startActivity(intent);
             voltar();
         });

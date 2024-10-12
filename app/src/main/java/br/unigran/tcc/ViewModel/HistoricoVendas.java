@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,10 +31,10 @@ import br.unigran.tcc.R;
 public class HistoricoVendas extends AppCompatActivity {
 
     private RecyclerView recyclerViewHistoricoVendas;
-    private HistoricoVendasAdapter historicoVendasAdapter; // Corrigido aqui
+    private HistoricoVendasAdapter historicoVendasAdapter;
     private List<FinalizarVendas> listaVendas;
-    private TextView textViewData; // TextView para mostrar a data selecionada
-    private ImageView imageViewCalendario; // ImageView como botão para abrir o calendário
+    private TextView textViewData;
+    private ImageView imageViewCalendario;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -48,14 +49,20 @@ public class HistoricoVendas extends AppCompatActivity {
         recyclerViewHistoricoVendas.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewHistoricoVendas.setAdapter(historicoVendasAdapter);
 
-        textViewData = findViewById(R.id.textViewData); // Inicializando TextView
-        imageViewCalendario = findViewById(R.id.imageViewCalendario); // Inicializando ImageView
+        textViewData = findViewById(R.id.textViewData);
+        imageViewCalendario = findViewById(R.id.imageViewCalendario);
 
         imageViewCalendario.setOnClickListener(v -> showDatePickerDialog());
 
         textViewData.setOnClickListener(v -> showDatePickerDialog());
 
-        carregarVendas(); // Mudado para carregarVendas
+        carregarVendas();
+
+        Window window = getWindow();
+        window.setStatusBarColor(getResources().getColor(android.R.color.black));
+
+        window.setNavigationBarColor(getResources().getColor(android.R.color.black));
+
     }
 
     private void showDatePickerDialog() {
@@ -68,7 +75,7 @@ public class HistoricoVendas extends AppCompatActivity {
                 (view, selectedYear, selectedMonth, selectedDay) -> {
                     String selectedDate = String.format("%02d/%02d/%d", selectedDay, selectedMonth + 1, selectedYear);
                     textViewData.setText(selectedDate);
-                    filtrarVendasPorData(selectedDate); // Chamar método para filtrar imediatamente após a seleção
+                    filtrarVendasPorData(selectedDate);
                 }, year, month, day);
         datePickerDialog.show();
     }
@@ -106,7 +113,7 @@ public class HistoricoVendas extends AppCompatActivity {
                                 vendas.setId(documento.getId());
 
                                 try {
-                                    Date dataVenda = sdf.parse(vendas.getData()); // Assegure-se de que a classe FinalizarVendas possui o método getData
+                                    Date dataVenda = sdf.parse(vendas.getData());
                                     if (dataVenda != null && dataVenda.equals(dataFiltro)) {
                                         listaVendas.add(vendas);
                                     }
@@ -126,7 +133,7 @@ public class HistoricoVendas extends AppCompatActivity {
 
 
 
-    private void carregarVendas() { // Mudado para carregarVendas
+    private void carregarVendas() {
         FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
         if (usuarioAtual != null) {
             String userId = usuarioAtual.getUid();
@@ -137,13 +144,13 @@ public class HistoricoVendas extends AppCompatActivity {
                         if (task.isSuccessful() && task.getResult() != null) {
                             listaVendas.clear();
                             for (QueryDocumentSnapshot documento : task.getResult()) {
-                                FinalizarVendas vendas = documento.toObject(FinalizarVendas.class); // Assegure-se de que esta classe está correta
-                                vendas.setId(documento.getId()); // Certifique-se de que a classe FinalizarVendas tem um método setId
+                                FinalizarVendas vendas = documento.toObject(FinalizarVendas.class);
+                                vendas.setId(documento.getId());
                                 listaVendas.add(vendas);
                             }
-                            historicoVendasAdapter.notifyDataSetChanged(); // Corrigido para chamar no adapter
+                            historicoVendasAdapter.notifyDataSetChanged();
                         } else {
-                            Log.e("HistoricoVendas", "Erro ao carregar vendas", task.getException()); // Mudada a mensagem de log
+                            Log.e("HistoricoVendas", "Erro ao carregar vendas", task.getException());
                         }
                     });
         } else {

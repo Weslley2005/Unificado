@@ -2,6 +2,7 @@ package br.unigran.tcc.ViewModel;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -22,10 +23,10 @@ import java.util.List;
 import br.unigran.tcc.Model.ItemVendas;
 import br.unigran.tcc.R;
 
-public class DetalhesHistoricoVendas extends AppCompatActivity { // Corrigido o nome da classe
+public class DetalhesHistoricoVendas extends AppCompatActivity {
 
     private RecyclerView recyclerViewItensHistoricoVendas;
-    private DetalhesHistoricoVendasAdapter detalhesHistoricoVendasAdapter; // Corrigido nome do adapter
+    private DetalhesHistoricoVendasAdapter detalhesHistoricoVendasAdapter;
     private List<ItemVendas> listaItensVendas;
     private FirebaseFirestore firestore;
     private ImageButton deletar;
@@ -37,37 +38,37 @@ public class DetalhesHistoricoVendas extends AppCompatActivity { // Corrigido o 
         setContentView(R.layout.activity_detalhes_hitorico_vendas);
 
         recyclerViewItensHistoricoVendas = findViewById(R.id.recycleViewItensHistoricoVendas);
-        deletar = findViewById(R.id.idDeletarAluguel); // Verificar se o ID do botão está correto
+        deletar = findViewById(R.id.idDeletarAluguel);
         listaItensVendas = new ArrayList<>();
-        detalhesHistoricoVendasAdapter = new DetalhesHistoricoVendasAdapter(listaItensVendas); // Corrigido o nome do adapter
+        detalhesHistoricoVendasAdapter = new DetalhesHistoricoVendasAdapter(listaItensVendas);
 
-        // Configuração do RecyclerView
         recyclerViewItensHistoricoVendas.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewItensHistoricoVendas.setAdapter(detalhesHistoricoVendasAdapter);
 
-        // Inicializa o Firestore
         firestore = FirebaseFirestore.getInstance();
 
         FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
-        usuarioId = usuarioAtual != null ? usuarioAtual.getUid() : null; // Definindo usuarioId aqui
+        usuarioId = usuarioAtual != null ? usuarioAtual.getUid() : null;
 
-        // Obtém o ID da venda da Intent
-        String aluguelId = getIntent().getStringExtra("aluguelId"); // Corrigir para venda se necessário
+        String aluguelId = getIntent().getStringExtra("aluguelId");
         if (aluguelId != null && !aluguelId.isEmpty()) {
-            carregarItensVendas(aluguelId); // Nome adequado ao contexto de vendas
+            carregarItensVendas(aluguelId);
         } else {
-            Toast.makeText(this, "ID da venda inválido!", Toast.LENGTH_SHORT).show(); // Corrigido para venda
-            finish(); // Fecha a Activity se o aluguelId (ou vendaId) for inválido
+            Toast.makeText(this, "ID da venda inválido!", Toast.LENGTH_SHORT).show();
+            finish();
         }
 
         deletar.setOnClickListener(view -> {
-            // Exibe diálogo de confirmação antes de deletar
             mostrarDialogoDeConfirmacao(aluguelId);
         });
+
+        Window window = getWindow();
+        window.setStatusBarColor(getResources().getColor(android.R.color.black));
+
+        window.setNavigationBarColor(getResources().getColor(android.R.color.black));
     }
 
-    // Método para carregar os itens vendidos
-    private void carregarItensVendas(String vendaId) { // Nome corrigido
+    private void carregarItensVendas(String vendaId) {
         CollectionReference itensRef = firestore.collection("Compras")
                 .document(vendaId)
                 .collection("Itens");
@@ -80,40 +81,38 @@ public class DetalhesHistoricoVendas extends AppCompatActivity { // Corrigido o 
                     itemVendas.setId(documento.getId());
                     listaItensVendas.add(itemVendas);
                 }
-                detalhesHistoricoVendasAdapter.notifyDataSetChanged(); // Corrigido para chamar no adapter
+                detalhesHistoricoVendasAdapter.notifyDataSetChanged();
             } else {
-                Log.e("DetalhesHistoricoVendas", "Erro ao carregar itens vendidos", task.getException()); // Mensagem de log corrigida
+                Log.e("DetalhesHistoricoVendas", "Erro ao carregar itens vendidos", task.getException());
                 Toast.makeText(DetalhesHistoricoVendas.this, "Erro ao carregar itens!", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void mostrarDialogoDeConfirmacao(String vendaId) { // Nome corrigido
+    private void mostrarDialogoDeConfirmacao(String vendaId) {
         new AlertDialog.Builder(this)
                 .setTitle("Confirmar Exclusão")
-                .setMessage("Você realmente deseja deletar esta venda?") // Mensagem corrigida
-                .setPositiveButton("Sim", (dialog, which) -> deletarVenda(vendaId)) // Nome corrigido
+                .setMessage("Você realmente deseja deletar esta venda?")
+                .setPositiveButton("Sim", (dialog, which) -> deletarVenda(vendaId))
                 .setNegativeButton("Não", null)
                 .show();
     }
 
-    private void deletarVenda(String vendaId) { // Nome corrigido
-        // Verifica se há itens vendidos
+    private void deletarVenda(String vendaId) {
         if (listaItensVendas.isEmpty()) {
-            Toast.makeText(this, "Nenhum item para excluir!", Toast.LENGTH_SHORT).show(); // Mensagem corrigida
+            Toast.makeText(this, "Nenhum item para excluir!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Remove o documento da venda diretamente
-        firestore.collection("Compras").document(vendaId) // Verifique o nome da coleção no Firestore
+        firestore.collection("Compras").document(vendaId)
                 .delete()
                 .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(this, "Venda deletada com sucesso!", Toast.LENGTH_SHORT).show(); // Mensagem corrigida
-                    finish(); // Fecha a Activity após deletar
+                    Toast.makeText(this, "Venda deletada com sucesso!", Toast.LENGTH_SHORT).show();
+                    finish();
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Erro ao deletar venda", Toast.LENGTH_SHORT).show(); // Mensagem corrigida
-                    Log.e("DetalhesHistoricoVendas", "Erro ao deletar venda", e); // Mensagem de log corrigida
+                    Toast.makeText(this, "Erro ao deletar venda", Toast.LENGTH_SHORT).show();
+                    Log.e("DetalhesHistoricoVendas", "Erro ao deletar venda", e);
                 });
     }
 }

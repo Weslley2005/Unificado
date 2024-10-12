@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:background="@color/blue_light"
     android:layout_height="match_parent">
 
     <LinearLayout
@@ -9,10 +10,20 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/textView46"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Itens Alugados"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycleViewItensHistoricoAlugados"
             android:layout_width="match_parent"
-            android:layout_height="634dp" />
+            android:layout_height="wrap_content"
+            android:background="@drawable/borda_recycleview"/>
 
         <ImageButton
             android:id="@+id/idDeletarAluguel"

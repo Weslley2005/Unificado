@@ -190,7 +190,6 @@ public class CadastroEquipAlug extends AppCompatActivity {
         EquipamentoAluguel equipAlug = new EquipamentoAluguel();
         equipAlug.setNome(nomeEquip.getText().toString());
         equipAlug.setQtdAluguel(Integer.parseInt(qtdEquip.getText().toString()));
-        // Format the prices with 2 decimal places
         float precoAluguelMFloat = Float.parseFloat(precoAluguelM.getText().toString().replace(",", "."));
         float precoAluguelIFloat = Float.parseFloat(precoAluguelI.getText().toString().replace(",", "."));
 

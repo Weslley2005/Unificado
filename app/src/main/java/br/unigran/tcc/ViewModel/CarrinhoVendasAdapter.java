@@ -44,7 +44,7 @@ public class CarrinhoVendasAdapter extends RecyclerView.Adapter<CarrinhoVendasAd
 
         holder.btnEditar.setOnClickListener(v -> {
             Intent intent = new Intent(listarCarrinho, ACPVAlimento.class);
-            intent.putExtra("id", produto.getId()); // Supondo que você tenha um método getId() para obter o ID do item
+            intent.putExtra("id", produto.getId());
             listarCarrinho.startActivity(intent);
             //voltar();
         });

@@ -35,12 +35,11 @@ public class ADAluguel extends AppCompatActivity {
     private TextView precoTotal;
     private Button btnAdicionarCarrinho;
     private Switch switchTipoAluguel;
-
     private double precoUnitarioM;
     private double precoUnitarioI;
 
     private FirebaseFirestore db;
-    private String itemId; // Variável para armazenar o ID do item
+    private String itemId;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -58,14 +57,12 @@ public class ADAluguel extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
 
-        // Obtendo o ID do item passado pelo Intent
         itemId = getIntent().getStringExtra("id");
 
         if (itemId != null) {
             buscarDadosDoBanco();
         }
 
-        // Obtendo valores do Intent
         Intent intent = getIntent();
         String nome = intent.getStringExtra("nome");
         precoUnitarioM = intent.getFloatExtra("precoAluguelM", 0);
@@ -94,7 +91,6 @@ public class ADAluguel extends AppCompatActivity {
             public void afterTextChanged(Editable s) {}
         });
 
-        // Listener para o Switch
         switchTipoAluguel.setOnCheckedChangeListener((buttonView, isChecked) -> atualizarPrecoTotal());
 
         btnAdicionarCarrinho.setOnClickListener(v -> adicionarAoCarrinho());
@@ -125,7 +121,6 @@ public class ADAluguel extends AppCompatActivity {
             String nome = nomeProduto.getText().toString();
             int quantidadeDesejada = Integer.parseInt(qtdParaAluguel.getText().toString());
 
-            // Verifica se o itemId não é nulo para editar
             if (itemId != null) {
                 FirebaseFirestore.getInstance().collection("CarrinhoAluguel").document(userId)
                         .collection("ItensAluguel").document(itemId)
@@ -140,7 +135,6 @@ public class ADAluguel extends AppCompatActivity {
                             Toast.makeText(ADAluguel.this, "Erro ao atualizar produto no carrinho", Toast.LENGTH_SHORT).show();
                         });
             } else {
-                // Se itemId for nulo, busca o item pelo nome
                 FirebaseFirestore.getInstance().collection("EquipamentoAluguel")
                         .whereEqualTo("nome", nome)
                         .get()
@@ -153,7 +147,6 @@ public class ADAluguel extends AppCompatActivity {
                                 if (quantidadeDesejada <= qtdDisponivel) {
                                     double precoTotalCalculado = calcularPrecoTotal(quantidadeDesejada);
 
-                                    // Criando o mapa com as informações do produto
                                     Map<String, Object> produto = new HashMap<>();
                                     produto.put("id", documento.getId()); // Adicionando o ID
                                     produto.put("nome", nome);
@@ -206,24 +199,19 @@ public class ADAluguel extends AppCompatActivity {
                         } else {
                             for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
                                 if (documentSnapshot.exists()) {
-                                    // Preencher os campos com os dados do documento
                                     String nome = documentSnapshot.getString("nome");
                                     precoUnitarioM = documentSnapshot.getDouble("precoAluguelM");
                                     precoUnitarioI = documentSnapshot.getDouble("precoAluguelI");
                                     int qtdAluguel = documentSnapshot.getLong("quantidade").intValue();
                                     boolean tipoAluguel = documentSnapshot.getBoolean("tipoAluguel");
 
-                                    // Atualiza a interface com os dados
                                     nomeProduto.setText(nome);
                                     qtdParaAluguel.setText(String.valueOf(qtdAluguel));
                                     precoAluguelM.setText(String.format("Preço de Aluguel M: R$%.2f", precoUnitarioM));
                                     precoAluguelI.setText(String.format("Preço de Aluguel I: R$%.2f", precoUnitarioI));
                                     precoTotal.setText(String.format("Preço Total: R$%.2f", calcularPrecoTotal(qtdAluguel)));
-
-                                    // Atualiza o estado do switch
                                     switchTipoAluguel.setChecked(tipoAluguel);
 
-                                    // Exibir um Toast com os dados recuperados
                                     Toast.makeText(ADAluguel.this, "Dados carregados com sucesso: " + nome, Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(ADAluguel.this, "Documento não existe: " + documentSnapshot.getId(), Toast.LENGTH_SHORT).show();

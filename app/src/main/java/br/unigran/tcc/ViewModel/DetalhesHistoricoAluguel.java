@@ -3,7 +3,7 @@ package br.unigran.tcc.ViewModel;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
+import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -25,11 +25,9 @@ import br.unigran.tcc.Model.ItemAluguel;
 import br.unigran.tcc.R;
 
 public class DetalhesHistoricoAluguel extends AppCompatActivity {
-    private static final int EDITAR_ALUGUEL_REQUEST_CODE = 1;
     private RecyclerView recyclerViewItensHistoricoAlugados;
     private DetalhesHistoricoAluguelAdapter DetalhesHistoricoAluguelAdapter;
     private List<ItemAluguel> listaItensAlugados;
-    private Button buttonFinalizarAluguel;
     private FirebaseFirestore firestore;
     private ImageButton deletar, editar;
     private String usuarioId;
@@ -41,40 +39,37 @@ public class DetalhesHistoricoAluguel extends AppCompatActivity {
         setContentView(R.layout.activity_detalhes_historico_aluguel);
 
         recyclerViewItensHistoricoAlugados = findViewById(R.id.recycleViewItensHistoricoAlugados);
-        buttonFinalizarAluguel = findViewById(R.id.buttonFinalizarAluguel);
         deletar = findViewById(R.id.idDeletarAluguel);
         editar = findViewById(R.id.idEditarAluguel);
         listaItensAlugados = new ArrayList<>();
         DetalhesHistoricoAluguelAdapter = new DetalhesHistoricoAluguelAdapter(listaItensAlugados);
 
-        // Configuração do RecyclerView
         recyclerViewItensHistoricoAlugados.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewItensHistoricoAlugados.setAdapter(DetalhesHistoricoAluguelAdapter);
 
-        // Inicializa o Firestore
         firestore = FirebaseFirestore.getInstance();
 
         FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
-        usuarioId = usuarioAtual != null ? usuarioAtual.getUid() : null; // Definindo usuarioId aqui
+        usuarioId = usuarioAtual != null ? usuarioAtual.getUid() : null;
 
-        // Obtém o ID do aluguel da Intent
         String aluguelId = getIntent().getStringExtra("aluguelId");
         if (aluguelId != null && !aluguelId.isEmpty()) {
             carregarItensAlugados(aluguelId);
         } else {
             Toast.makeText(this, "ID do aluguel inválido!", Toast.LENGTH_SHORT).show();
-            finish(); // Fecha a Activity se o aluguelId for inválido
+            finish();
         }
 
         deletar.setOnClickListener(view -> {
-            // Exibe diálogo de confirmação antes de deletar
             mostrarDialogoDeConfirmacao(aluguelId);
         });
 
+        Window window = getWindow();
+        window.setStatusBarColor(getResources().getColor(android.R.color.black));
 
+        window.setNavigationBarColor(getResources().getColor(android.R.color.black));
     }
 
-    // Método para carregar os itens alugados
     private void carregarItensAlugados(String aluguelId) {
         CollectionReference itensRef = firestore.collection("AlugFinaliz")
                 .document(aluguelId)
@@ -107,25 +102,22 @@ public class DetalhesHistoricoAluguel extends AppCompatActivity {
     }
 
     private void deletarAluguel(String aluguelId) {
-        // Verifica se há itens alugados
         if (listaItensAlugados.isEmpty()) {
             Toast.makeText(this, "Nenhum item para devolver!", Toast.LENGTH_SHORT).show();
-            return; // Para se não houver itens para devolver
+            return;
         }
 
-        // Remove o documento do aluguel diretamente
         firestore.collection("AlugFinaliz").document(aluguelId)
                 .delete()
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Aluguel deletado com sucesso!", Toast.LENGTH_SHORT).show();
-                    finish(); // Fecha a Activity após deletar
+                    finish();
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(this, "Erro ao deletar aluguel", Toast.LENGTH_SHORT).show();
                     Log.e("DetalhesAluguel", "Erro ao deletar aluguel", e);
                 });
     }
-
 }
 
 

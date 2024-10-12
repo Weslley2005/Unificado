@@ -103,7 +103,7 @@ public class ListarEquipAlug extends AppCompatActivity {
                                 equipAlugList.clear();
                                 for (QueryDocumentSnapshot document : querySnapshot) {
                                     EquipamentoAluguel equipAlug = document.toObject(EquipamentoAluguel.class);
-                                    equipAlug.setId(document.getId()); //
+                                    equipAlug.setId(document.getId());
                                     equipAlugList.add(equipAlug);
                                 }
                                 filteredEquipAlugList.addAll(equipAlugList);
