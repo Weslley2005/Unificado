@@ -53,15 +53,18 @@
             <item
                 android:id="@+id/item3_1"
                 android:icon="@drawable/faturamento"
-                android:title="DIÁRIO"/>
+                android:title="DIÁRIO"
+                android:onClick="faturamentoDiario"/>
             <item
                 android:id="@+id/item3_2"
                 android:icon="@drawable/faturamento"
-                android:title="MENSAL"/>
+                android:title="MENSAL"
+                android:onClick="faturamentoMensal"/>
             <item
                 android:id="@+id/item3_3"
                 android:icon="@drawable/faturamento"
-                android:title="ANUAL"/>
+                android:title="ANUAL"
+                android:onClick="faturamentoAnual"/>
         </menu>
     </item>
 

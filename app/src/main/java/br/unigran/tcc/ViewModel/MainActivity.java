@@ -138,4 +138,16 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, HistoricoVendas.class);
         startActivity(intent);
     }
+    public void faturamentoDiario(MenuItem item) {
+        Intent intent = new Intent(this, FaturamentoDiario.class);
+        startActivity(intent);
+    }
+    public void faturamentoMensal(MenuItem item) {
+        Intent intent = new Intent(this, FaturamentoMensal.class);
+        startActivity(intent);
+    }
+    public void faturamentoAnual(MenuItem item) {
+        Intent intent = new Intent(this, FaturamentoAnual.class);
+        startActivity(intent);
+    }
 }
