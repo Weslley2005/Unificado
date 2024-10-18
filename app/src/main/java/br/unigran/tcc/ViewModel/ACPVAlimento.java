@@ -123,6 +123,7 @@ public class ACPVAlimento extends AppCompatActivity {
 
                                 if (quantidadeDesejada <= qtdDisponivel) {
                                     double precoTotalCalculado = precoUnitario * quantidadeDesejada;
+                                    double precoCompra = produtosEstoque.getPrecoCompra(); // Adicionando precoCompra
 
                                     Map<String, Object> produto = new HashMap<>();
                                     produto.put("id", documento.getId());
@@ -130,6 +131,7 @@ public class ACPVAlimento extends AppCompatActivity {
                                     produto.put("precoUnitario", precoUnitario);
                                     produto.put("quantidade", quantidadeDesejada);
                                     produto.put("precoTotal", precoTotalCalculado);
+                                    produto.put("precoCompra", precoCompra); // Salvando precoCompra
 
                                     FirebaseFirestore.getInstance().collection("Carrinho").document(userId)
                                             .collection("Itens")
@@ -154,6 +156,7 @@ public class ACPVAlimento extends AppCompatActivity {
             Toast.makeText(ACPVAlimento.this, "Você precisa estar logado para adicionar itens ao carrinho.", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     private void buscarDadosDoBanco() {
         FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textViewData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="Selecione a data (dd/MM/yyyy)"
+        android:textSize="16sp"
+        tools:ignore="Suspicious0dp" />
+
+    <ImageView
+        android:id="@+id/imageViewCalendario"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:contentDescription="Abrir calendário"
+        android:padding="8dp"
+        android:src="@android:drawable/ic_menu_my_calendar" />
+
+    <TextView
+        android:id="@+id/text_faturamento_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Faturamento Total: "
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/text_desconto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Desconto Total: "
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/text_lucro_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lucro Total: "
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/btn_calcular_faturamento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Calcular Faturamento Diário" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_produtos"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+</LinearLayout>

@@ -113,6 +113,13 @@ public class CarrinhoVendas extends AppCompatActivity {
                                     produto.setQtdProduto(0);
                                 }
 
+                                Object precoCompraObj = item.get("precoCompra");
+                                if (precoCompraObj != null) {
+                                    produto.setPrecoCompra(((Double) precoCompraObj).floatValue());
+                                } else {
+                                    produto.setPrecoCompra(0f);
+                                }
+
                                 listaCarrinho.add(produto);
                                 subtotal += produto.getPrecoVenda() * produto.getQtdProduto();
                             }
@@ -176,6 +183,7 @@ public class CarrinhoVendas extends AppCompatActivity {
             compra.put("subtotal", subtotal);
             compra.put("desconto", desconto);
             compra.put("total", total);
+            compra.put("precoCompra", total); // Incluindo precoCompra
             compra.put("data", dataFormatada);
             compra.put("hora", horaFormatada);
 
@@ -194,6 +202,7 @@ public class CarrinhoVendas extends AppCompatActivity {
                             item.put("precoUnitario", produtos.getPrecoVenda());
                             item.put("quantidade", produtos.getQtdProduto());
                             item.put("precoTotal", produtos.getPrecoVenda() * produtos.getQtdProduto());
+                            item.put("precoCompra", produtos.getPrecoCompra());
                             itens.add(item);
                         }
 
@@ -206,7 +215,6 @@ public class CarrinhoVendas extends AppCompatActivity {
                         }
 
                         for (Produtos produtos : listaCarrinho) {
-                            Log.d("CarrinhoActivity", "Quantidade no carrinho: " + produtos.getQtdProduto());
                             atualizarEstoque(produtos);
                         }
 
@@ -222,6 +230,7 @@ public class CarrinhoVendas extends AppCompatActivity {
             Toast.makeText(CarrinhoVendas.this, "Você precisa estar logado para finalizar a compra.", Toast.LENGTH_SHORT).show();
         }
     }
+
 
 
     private void atualizarEstoque(Produtos produto) {
