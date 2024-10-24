@@ -8,33 +8,38 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 import br.unigran.tcc.R;
 
-public class FaturamentoAnualAdapter extends RecyclerView.Adapter<FaturamentoAnualAdapter.ProdutoViewHolder> {
+public class FaturamentoDiarioAluguelAdapter extends RecyclerView.Adapter<FaturamentoDiarioAluguelAdapter.ProdutoViewHolder> {
 
-    private List<FaturamentoAnualImpl.ProdutoFaturamento> produtos;
+    private List<FaturamentoDiarioAlugueisImpl.ProdutoFaturamento> produtos;
 
-    public FaturamentoAnualAdapter(List<FaturamentoAnualImpl.ProdutoFaturamento> produtos) {
+    public FaturamentoDiarioAluguelAdapter(List<FaturamentoDiarioAlugueisImpl.ProdutoFaturamento> produtos) {
         this.produtos = produtos;
     }
 
     @NonNull
     @Override
     public ProdutoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_item_faturamento_anual, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_item_faturamento_diario_aluguel, parent, false);
         return new ProdutoViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ProdutoViewHolder holder, int position) {
-        FaturamentoAnualImpl.ProdutoFaturamento produto = produtos.get(position);
+        FaturamentoDiarioAlugueisImpl.ProdutoFaturamento produto = produtos.get(position);
+
+        // Formatação de valores monetários
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+
         holder.textNomeProduto.setText(produto.getNome());
         holder.textQuantidade.setText("Quantidade: " + produto.getQuantidade());
-        holder.textPrecoCompra.setText("Total Compra: R$ " + produto.getTotalPrecoCompra());
-        holder.textPrecoVenda.setText("Total Venda: R$ " + produto.getTotalPrecoVenda());
-        holder.textPrecoLiquido.setText("Lucro: R$ " + produto.getPrecoLiquido());
+        holder.textPrecoVenda.setText("Total Venda: " + currencyFormat.format(produto.getTotalPrecoVenda()));
+        holder.textPrecoLiquido.setText("Lucro: " + currencyFormat.format(produto.getPrecoLiquido()));
     }
 
     @Override
@@ -43,24 +48,24 @@ public class FaturamentoAnualAdapter extends RecyclerView.Adapter<FaturamentoAnu
     }
 
     public void limparDados() {
-        this.produtos.clear();
-        notifyDataSetChanged();
+        this.produtos.clear(); // Remove todos os itens da lista
+        notifyDataSetChanged(); // Notifica o RecyclerView que os dados foram removidos
     }
 
-    public void updateProdutos(List<FaturamentoAnualImpl.ProdutoFaturamento> novosProdutos) {
+    public void updateProdutos(List<FaturamentoDiarioAlugueisImpl.ProdutoFaturamento> novosProdutos) {
         this.produtos.clear();
+        notifyDataSetChanged();
         this.produtos.addAll(novosProdutos);
         notifyDataSetChanged();
     }
 
     static class ProdutoViewHolder extends RecyclerView.ViewHolder {
-        TextView textNomeProduto, textQuantidade, textPrecoCompra, textPrecoVenda, textPrecoLiquido;
+        TextView textNomeProduto, textQuantidade, textPrecoVenda, textPrecoLiquido;
 
         public ProdutoViewHolder(@NonNull View itemView) {
             super(itemView);
             textNomeProduto = itemView.findViewById(R.id.text_nome_produto);
             textQuantidade = itemView.findViewById(R.id.text_quantidade);
-            textPrecoCompra = itemView.findViewById(R.id.text_preco_compra);
             textPrecoVenda = itemView.findViewById(R.id.text_preco_venda);
             textPrecoLiquido = itemView.findViewById(R.id.text_preco_liquido);
         }

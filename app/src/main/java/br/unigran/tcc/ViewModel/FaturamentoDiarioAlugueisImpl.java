@@ -1,5 +1,6 @@
 package br.unigran.tcc.ViewModel;
 
+
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -12,33 +13,33 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FaturamentoDiarioImpl {
+public class FaturamentoDiarioAlugueisImpl {
     private FirebaseFirestore db;
     private CollectionReference comprasRef;
 
-    public FaturamentoDiarioImpl() {
+    public FaturamentoDiarioAlugueisImpl() {
         db = FirebaseFirestore.getInstance();
         comprasRef = db.collection("Compras");
     }
 
-    public void calcularFaturamentoDiario(String data, final FaturamentoListener listener) {
-        Query query = comprasRef.whereEqualTo("data", data);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+    public void calcularFaturamentoAlugueis(String data, final FaturamentoListener listener) {
+        CollectionReference alugueisRef = db.collection("AlugFinaliz");
+        Query query = alugueisRef.whereEqualTo("data", data);
 
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    Map<String, ProdutoFaturamento> produtosMap = new HashMap<>();
+                    Map<String, ProdutoFaturamento> alugueisMap = new HashMap<>();
                     final double[] totalDescontos = {0};
                     final double[] totalLucro = {0};
 
                     for (DocumentSnapshot document : task.getResult()) {
-                        CollectionReference itensRef = document.getReference().collection("Itens");
+                        CollectionReference itensRef = document.getReference().collection("ItensAluguel");
                         itensRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -48,28 +49,28 @@ public class FaturamentoDiarioImpl {
                                         if (item != null) {
                                             String nomeProduto = item.getNome();
                                             double precoCompra = item.getPrecoCompra();
-                                            double precoVenda = item.getPrecoUnitario();
+                                            double precoVenda = item.getPrecoTotal();
                                             int quantidade = item.getQuantidade();
 
-                                            Log.d("FaturamentoDiario", "Produto: " + nomeProduto + ", Preço de Venda: " + precoVenda + ", Quantidade: " + quantidade);
+                                            Log.d("FaturamentoAlugueis", "Produto: " + nomeProduto + ", Preço de Venda: " + precoVenda + ", Quantidade: " + quantidade);
 
-                                            if (!produtosMap.containsKey(nomeProduto)) {
-                                                produtosMap.put(nomeProduto, new ProdutoFaturamento(nomeProduto));
+                                            if (!alugueisMap.containsKey(nomeProduto)) {
+                                                alugueisMap.put(nomeProduto, new ProdutoFaturamento(nomeProduto));
                                             }
 
-                                            ProdutoFaturamento produto = produtosMap.get(nomeProduto);
+                                            ProdutoFaturamento produto = alugueisMap.get(nomeProduto);
                                             produto.adicionarQuantidade(quantidade);
                                             produto.adicionarPrecoCompra(precoCompra * quantidade);
-                                            produto.adicionarPrecoVenda(precoVenda * quantidade);
+                                            produto.adicionarPrecoVenda(precoVenda);
                                             Double desconto = document.getDouble("desconto");
                                             if (desconto != null) totalDescontos[0] += desconto;
-                                            totalLucro[0] += ((precoVenda - precoCompra) * quantidade)-desconto;
+                                            totalLucro[0] += (precoVenda-desconto);
                                         }
                                     }
 
 
 
-                                    listener.onFaturamentoCalculado(produtosMap, totalDescontos[0], totalLucro[0]);
+                                    listener.onFaturamentoCalculado(alugueisMap, totalDescontos[0], totalLucro[0]);
                                 } else {
                                     listener.onErro(task.getException());
                                 }
@@ -82,6 +83,7 @@ public class FaturamentoDiarioImpl {
             }
         });
     }
+
 
     public interface FaturamentoListener {
         void onFaturamentoCalculado(Map<String, ProdutoFaturamento> produtosMap, double totalDescontos, double totalLucro);
@@ -109,8 +111,8 @@ public class FaturamentoDiarioImpl {
             this.totalPrecoCompra += precoCompra;
         }
 
-        public void adicionarPrecoVenda(double precoUnitario) {
-            this.totalPrecoVenda += precoUnitario;
+        public void adicionarPrecoVenda(double precoTotal) {
+            this.totalPrecoVenda += precoTotal;
         }
 
         public double getPrecoLiquido() {
@@ -137,7 +139,7 @@ public class FaturamentoDiarioImpl {
     public static class ItemFaturamento {
         private String nome;
         private double precoCompra;
-        private double precoUnitario;
+        private double precoTotal;
         private int quantidade;
 
         public String getNome() {
@@ -148,8 +150,8 @@ public class FaturamentoDiarioImpl {
             return precoCompra;
         }
 
-        public double getPrecoUnitario() {
-            return precoUnitario;
+        public double getPrecoTotal() {
+            return precoTotal;
         }
 
         public int getQuantidade() {

@@ -87,12 +87,14 @@ public class FaturamentoMensalImpl {
                                                 produto.adicionarPrecoCompra(precoCompra * quantidade);
                                                 produto.adicionarPrecoVenda(precoVenda * quantidade);
 
-                                                totalLucro[0] += (precoVenda - precoCompra) * quantidade;
+                                                Double desconto = document.getDouble("desconto");
+                                                if (desconto != null) totalDescontos[0] += desconto;
+
+                                                totalLucro[0] += ((precoVenda - precoCompra) * quantidade) - desconto;
                                             }
                                         }
 
-                                        Double desconto = document.getDouble("desconto");
-                                        if (desconto != null) totalDescontos[0] += desconto;
+
 
                                         listener.onFaturamentoCalculado(produtosMap, totalDescontos[0], totalLucro[0]);
                                     } else {

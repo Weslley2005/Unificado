@@ -1,61 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:background="@color/blue_light"
     android:padding="16dp">
 
-    <TextView
-        android:id="@+id/textViewData"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="16dp"
-        android:text="Selecione a data (dd/MM/yyyy)"
-        android:textSize="16sp"
-        tools:ignore="Suspicious0dp" />
+        android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/imageViewCalendario"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_gravity="center"
-        android:contentDescription="Abrir calendário"
-        android:padding="8dp"
-        android:src="@android:drawable/ic_menu_my_calendar" />
+        <TextView
+            android:id="@+id/textView49"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="FATURAMENTO ANUAL"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:background="@drawable/borda_recycleview" />
 
-    <TextView
-        android:id="@+id/text_faturamento_total"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Faturamento Total: "
-        android:textSize="18sp" />
+        <TextView
+            android:id="@+id/textViewData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="Selecione a data (dd/MM/yyyy)"
+            android:textSize="16sp"
+            tools:ignore="Suspicious0dp" />
 
-    <TextView
-        android:id="@+id/text_desconto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Desconto Total: "
-        android:textSize="18sp" />
+        <ImageView
+            android:id="@+id/imageViewCalendario"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:contentDescription="Abrir calendário"
+            android:padding="0dp"
+            android:src="@android:drawable/ic_menu_my_calendar" />
 
-    <TextView
-        android:id="@+id/text_lucro_total"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Lucro Total: "
-        android:textSize="18sp" />
+        <Button
+            android:id="@+id/btn_calcular_faturamento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/Button"
+            android:text="Calcular Faturamento Anual"
+            android:layout_gravity="center" />
 
-    <Button
-        android:id="@+id/btn_calcular_faturamento"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Calcular Faturamento Diário" />
+        <TextView
+            android:id="@+id/textView47"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Vendas:"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_produtos"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        <TextView
+            android:id="@+id/text_faturamento_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Faturamento Total: "
+            android:textSize="18sp" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/text_desconto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Desconto Total: "
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/text_lucro_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lucro Total: "
+            android:textSize="18sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_produtos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/borda_recycleview" />
+
+        <TextView
+            android:id="@+id/textView48"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Alugueis:"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/text_faturamento_totalA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Faturamento Total: "
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/text_descontoA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Desconto Total: "
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/text_lucro_totalA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lucro Total: "
+            android:textSize="18sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_alugueis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/borda_recycleview" />
+
+    </LinearLayout>
+</ScrollView>

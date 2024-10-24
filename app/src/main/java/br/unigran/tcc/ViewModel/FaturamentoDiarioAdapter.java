@@ -42,6 +42,11 @@ public class FaturamentoDiarioAdapter extends RecyclerView.Adapter<FaturamentoDi
         return produtos.size();
     }
 
+    public void limparDados() {
+        this.produtos.clear();
+        notifyDataSetChanged();
+    }
+
     public void updateProdutos(List<FaturamentoDiarioImpl.ProdutoFaturamento> novosProdutos) {
         this.produtos.clear();
         this.produtos.addAll(novosProdutos);

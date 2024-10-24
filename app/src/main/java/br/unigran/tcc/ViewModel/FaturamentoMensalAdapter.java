@@ -42,6 +42,11 @@ public class FaturamentoMensalAdapter extends RecyclerView.Adapter<FaturamentoMe
         return produtos.size();
     }
 
+    public void limparDados() {
+        this.produtos.clear();
+        notifyDataSetChanged();
+    }
+
     public void updateProdutos(List<FaturamentoMensalImpl.ProdutoFaturamento> novosProdutos) {
         this.produtos.clear();
         this.produtos.addAll(novosProdutos);

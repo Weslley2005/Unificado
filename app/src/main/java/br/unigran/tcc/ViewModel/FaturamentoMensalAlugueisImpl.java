@@ -20,13 +20,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FaturamentoAnualImpl {
+public class FaturamentoMensalAlugueisImpl {
     private FirebaseFirestore db;
     private CollectionReference comprasRef;
 
-    public FaturamentoAnualImpl() {
+    public FaturamentoMensalAlugueisImpl() {
+        // Inicializar Firestore
         db = FirebaseFirestore.getInstance();
-        comprasRef = db.collection("Compras");
+        comprasRef = db.collection("AlugFinaliz");
     }
     public Date converterStringParaData(String dataString) {
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
@@ -39,7 +40,7 @@ public class FaturamentoAnualImpl {
     }
 
     @SuppressLint("RestrictedApi")
-    public void calcularFaturamentoAnual(String dataInicio, String dataFim, final FaturamentoListener listener) {
+    public void calcularFaturamentoMensalAlugueis(String dataInicio, String dataFim, final FaturamentoListener listener) {
         Log.d(TAG, "Convertendo data de inicio e fim: " + dataInicio + " até " + dataFim);
 
         comprasRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -62,7 +63,7 @@ public class FaturamentoAnualImpl {
                         if (dataDocumento != null && (dataDocumento.compareTo(dataInicioDate) >= 0) && (dataDocumento.compareTo(dataFimDate) <= 0)) {
                             Log.d(TAG, "Documento encontrado dentro do intervalo: " + document.getId());
 
-                            CollectionReference itensRef = document.getReference().collection("Itens");
+                            CollectionReference itensRef = document.getReference().collection("ItensAluguel");
                             itensRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -74,7 +75,7 @@ public class FaturamentoAnualImpl {
                                             if (item != null) {
                                                 String nomeProduto = item.getNome();
                                                 double precoCompra = item.getPrecoCompra();
-                                                double precoVenda = item.getPrecoUnitario();
+                                                double precoVenda = item.getPrecoTotal();
                                                 int quantidade = item.getQuantidade();
 
                                                 if (!produtosMap.containsKey(nomeProduto)) {
@@ -84,16 +85,14 @@ public class FaturamentoAnualImpl {
                                                 ProdutoFaturamento produto = produtosMap.get(nomeProduto);
                                                 produto.adicionarQuantidade(quantidade);
                                                 produto.adicionarPrecoCompra(precoCompra * quantidade);
-                                                produto.adicionarPrecoVenda(precoVenda * quantidade);
+                                                produto.adicionarPrecoVenda(precoVenda);
 
                                                 Double desconto = document.getDouble("desconto");
                                                 if (desconto != null) totalDescontos[0] += desconto;
 
-                                                totalLucro[0] += ((precoVenda - precoCompra) * quantidade) - desconto;
+                                                totalLucro[0] += (precoVenda - desconto);
                                             }
                                         }
-
-
 
                                         listener.onFaturamentoCalculado(produtosMap, totalDescontos[0], totalLucro[0]);
                                     } else {
@@ -140,8 +139,8 @@ public class FaturamentoAnualImpl {
             this.totalPrecoCompra += precoCompra;
         }
 
-        public void adicionarPrecoVenda(double precoUnitario) {
-            this.totalPrecoVenda += precoUnitario;
+        public void adicionarPrecoVenda(double precoTotal) {
+            this.totalPrecoVenda += precoTotal;
         }
 
         public double getPrecoLiquido() {
@@ -168,7 +167,7 @@ public class FaturamentoAnualImpl {
     public static class ItemFaturamento {
         private String nome;
         private double precoCompra;
-        private double precoUnitario;
+        private double precoTotal;
         private int quantidade;
 
         public String getNome() {
@@ -179,8 +178,8 @@ public class FaturamentoAnualImpl {
             return precoCompra;
         }
 
-        public double getPrecoUnitario() {
-            return precoUnitario;
+        public double getPrecoTotal() {
+            return precoTotal;
         }
 
         public int getQuantidade() {

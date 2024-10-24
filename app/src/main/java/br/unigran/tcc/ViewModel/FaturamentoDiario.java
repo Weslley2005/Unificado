@@ -1,9 +1,11 @@
 package br.unigran.tcc.ViewModel;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -26,14 +28,21 @@ import br.unigran.tcc.R;
 
 public class FaturamentoDiario extends AppCompatActivity {
     private TextView textFaturamentoTotal, textDesconto, textLucroTotal;
+    private TextView textFaturamentoTotalA, textDescontoA, textLucroTotalA;
     private Button btnCalcularFaturamento;
     private RecyclerView recyclerViewProdutos;
     private FaturamentoDiarioAdapter produtosAdapter;
+    private FaturamentoDiarioAluguelAdapter alugueisAdapter;
     private FaturamentoDiarioImpl faturamentoDiario;
+    private FaturamentoDiarioAlugueisImpl faturamentoDiarioAlugueis;
     private TextView textViewData;
     private ImageView imageViewCalendario;
     private Calendar calendar;
+    private RecyclerView recyclerViewAlugueis;
 
+
+
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,21 +51,42 @@ public class FaturamentoDiario extends AppCompatActivity {
         textFaturamentoTotal = findViewById(R.id.text_faturamento_total);
         textDesconto = findViewById(R.id.text_desconto);
         textLucroTotal = findViewById(R.id.text_lucro_total);
+        textFaturamentoTotalA = findViewById(R.id.text_faturamento_totalA);
+        textDescontoA = findViewById(R.id.text_descontoA);
+        textLucroTotalA = findViewById(R.id.text_lucro_totalA);
         btnCalcularFaturamento = findViewById(R.id.btn_calcular_faturamento);
         recyclerViewProdutos = findViewById(R.id.recycler_view_produtos);
 
         faturamentoDiario = new FaturamentoDiarioImpl();
+        faturamentoDiarioAlugueis = new FaturamentoDiarioAlugueisImpl();
 
         recyclerViewProdutos.setLayoutManager(new LinearLayoutManager(this));
         produtosAdapter = new FaturamentoDiarioAdapter(new ArrayList<>());
         recyclerViewProdutos.setAdapter(produtosAdapter);
 
+        recyclerViewAlugueis = findViewById(R.id.recycler_view_alugueis);
+        recyclerViewAlugueis.setLayoutManager(new LinearLayoutManager(this));
+        alugueisAdapter = new FaturamentoDiarioAluguelAdapter(new ArrayList<>());
+        recyclerViewAlugueis.setAdapter(alugueisAdapter);
+
         btnCalcularFaturamento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                alugueisAdapter.limparDados();
+                produtosAdapter.limparDados();
+
+                textFaturamentoTotal.setText("Faturamento Total:R$ 0.00");
+                textDesconto.setText("Desconto Total:R$ 0.00");
+                textLucroTotal.setText("Lucro Total:R$ 0.00");
+                textFaturamentoTotalA.setText("Faturamento Total:R$ 0.00");
+                textDescontoA.setText("Desconto Total:R$ 0.00");
+                textLucroTotalA.setText("Lucro Total:R$ 0.00");
+
                 calcularFaturamento();
+                calcularFaturamentoAlugueis();
             }
         });
+
 
         textViewData = findViewById(R.id.textViewData);
         imageViewCalendario = findViewById(R.id.imageViewCalendario);
@@ -69,6 +99,9 @@ public class FaturamentoDiario extends AppCompatActivity {
             }
         });
 
+        Window janela = getWindow();
+        janela.setStatusBarColor(getResources().getColor(android.R.color.black));
+        janela.setNavigationBarColor(getResources().getColor(android.R.color.black));
     }
 
     private void mostrarSeletorDeData() {
@@ -123,4 +156,38 @@ public class FaturamentoDiario extends AppCompatActivity {
             }
         });
     }
+
+    private void calcularFaturamentoAlugueis() {
+        String dataSelecionada = textViewData.getText().toString();
+        faturamentoDiarioAlugueis.calcularFaturamentoAlugueis(dataSelecionada, new FaturamentoDiarioAlugueisImpl.FaturamentoListener() {
+            @Override
+            public void onFaturamentoCalculado(Map<String, FaturamentoDiarioAlugueisImpl.ProdutoFaturamento> produtosMap, double totalDescontos, double totalLucro) {
+                if (produtosMap == null || produtosMap.isEmpty()) {
+                    Toast.makeText(FaturamentoDiario.this, "Nenhum produto encontrado.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                double totalFaturamento = 0;
+                List<FaturamentoDiarioAlugueisImpl.ProdutoFaturamento> produtos = new ArrayList<>(produtosMap.values());
+                for (FaturamentoDiarioAlugueisImpl.ProdutoFaturamento produto : produtos) {
+                    totalFaturamento += produto.getTotalPrecoVenda();
+                }
+
+                NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+                textFaturamentoTotalA.setText("Faturamento Total: " + currencyFormat.format(totalFaturamento));
+                textDescontoA.setText("Desconto Total: " + currencyFormat.format(totalDescontos));
+                textLucroTotalA.setText("Lucro Total: " + currencyFormat.format(totalLucro));
+
+                alugueisAdapter.updateProdutos(produtos);
+                alugueisAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onErro(Exception e) {
+                Log.e("FaturamentoDiario", "Erro ao calcular faturamento", e);
+                Toast.makeText(FaturamentoDiario.this, "Erro ao calcular faturamento.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }
