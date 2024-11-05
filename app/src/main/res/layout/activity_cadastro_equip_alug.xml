@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/blue_light"
     tools:context=".ViewModel.CadastroEquipAlug">
 
     <TextView
@@ -14,6 +15,7 @@
         android:gravity="center"
         android:text="Cadastro de Equipamento Para Aluguel"
         android:textSize="26sp"
+        android:background="@drawable/borda_recycleview"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,8 +27,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="5dp"
         android:text="Nome Equipamento"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textView6" />
 
@@ -57,8 +59,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="5dp"
         android:text="Quantidade Equipamento"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/idNomeEqui" />
 
@@ -90,8 +92,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="5dp"
         android:text="Preço Aluguel Meio Dia (Meia)"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/idQtdEqui" />
 
@@ -124,6 +126,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
         android:text="Preço Aluguel Dia Inteiro (Inteiro)"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/idPrecoEquiM" />
 

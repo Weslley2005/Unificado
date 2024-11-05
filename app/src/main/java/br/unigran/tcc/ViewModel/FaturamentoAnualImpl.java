@@ -26,7 +26,7 @@ public class FaturamentoAnualImpl {
 
     public FaturamentoAnualImpl() {
         db = FirebaseFirestore.getInstance();
-        comprasRef = db.collection("Compras");
+        comprasRef = db.collection("VendasFinaliz");
     }
     public Date converterStringParaData(String dataString) {
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");

@@ -34,5 +34,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/idBtnVendas" />
 
+        <TextView
+            android:id="@+id/textView53"
+            android:layout_width="393dp"
+            android:layout_height="41dp"
+            android:layout_marginStart="9dp"
+            android:layout_marginTop="42dp"
+            android:background="@drawable/borda_recycleview"
+            android:text="Carrinho"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

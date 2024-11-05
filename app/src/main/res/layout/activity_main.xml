@@ -7,59 +7,65 @@
     android:background="@color/blue_light"
     tools:context=".ViewModel.MainActivity"
     android:id="@+id/drawerLayout">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <Button
-            android:id="@+id/idBtnAluguel"
+            android:id="@+id/idBtnVendas"
             android:layout_width="186dp"
             android:layout_height="124dp"
-            android:layout_marginStart="208dp"
-            android:layout_marginTop="116dp"
+            android:layout_marginTop="40dp"
             android:backgroundTint="@color/Button"
-            android:onClick="Aluguel"
-            android:text="Aluguel"
+            android:onClick="vendas"
+            android:text="Vendas"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.502"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/idBtnVendas"
+            android:id="@+id/idBtnAluguel"
             android:layout_width="186dp"
             android:layout_height="124dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="116dp"
+            android:layout_marginTop="8dp"
             android:backgroundTint="@color/Button"
-            android:onClick="vendas"
-            android:text="Vendas"
+            android:onClick="Aluguel"
+            android:text="Aluguel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.502"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/idBtnVendas" />
 
         <Button
             android:id="@+id/idBtnAlugueisFinalizados"
             android:layout_width="186dp"
             android:layout_height="124dp"
-            android:layout_marginStart="208dp"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="8dp"
             android:backgroundTint="@color/Button"
-            android:onClick="finalizarAluguel"
-            android:text="Alugueis"
+            android:onClick="comandas"
+            android:text="COMANDAS"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.502"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/idBtnVendas" />
+            app:layout_constraintTop_toBottomOf="@id/idBtnCarrinho" />
 
         <Button
             android:id="@+id/idBtnCarrinho"
             android:layout_width="186dp"
             android:layout_height="124dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="8dp"
             android:backgroundTint="@color/Button"
             android:onClick="carrinho"
             android:text="Carrinho"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.502"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/idBtnAluguel" />
+            app:layout_constraintTop_toBottomOf="@id/idBtnAluguel" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -68,9 +74,6 @@
         android:background="@color/Menu"
         android:id="@+id/navView"
         app:headerLayout="@layout/navbar"
-        app:menu="@menu/principal"
-        />
-
-
+        app:menu="@menu/principal" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

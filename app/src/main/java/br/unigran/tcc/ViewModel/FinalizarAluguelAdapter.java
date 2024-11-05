@@ -1,5 +1,6 @@
 package br.unigran.tcc.ViewModel;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -13,15 +14,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import br.unigran.tcc.Model.FinalizarAlugueis;
+import br.unigran.tcc.Model.FinalizaAlugueis;
 import br.unigran.tcc.R;
 
 public class FinalizarAluguelAdapter extends RecyclerView.Adapter<FinalizarAluguelAdapter.AluguelViewHolder> {
 
-    private List<FinalizarAlugueis> listaAlugueis;
+    private List<FinalizaAlugueis> listaAlugueis;
     private Context context;
 
-    public FinalizarAluguelAdapter(List<FinalizarAlugueis> listaAlugueis, FinalizarAluguel context) {
+    public FinalizarAluguelAdapter(List<FinalizaAlugueis> listaAlugueis, FinalizarAluguel context) {
         this.listaAlugueis = listaAlugueis;
         this.context = context;
     }
@@ -37,7 +38,7 @@ public class FinalizarAluguelAdapter extends RecyclerView.Adapter<FinalizarAlugu
 
     @Override
     public void onBindViewHolder(@NonNull AluguelViewHolder holder, int position) {
-        FinalizarAlugueis aluguel = listaAlugueis.get(position);
+        FinalizaAlugueis aluguel = listaAlugueis.get(position);
         holder.textTotal.setText(String.format("Total: R$%.2f", aluguel.getTotal()));
         holder.textData.setText("Data: " + aluguel.getData());
         holder.textHora.setText("Hora: " + aluguel.getHora());
@@ -48,6 +49,7 @@ public class FinalizarAluguelAdapter extends RecyclerView.Adapter<FinalizarAlugu
             Intent intent = new Intent(context, DetalhesAluguel.class);
             intent.putExtra("aluguelId", aluguel.getId());
             context.startActivity(intent);
+            ((Activity) context).finish();
         });
     }
 

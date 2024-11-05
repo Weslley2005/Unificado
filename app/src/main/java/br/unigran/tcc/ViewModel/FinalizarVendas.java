@@ -21,36 +21,35 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.unigran.tcc.Model.FinalizaAlugueis;
+import br.unigran.tcc.Model.FinalizaVendas;
 import br.unigran.tcc.R;
 
-public class FinalizarAluguel extends AppCompatActivity {
-
-    private RecyclerView recyclerViewAlugueis;
-    private FinalizarAluguelAdapter aluguelAdapter;
-    private List<FinalizaAlugueis> listaAlugueis;
-    private List<FinalizaAlugueis> listaItensAlugueisFiltrados;
+public class FinalizarVendas extends AppCompatActivity {
+    private RecyclerView recyclerViewVendas;
+    private FinalizarVendasAdapter vendasAdapter;
+    private List<FinalizaVendas> listaVendas;
+    private List<FinalizaVendas> listaItensVendasFiltrados; // Lista para manter os itens filtrados
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_finalizar_aluguel);
+        setContentView(R.layout.activity_finalizar_vendas);
 
         setSupportActionBar(findViewById(R.id.toolbar));
 
         androidx.appcompat.widget.SearchView searchView = findViewById(R.id.searchView);
+        recyclerViewVendas = findViewById(R.id.recycleViewAlugueis);
+        listaVendas = new ArrayList<>();
+        listaItensVendasFiltrados = new ArrayList<>();
+        vendasAdapter = new FinalizarVendasAdapter(listaVendas, this);
 
-        recyclerViewAlugueis = findViewById(R.id.recycleViewAlugueis);
-        listaAlugueis = new ArrayList<>();
-        listaItensAlugueisFiltrados = new ArrayList<>();
-        aluguelAdapter = new FinalizarAluguelAdapter(listaAlugueis, this);
+        recyclerViewVendas.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewVendas.setAdapter(vendasAdapter);
 
-        recyclerViewAlugueis.setLayoutManager(new LinearLayoutManager(this));
-        recyclerViewAlugueis.setAdapter(aluguelAdapter);
+        carregarVendas();
 
-        carregarAlugueis();
-
+        // Configuração da cor da barra de status e de navegação
         Window janela = getWindow();
         janela.setStatusBarColor(getResources().getColor(android.R.color.black));
         janela.setNavigationBarColor(getResources().getColor(android.R.color.black));
@@ -76,43 +75,46 @@ public class FinalizarAluguel extends AppCompatActivity {
         searchEditText.setHintTextColor(hintColor);
     }
 
-    private void carregarAlugueis() {
+    private void carregarVendas() {
         FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
         if (usuarioAtual != null) {
             String userId = usuarioAtual.getUid();
-            FirebaseFirestore.getInstance().collection("AluguelFinalizadas")
+            FirebaseFirestore.getInstance().collection("Compras")
                     .whereEqualTo("usuarioId", userId)
                     .get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful() && task.getResult() != null) {
-                            listaAlugueis.clear();
+                            listaVendas.clear();
                             for (QueryDocumentSnapshot documento : task.getResult()) {
-                                FinalizaAlugueis aluguel = documento.toObject(FinalizaAlugueis.class);
-                                aluguel.setId(documento.getId());
-                                listaAlugueis.add(aluguel);
+                                FinalizaVendas vendas = documento.toObject(FinalizaVendas.class);
+                                vendas.setId(documento.getId());
+                                listaVendas.add(vendas);
                             }
-                            aluguelAdapter.notifyDataSetChanged();
+                            // Manter uma cópia da lista original para filtrar posteriormente
+                            listaItensVendasFiltrados.clear();
+                            listaItensVendasFiltrados.addAll(listaVendas);
+                            vendasAdapter.notifyDataSetChanged();
                         } else {
-                            Log.e("FinalizarAluguelActivity", "Erro ao carregar aluguéis", task.getException());
+                            Log.e("FinalizarVendas", "Erro ao carregar vendas", task.getException());
                         }
                     });
         } else {
-            Toast.makeText(this, "Você precisa estar logado para visualizar seus aluguéis.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Você precisa estar logado para visualizar suas vendas.", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void filtrarItens(String texto) {
-        listaAlugueis.clear();
+        listaVendas.clear();
         if (texto.isEmpty()) {
-            listaAlugueis.addAll(listaItensAlugueisFiltrados); // Se o texto estiver vazio, exibe todos os itens
+            listaVendas.addAll(listaItensVendasFiltrados); // Se o texto estiver vazio, exibe todos os itens
         } else {
             String filtro = texto.toLowerCase(); // Converte o texto para minúsculas para comparação
-            for (FinalizaAlugueis item : listaItensAlugueisFiltrados) {
-                if (item.getIdNomenAluguel().toLowerCase().contains(filtro)) { // Filtra os itens pelo nome
-                    listaAlugueis.add(item); // Adiciona o item filtrado à lista de vendas
+            for (FinalizaVendas item : listaItensVendasFiltrados) {
+                if (item.getNomenAluguel().toLowerCase().contains(filtro)) { // Filtra os itens pelo nome
+                    listaVendas.add(item); // Adiciona o item filtrado à lista de vendas
                 }
             }
         }
-        aluguelAdapter.notifyDataSetChanged(); // Notifica o adapter sobre a mudança
+        vendasAdapter.notifyDataSetChanged(); // Notifica o adapter sobre a mudança
     }
 }

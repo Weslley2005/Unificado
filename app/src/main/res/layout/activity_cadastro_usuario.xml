@@ -29,6 +29,7 @@
                 android:layout_marginBottom="24dp"
                 android:fontFamily="sans-serif"
                 android:text="Cadastro de Usuário"
+                android:background="@drawable/borda_recycleview"
                 android:textAlignment="center"
                 android:textSize="24sp"
                 android:textStyle="bold"
@@ -216,6 +217,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="16dp"
                 android:text="* A senha deve conter no mínimo Oito(8) digitos."
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/idConfSenha" />
 

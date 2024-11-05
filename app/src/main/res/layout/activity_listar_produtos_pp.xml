@@ -33,6 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Lista de Produtos de Produção Própria"
+            android:background="@drawable/borda_recycleview"
             android:textAlignment="center"
             android:textSize="24sp"
             android:textStyle="bold" />

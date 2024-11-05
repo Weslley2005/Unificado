@@ -1,6 +1,6 @@
 package br.unigran.tcc.Model;
 
-public class FinalizarAlugueis {
+public class FinalizaAlugueis {
     private String id;
     private double total;
     private String data;
@@ -12,7 +12,7 @@ public class FinalizarAlugueis {
     private String usuarioId;
 
     // Construtor padrão (necessário para Firestore)
-    public FinalizarAlugueis() {}
+    public FinalizaAlugueis() {}
 
     // Getters
     public String getId() {

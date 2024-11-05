@@ -14,6 +14,16 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <TextView
+            android:id="@+id/textView51"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Carrinho Aluguel"
+            android:background="@drawable/borda_recycleview"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewCarrinhoAluguel"
             android:layout_width="match_parent"
@@ -98,7 +108,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:backgroundTint="@color/Button"
-            android:text="Finalizar Aluguel"
+            android:text="Alugar"
             android:textColor="@android:color/white" />
     </LinearLayout>
 

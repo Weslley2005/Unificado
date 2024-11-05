@@ -11,20 +11,20 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView46"
+            android:id="@+id/textView42"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Itens Alugados"
-            android:textAlignment="center"
+            android:text="Itens Vendas"
             android:background="@drawable/borda_recycleview"
+            android:textAlignment="center"
             android:textSize="24sp"
             android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycleViewItensHistoricoAlugados"
+            android:id="@+id/recycleViewItensAlugados"
+            android:background="@drawable/borda_recycleview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/borda_recycleview"/>
+            android:layout_height="441dp" />
 
         <ImageButton
             android:id="@+id/idDeletarAluguel"
@@ -32,5 +32,18 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/excluir" />
 
+        <ImageButton
+            android:id="@+id/idEditarAluguel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/editar" />
+
+        <Button
+            android:id="@+id/buttonFinalizarAluguel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:allowUndo="false"
+            android:backgroundTint="@color/Button"
+            android:text="Finalizar Venda" />
     </LinearLayout>
 </ScrollView>

@@ -13,14 +13,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import br.unigran.tcc.Model.FinalizarVendas;
+import br.unigran.tcc.Model.FinalizaVendas;
 import br.unigran.tcc.R;
 
 public class HistoricoVendasAdapter extends RecyclerView.Adapter<HistoricoVendasAdapter.AluguelViewHolder>{
-    private List<FinalizarVendas> listaVendas;
+    private List<FinalizaVendas> listaVendas;
     private Context context;
 
-    public HistoricoVendasAdapter(List<FinalizarVendas> listaVendas, HistoricoVendas context) {
+    public HistoricoVendasAdapter(List<FinalizaVendas> listaVendas, HistoricoVendas context) {
         this.listaVendas = listaVendas;
         this.context = context;
     }
@@ -36,10 +36,11 @@ public class HistoricoVendasAdapter extends RecyclerView.Adapter<HistoricoVendas
 
     @Override
     public void onBindViewHolder(@NonNull HistoricoVendasAdapter.AluguelViewHolder holder, int position) {
-        FinalizarVendas vendas = listaVendas.get(position);
+        FinalizaVendas vendas = listaVendas.get(position);
         holder.textTotal.setText(String.format("Total: R$%.2f", vendas.getTotal()));
         holder.textData.setText("Data: " + vendas.getData());
         holder.textHora.setText("Hora: " + vendas.getHora());
+        holder.textIdNomeAluguel.setText("Nome: " + vendas.getNomenAluguel());
 
         holder.buttonDetalhes.setOnClickListener(v -> {
             Intent intent = new Intent(context, DetalhesHistoricoVendas.class);
@@ -54,7 +55,7 @@ public class HistoricoVendasAdapter extends RecyclerView.Adapter<HistoricoVendas
     }
 
     public static class AluguelViewHolder extends RecyclerView.ViewHolder {
-        TextView textTotal, textData, textHora;
+        TextView textTotal, textData, textHora, textIdNomeAluguel;
         Button buttonDetalhes;
 
         public AluguelViewHolder(@NonNull View itemView) {
@@ -62,6 +63,7 @@ public class HistoricoVendasAdapter extends RecyclerView.Adapter<HistoricoVendas
             textTotal = itemView.findViewById(R.id.textTotal);
             textData = itemView.findViewById(R.id.textData);
             textHora = itemView.findViewById(R.id.textHora);
+            textIdNomeAluguel = itemView.findViewById(R.id.textIdNomeAluguel);
             buttonDetalhes = itemView.findViewById(R.id.buttonDetalhes);
         }
     }

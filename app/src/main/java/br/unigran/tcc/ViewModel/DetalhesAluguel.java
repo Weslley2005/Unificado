@@ -1,5 +1,6 @@
 package br.unigran.tcc.ViewModel;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
@@ -361,6 +362,9 @@ public class DetalhesAluguel extends AppCompatActivity {
                                                                 .addOnSuccessListener(aVoid2 -> {
                                                                     Log.d("DetalhesAluguel", "Campos adicionais salvos com sucesso!");
                                                                     deletarColecaoAluguelFinalizadas(aluguelId);
+                                                                    ComandaAlug();
+                                                                    CarrinhoAlug();
+                                                                    finish();
                                                                 })
                                                                 .addOnFailureListener(e -> Log.e("DetalhesAluguel", "Erro ao salvar campos adicionais", e));
                                                     })
@@ -378,5 +382,14 @@ public class DetalhesAluguel extends AppCompatActivity {
                         Log.e("DetalhesAluguel", "Erro ao carregar documento AluguelFinalizadas", taskAluguel.getException());
                     }
                 });
+    }
+
+    public void CarrinhoAlug() {
+        Intent intent = new Intent(this, CarrinhoAluguel.class);
+        startActivity(intent);
+    }
+    public void ComandaAlug() {
+        Intent intent = new Intent(this, FinalizarAluguel.class);
+        startActivity(intent);
     }
 }

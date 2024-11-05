@@ -15,6 +15,7 @@
         android:gravity="center"
         android:text="Cadastro de Produto de Produção Própria"
         android:textSize="26sp"
+        android:background="@drawable/borda_recycleview"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -102,6 +103,7 @@
         android:layout_marginTop="7dp"
         android:layout_marginBottom="5dp"
         android:text="Nome Produto"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/idNomeProdutoPP"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4"
@@ -115,6 +117,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"
         android:text="Preço de Venda"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/idPrecoVendaPP"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/idNomeProdutoPP" />
@@ -127,6 +130,7 @@
         android:layout_marginTop="11dp"
         android:layout_marginBottom="5dp"
         android:text="Tipo Produto"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/idTipoProdutoPP"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/idPrecoVendaPP" />

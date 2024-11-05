@@ -15,6 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Itens Vendidos"
+            android:background="@drawable/borda_recycleview"
             android:textAlignment="center"
             android:textSize="24sp"
             android:textStyle="bold" />

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
@@ -59,7 +60,29 @@ public class CarrinhoVendas extends AppCompatActivity {
         recyclerViewCarrinho.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewCarrinho.setAdapter(carrinhoAdapter);
 
-        carregarCarrinho();
+        FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
+        if (usuarioAtual != null) {
+            String userId = usuarioAtual.getUid();
+            FirebaseFirestore.getInstance().collection("Carrinho").document(userId)
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            String nomeAluguel = documentSnapshot.getString("idNomenAluguel");
+
+                            if (nomeAluguel == null) {
+                                carregarCarrinho();
+                            } else {
+                                carregarCarrinhoEditar();
+                            }
+                        } else {
+                            Log.e("CarrinhoActivity", "Documento não encontrado.");
+                            carregarCarrinho();
+                        }
+                    })
+                    .addOnFailureListener(e -> Log.e("CarrinhoActivity", "Erro ao carregar documento", e));
+        } else {
+            Toast.makeText(CarrinhoVendas.this, "Você precisa estar logado para visualizar o carrinho.", Toast.LENGTH_SHORT).show();
+        }
 
         buttonFinalizar.setOnClickListener(v -> finalizarCompra());
 
@@ -134,6 +157,78 @@ public class CarrinhoVendas extends AppCompatActivity {
         }
     }
 
+    private void carregarCarrinhoEditar() {
+        FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
+        if (usuarioAtual != null) {
+            String userId = usuarioAtual.getUid();
+
+            FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
+            firestore.collection("Carrinho").document(userId)
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            String nomeAluguel = documentSnapshot.getString("idNomenAluguel");
+
+
+                            EditText editNomeAluguel = findViewById(R.id.idNomeAluguel);
+
+
+                            editNomeAluguel.setText(nomeAluguel);
+                        } else {
+                            Log.e("CarrinhoActivity", "Documento não encontrado para carregar nome e telefone.");
+                        }
+                    })
+                    .addOnFailureListener(e -> Log.e("CarrinhoActivity", "Erro ao carregar nome e telefone", e));
+
+            FirebaseFirestore.getInstance().collection("Carrinho").document(userId)
+                    .collection("Itens")
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            listaCarrinho.clear();
+                            subtotal = 0.0;
+                            for (QueryDocumentSnapshot documento : task.getResult()) {
+                                Map<String, Object> item = documento.getData();
+                                Produtos produto = new Produtos();
+                                produto.setNome((String) item.get("nome"));
+                                produto.setId(documento.getId());
+
+                                Object precoUnitarioObj = item.get("precoUnitario");
+                                if (precoUnitarioObj != null) {
+                                    produto.setPrecoVenda(((Double) precoUnitarioObj).floatValue());
+                                } else {
+                                    produto.setPrecoVenda(0f);
+                                }
+
+                                Object quantidadeObj = item.get("quantidade");
+                                if (quantidadeObj != null) {
+                                    produto.setQtdProduto(((Long) quantidadeObj).intValue());
+                                } else {
+                                    produto.setQtdProduto(0);
+                                }
+
+                                Object precoCompraObj = item.get("precoCompra");
+                                if (precoCompraObj != null) {
+                                    produto.setPrecoCompra(((Double) precoCompraObj).floatValue());
+                                } else {
+                                    produto.setPrecoCompra(0f);
+                                }
+
+                                listaCarrinho.add(produto);
+                                subtotal += produto.getPrecoVenda() * produto.getQtdProduto();
+                            }
+                            carrinhoAdapter.notifyDataSetChanged();
+                            atualizarSubtotal();
+                        } else {
+                            Log.e("CarrinhoActivity", "Erro ao carregar carrinho", task.getException());
+                        }
+                    });
+        } else {
+            Toast.makeText(CarrinhoVendas.this, "Você precisa estar logado para visualizar o carrinho.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void atualizarSubtotal() {
         textSubtotal.setText(String.format("Subtotal: R$%.2f", subtotal));
 
@@ -154,6 +249,28 @@ public class CarrinhoVendas extends AppCompatActivity {
 
 
     private void finalizarCompra() {
+        EditText editNomeAluguel = findViewById(R.id.idNomeAluguel);
+        TextView erroNomeAluguel = findViewById(R.id.erroNomeAluguel);
+
+        String nomeAluguel = editNomeAluguel.getText().toString().trim();
+
+
+        boolean camposVazios = false;
+
+        if (nomeAluguel.isEmpty()) {
+            editNomeAluguel.setBackgroundResource(R.drawable.borda_vermelha);
+            erroNomeAluguel.setText("Campo obrigatório!");
+            erroNomeAluguel.setVisibility(View.VISIBLE);
+            camposVazios = true;
+        } else {
+            editNomeAluguel.setBackgroundResource(0);
+            erroNomeAluguel.setVisibility(View.GONE);
+        }
+
+        if (camposVazios) {
+            return;
+        }
+
         String descontoStr = editDesconto.getText().toString();
         double desconto = 0.0;
 
@@ -186,6 +303,7 @@ public class CarrinhoVendas extends AppCompatActivity {
             compra.put("precoCompra", total); // Incluindo precoCompra
             compra.put("data", dataFormatada);
             compra.put("hora", horaFormatada);
+            compra.put("NomenAluguel", nomeAluguel);
 
             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
             CollectionReference comprasRef = firestore.collection("Compras");
@@ -279,6 +397,20 @@ public class CarrinhoVendas extends AppCompatActivity {
                     } else {
                         Log.e("CarrinhoActivity", "Erro ao limpar carrinho", task.getException());
                     }
+                });
+
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore.collection("Carrinho").document(userId)
+                .delete()  // Directly delete the document
+                .addOnSuccessListener(aVoid -> {
+                    listaCarrinho.clear(); // Clear the local list
+                    carrinhoAdapter.notifyDataSetChanged(); // Notify adapter to refresh the view
+                    subtotal = 0.0; // Reset the subtotal
+                    atualizarSubtotal(); // Update the displayed subtotal
+                    Log.i("CarrinhoActivity", "Carrinho limpo com sucesso");
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("CarrinhoActivity", "Erro ao limpar carrinho", e);
                 });
     }
 

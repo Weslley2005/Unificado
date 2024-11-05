@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/blue_light"
     tools:context=".ViewModel.ACPPVAlimentos">
 
 
@@ -78,6 +79,7 @@
         android:layout_marginTop="36dp"
         android:text="Adicionar Produto PP ao Carrinho"
         android:textSize="24sp"
+        android:background="@drawable/borda_recycleview"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

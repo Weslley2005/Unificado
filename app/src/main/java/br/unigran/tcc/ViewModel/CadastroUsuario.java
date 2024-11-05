@@ -39,11 +39,11 @@ public class CadastroUsuario extends AppCompatActivity {
     public EditText cidade;
     public EditText bairro;
     public EditText rua;
-    private EditText numero;
-    private EditText email;
-    private EditText senha;
+    public EditText numero;
+    public EditText email;
+    public EditText senha;
     private TextView senhaError;
-    private EditText confirmarSenha;
+    public EditText confirmarSenha;
     private Button cadastrar;
     private TextView cpfError;
     private TextView confSenhaError;
@@ -81,6 +81,47 @@ public class CadastroUsuario extends AppCompatActivity {
         window.setStatusBarColor(getResources().getColor(android.R.color.black));
 
         window.setNavigationBarColor(getResources().getColor(android.R.color.black));
+
+
+        telefone.addTextChangedListener(new TextWatcher() {
+            private boolean isFormatting;
+            private String oldText = "";
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                oldText = s.toString();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (isFormatting) return;
+
+                isFormatting = true;
+
+                String digits = s.toString().replaceAll("\\D", "");
+                StringBuilder formatted = new StringBuilder();
+                if (digits.length() >= 2) {
+                    formatted.append("(").append(digits.substring(0, 2)).append(") ");
+                    if (digits.length() >= 7) {
+                        formatted.append(digits.substring(2, 7)).append("-").append(digits.substring(7, Math.min(11, digits.length())));
+                    } else if (digits.length() > 2) {
+                        formatted.append(digits.substring(2));
+                    }
+                } else if (digits.length() > 0) {
+                    formatted.append("(").append(digits);
+                }
+
+                telefone.setText(formatted.toString());
+                telefone.setSelection(formatted.length());
+
+                isFormatting = false;
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // No action needed
+            }
+        });
 
         cadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -204,7 +245,7 @@ public class CadastroUsuario extends AppCompatActivity {
     }
 
 
-    private boolean camposVazios() {
+    public boolean camposVazios() {
         return nome.getText().toString().isEmpty() || cpf.getText().toString().isEmpty() || estado.getText().toString().isEmpty() || telefone.getText().toString().isEmpty() || cidade.getText().toString().isEmpty() || bairro.getText().toString().isEmpty() || rua.getText().toString().isEmpty() || numero.getText().toString().isEmpty() || email.getText().toString().isEmpty() || senha.getText().toString().isEmpty() || confirmarSenha.getText().toString().isEmpty();
     }
 

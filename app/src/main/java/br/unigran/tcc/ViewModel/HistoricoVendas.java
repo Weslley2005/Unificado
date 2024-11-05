@@ -1,15 +1,16 @@
 package br.unigran.tcc.ViewModel;
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Window;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,25 +26,29 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import br.unigran.tcc.Model.FinalizarVendas;
+import br.unigran.tcc.Model.FinalizaVendas;
 import br.unigran.tcc.R;
 
 public class HistoricoVendas extends AppCompatActivity {
 
     private RecyclerView recyclerViewHistoricoVendas;
     private HistoricoVendasAdapter historicoVendasAdapter;
-    private List<FinalizarVendas> listaVendas;
+    private List<FinalizaVendas> listaVendas;
     private TextView textViewData;
     private ImageView imageViewCalendario;
+    private List<FinalizaVendas> listaItensVendasFiltrados;
 
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_historico_vendas);
 
+        setSupportActionBar(findViewById(R.id.toolbar));
+
+        SearchView searchView = findViewById(R.id.searchView);
         recyclerViewHistoricoVendas = findViewById(R.id.recycleViewHistoricoVendas);
         listaVendas = new ArrayList<>();
+        listaItensVendasFiltrados = new ArrayList<>();
         historicoVendasAdapter = new HistoricoVendasAdapter(listaVendas, this);
 
         recyclerViewHistoricoVendas.setLayoutManager(new LinearLayoutManager(this));
@@ -53,20 +58,59 @@ public class HistoricoVendas extends AppCompatActivity {
         imageViewCalendario = findViewById(R.id.imageViewCalendario);
 
         imageViewCalendario.setOnClickListener(v -> showDatePickerDialog());
-
         textViewData.setOnClickListener(v -> showDatePickerDialog());
 
         carregarVendas();
 
-        Window window = getWindow();
-        window.setStatusBarColor(getResources().getColor(android.R.color.black));
+        // Set colors for status bar and navigation bar
+        getWindow().setStatusBarColor(getResources().getColor(android.R.color.black));
+        getWindow().setNavigationBarColor(getResources().getColor(android.R.color.black));
 
-        window.setNavigationBarColor(getResources().getColor(android.R.color.black));
+        // Customize SearchView text colors
+        customizeSearchView(searchView);
+    }
 
+    private void customizeSearchView(SearchView searchView) {
+        int textColor = Color.WHITE;
+        int hintColor = Color.WHITE;
+
+        EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+        if (searchEditText != null) {
+            searchEditText.setTextColor(textColor);
+            searchEditText.setHintTextColor(hintColor);
+        }
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filtrarItens(newText);
+                return true;
+            }
+        });
+    }
+
+    private void filtrarItens(String texto) {
+        listaVendas.clear();
+        if (texto.isEmpty()) {
+            listaVendas.addAll(listaItensVendasFiltrados);
+        } else {
+            String filtro = texto.toLowerCase();
+            for (FinalizaVendas item : listaItensVendasFiltrados) {
+                if (item.getNomenAluguel().toLowerCase().contains(filtro)) {
+                    listaVendas.add(item);
+                }
+            }
+        }
+        historicoVendasAdapter.notifyDataSetChanged();
     }
 
     private void showDatePickerDialog() {
-        final Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -87,10 +131,8 @@ public class HistoricoVendas extends AppCompatActivity {
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        Date dataFiltro;
-
         try {
-            dataFiltro = sdf.parse(dataStr);
+            Date dataFiltro = sdf.parse(dataStr);
             carregarVendasPorData(dataFiltro);
         } catch (ParseException e) {
             Toast.makeText(this, "Formato de data inválido!", Toast.LENGTH_SHORT).show();
@@ -109,7 +151,7 @@ public class HistoricoVendas extends AppCompatActivity {
                             listaVendas.clear();
                             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                             for (QueryDocumentSnapshot documento : task.getResult()) {
-                                FinalizarVendas vendas = documento.toObject(FinalizarVendas.class);
+                                FinalizaVendas vendas = documento.toObject(FinalizaVendas.class);
                                 vendas.setId(documento.getId());
 
                                 try {
@@ -131,8 +173,6 @@ public class HistoricoVendas extends AppCompatActivity {
         }
     }
 
-
-
     private void carregarVendas() {
         FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
         if (usuarioAtual != null) {
@@ -144,10 +184,11 @@ public class HistoricoVendas extends AppCompatActivity {
                         if (task.isSuccessful() && task.getResult() != null) {
                             listaVendas.clear();
                             for (QueryDocumentSnapshot documento : task.getResult()) {
-                                FinalizarVendas vendas = documento.toObject(FinalizarVendas.class);
+                                FinalizaVendas vendas = documento.toObject(FinalizaVendas.class);
                                 vendas.setId(documento.getId());
                                 listaVendas.add(vendas);
                             }
+                            listaItensVendasFiltrados.addAll(listaVendas); // Keep a copy for filtering
                             historicoVendasAdapter.notifyDataSetChanged();
                         } else {
                             Log.e("HistoricoVendas", "Erro ao carregar vendas", task.getException());

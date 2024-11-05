@@ -4,8 +4,9 @@ public class ItemVendas {
     private String id;
     private String nome;
     private double precoTotal;
+    private double precoCompra;
     private int quantidade;
-    private double precoUnitaria;
+    private double precoUnitario;
 
     public String getId() {
         return id;
@@ -39,11 +40,19 @@ public class ItemVendas {
         this.quantidade = quantidade;
     }
 
-    public double getPrecoUnitaria() {
-        return precoUnitaria;
+    public double getPrecoCompra() {
+        return precoCompra;
     }
 
-    public void setPrecoUnitaria(double precoUnitaria) {
-        this.precoUnitaria = precoUnitaria;
+    public void setPrecoCompra(double precoCompra) {
+        this.precoCompra = precoCompra;
+    }
+
+    public double getPrecoUnitario() {
+        return precoUnitario;
+    }
+
+    public void setPrecoUnitario(double precoUnitario) {
+        this.precoUnitario = precoUnitario;
     }
 }

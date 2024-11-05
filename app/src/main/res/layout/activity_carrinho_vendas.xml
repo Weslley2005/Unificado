@@ -13,6 +13,16 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <TextView
+            android:id="@+id/textView52"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Carrinho Vendas"
+            android:background="@drawable/borda_recycleview"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewCarrinhoAluguel"
             android:layout_width="match_parent"
@@ -46,11 +56,33 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
+        <TextView
+            android:id="@+id/textViewNome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nome"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/idNomeAluguel"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/borda_recycleview"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/erroNomeAluguel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#FF0000"
+            android:visibility="gone"
+            android:layout_marginTop="8dp" />
+
         <Button
             android:id="@+id/buttonFinalizar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Finalizar Compra"
+            android:text="Adicionar na Comanda"
             android:backgroundTint="@color/Button"
             android:layout_marginTop="16dp"
             android:textColor="@android:color/white" />

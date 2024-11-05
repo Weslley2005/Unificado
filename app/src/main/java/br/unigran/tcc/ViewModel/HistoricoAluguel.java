@@ -2,14 +2,17 @@ package br.unigran.tcc.ViewModel;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,24 +28,29 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import br.unigran.tcc.Model.FinalizarAlugueis;
+import br.unigran.tcc.Model.FinalizaAlugueis;
 import br.unigran.tcc.R;
 
-public class HistiricoAluguel extends AppCompatActivity {
+public class HistoricoAluguel extends AppCompatActivity {
     private RecyclerView recyclerViewHistoricoAlugueis;
     private HistoricoAluguelAdapter aluguelAdapter;
-    private List<FinalizarAlugueis> listaAlugueis;
+    private List<FinalizaAlugueis> listaAlugueis;
     private TextView textViewData;
     private ImageView imageViewCalendario;
+    private List<FinalizaAlugueis> listaItensAlugueisFiltrados;
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_histirico_aluguel);
+        setContentView(R.layout.activity_historico_aluguel);
 
+        setSupportActionBar(findViewById(R.id.toolbar));
+
+        SearchView searchView = findViewById(R.id.searchView);
         recyclerViewHistoricoAlugueis = findViewById(R.id.recycleViewHistoricoAlugueis);
         listaAlugueis = new ArrayList<>();
+        listaItensAlugueisFiltrados = new ArrayList<>();
         aluguelAdapter = new HistoricoAluguelAdapter(listaAlugueis, this);
 
         recyclerViewHistoricoAlugueis.setLayoutManager(new LinearLayoutManager(this));
@@ -52,7 +60,6 @@ public class HistiricoAluguel extends AppCompatActivity {
         imageViewCalendario = findViewById(R.id.imageViewCalendario);
 
         imageViewCalendario.setOnClickListener(v -> showDatePickerDialog());
-
         textViewData.setOnClickListener(v -> showDatePickerDialog());
 
         carregarAlugueis();
@@ -60,6 +67,41 @@ public class HistiricoAluguel extends AppCompatActivity {
         Window window = getWindow();
         window.setStatusBarColor(getResources().getColor(android.R.color.black));
         window.setNavigationBarColor(getResources().getColor(android.R.color.black));
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filtrarItens(newText);
+                return true;
+            }
+        });
+
+        int textColor = Color.WHITE;
+        int hintColor = Color.WHITE;
+
+        EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+        searchEditText.setTextColor(textColor);
+        searchEditText.setHintTextColor(hintColor);
+    }
+
+    private void filtrarItens(String texto) {
+        listaAlugueis.clear();
+        if (texto.isEmpty()) {
+            listaAlugueis.addAll(listaItensAlugueisFiltrados);
+        } else {
+            String filtro = texto.toLowerCase();
+            for (FinalizaAlugueis item : listaItensAlugueisFiltrados) {
+                if (item.getIdNomenAluguel().toLowerCase().contains(filtro)) {
+                    listaAlugueis.add(item);
+                }
+            }
+        }
+        aluguelAdapter.notifyDataSetChanged();
     }
 
     private void showDatePickerDialog() {
@@ -106,7 +148,7 @@ public class HistiricoAluguel extends AppCompatActivity {
                             listaAlugueis.clear();
                             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                             for (QueryDocumentSnapshot documento : task.getResult()) {
-                                FinalizarAlugueis aluguel = documento.toObject(FinalizarAlugueis.class);
+                                FinalizaAlugueis aluguel = documento.toObject(FinalizaAlugueis.class);
                                 aluguel.setId(documento.getId());
 
                                 try {
@@ -127,6 +169,7 @@ public class HistiricoAluguel extends AppCompatActivity {
             Toast.makeText(this, "Você precisa estar logado para visualizar suas vendas.", Toast.LENGTH_SHORT).show();
         }
     }
+
     private void carregarAlugueis() {
         FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
         if (usuarioAtual != null) {
@@ -138,10 +181,11 @@ public class HistiricoAluguel extends AppCompatActivity {
                         if (task.isSuccessful() && task.getResult() != null) {
                             listaAlugueis.clear();
                             for (QueryDocumentSnapshot documento : task.getResult()) {
-                                FinalizarAlugueis aluguel = documento.toObject(FinalizarAlugueis.class);
+                                FinalizaAlugueis aluguel = documento.toObject(FinalizaAlugueis.class);
                                 aluguel.setId(documento.getId());
                                 listaAlugueis.add(aluguel);
                             }
+                            listaItensAlugueisFiltrados.addAll(listaAlugueis); // Adiciona todos os aluguéis filtrados
                             aluguelAdapter.notifyDataSetChanged();
                         } else {
                             Log.e("FinalizarAluguelActivity", "Erro ao carregar aluguéis", task.getException());

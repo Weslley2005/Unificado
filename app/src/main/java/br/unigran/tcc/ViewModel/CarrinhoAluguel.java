@@ -106,6 +106,47 @@ public class CarrinhoAluguel extends AppCompatActivity {
         Window janela = getWindow();
         janela.setStatusBarColor(getResources().getColor(android.R.color.black));
         janela.setNavigationBarColor(getResources().getColor(android.R.color.black));
+
+        EditText editTelefoneAluguel = findViewById(R.id.idTelefoneAluguel);
+        editTelefoneAluguel.addTextChangedListener(new TextWatcher() {
+            private boolean isFormatting;
+            private String oldText = "";
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                oldText = s.toString();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (isFormatting) return;
+
+                isFormatting = true;
+
+                String digits = s.toString().replaceAll("\\D", "");
+                StringBuilder formatted = new StringBuilder();
+                if (digits.length() >= 2) {
+                    formatted.append("(").append(digits.substring(0, 2)).append(") ");
+                    if (digits.length() >= 7) {
+                        formatted.append(digits.substring(2, 7)).append("-").append(digits.substring(7, Math.min(11, digits.length())));
+                    } else if (digits.length() > 2) {
+                        formatted.append(digits.substring(2));
+                    }
+                } else if (digits.length() > 0) {
+                    formatted.append("(").append(digits);
+                }
+
+                editTelefoneAluguel.setText(formatted.toString());
+                editTelefoneAluguel.setSelection(formatted.length());
+
+                isFormatting = false;
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // No action needed
+            }
+        });
     }
 
     private void carregarCarrinho() {

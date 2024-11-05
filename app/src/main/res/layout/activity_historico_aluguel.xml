@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blue_light"
-    tools:context=".ViewModel.ListarProdutos">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/blue_light">
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="0dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -20,39 +21,45 @@
 
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/searchView"
+                style="@style/CustomSearchView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:queryHint="Buscar produtos"
-                style="@style/CustomSearchView" />
+                app:queryHint="Buscar Cliente" />
         </androidx.appcompat.widget.Toolbar>
 
         <TextView
-            android:id="@+id/textView9"
+            android:id="@+id/textView45"
             android:layout_width="match_parent"
-            android:layout_height="38dp"
-            android:layout_marginTop="16dp"
-            android:text="Vendas"
+            android:layout_height="wrap_content"
+            android:text="Histórico Alugueis"
             android:background="@drawable/borda_recycleview"
             android:textAlignment="center"
             android:textSize="24sp"
             android:textStyle="bold" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewAluguel"
+        <TextView
+            android:id="@+id/textViewData"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/borda_recycleview"
-            android:textAlignment="center" />
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="Selecione a data (dd/MM/yyyy)" />
+
+        <ImageView
+            android:id="@+id/imageViewCalendario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:contentDescription="Abrir calendário"
+            android:padding="8dp" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewPPVAlimentos"
+            android:id="@+id/recycleViewHistoricoAlugueis"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="17dp"
             android:background="@drawable/borda_recycleview"
-            android:textAlignment="center" />
-
+            tools:ignore="MissingConstraints" />
     </LinearLayout>
 
-</androidx.core.widget.NestedScrollView>
+</ScrollView>

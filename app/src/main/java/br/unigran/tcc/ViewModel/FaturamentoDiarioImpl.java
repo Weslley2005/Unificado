@@ -22,7 +22,7 @@ public class FaturamentoDiarioImpl {
 
     public FaturamentoDiarioImpl() {
         db = FirebaseFirestore.getInstance();
-        comprasRef = db.collection("Compras");
+        comprasRef = db.collection("VendasFinaliz");
     }
 
     public void calcularFaturamentoDiario(String data, final FaturamentoListener listener) {

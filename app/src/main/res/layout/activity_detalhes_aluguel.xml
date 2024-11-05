@@ -14,6 +14,7 @@
             android:id="@+id/textView42"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/borda_recycleview"
             android:text="Itens Alugados"
             android:textAlignment="center"
             android:textSize="24sp"
@@ -21,9 +22,9 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycleViewItensAlugados"
-            android:background="@drawable/borda_recycleview"
             android:layout_width="match_parent"
-            android:layout_height="441dp" />
+            android:layout_height="441dp"
+            android:background="@drawable/borda_recycleview" />
 
         <ImageButton
             android:id="@+id/idDeletarAluguel"

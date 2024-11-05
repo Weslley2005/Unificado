@@ -1,10 +1,11 @@
 package br.unigran.tcc.Model;
 
-public class FinalizarVendas {
+public class FinalizaVendas {
     private String id;
     private double total;
     private String data;
     private String hora;
+    private String NomenAluguel;
     private double desconto;
     private double subTotal;
     private String usuarioId;
@@ -41,7 +42,13 @@ public class FinalizarVendas {
         this.hora = hora;
     }
 
+    public String getNomenAluguel() {
+        return NomenAluguel;
+    }
 
+    public void setNomenAluguel(String nomenAluguel) {
+        NomenAluguel = nomenAluguel;
+    }
 
     public double getDesconto() {
         return desconto;

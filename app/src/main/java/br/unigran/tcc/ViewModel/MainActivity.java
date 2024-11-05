@@ -126,12 +126,12 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, Aluguel.class);
         startActivity(intent);
     }
-    public void finalizarAluguel(View view) {
-        Intent intent = new Intent(this, FinalizarAluguel.class);
+    public void comandas(View view) {
+        Intent intent = new Intent(this, TipoComandas.class);
         startActivity(intent);
     }
     public void historicoAluguel(MenuItem item) {
-        Intent intent = new Intent(this, HistiricoAluguel.class);
+        Intent intent = new Intent(this, HistoricoAluguel.class);
         startActivity(intent);
     }
     public void historicoVendas(MenuItem item) {
