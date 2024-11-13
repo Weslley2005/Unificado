@@ -110,7 +110,7 @@ public class FinalizarVendas extends AppCompatActivity {
         } else {
             String filtro = texto.toLowerCase(); // Converte o texto para minúsculas para comparação
             for (FinalizaVendas item : listaItensVendasFiltrados) {
-                if (item.getNomenAluguel().toLowerCase().contains(filtro)) { // Filtra os itens pelo nome
+                if (item.getidNomenAluguel().toLowerCase().contains(filtro)) { // Filtra os itens pelo nome
                     listaVendas.add(item); // Adiciona o item filtrado à lista de vendas
                 }
             }

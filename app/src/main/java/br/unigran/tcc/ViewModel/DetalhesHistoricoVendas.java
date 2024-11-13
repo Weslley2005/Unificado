@@ -69,7 +69,7 @@ public class DetalhesHistoricoVendas extends AppCompatActivity {
     }
 
     private void carregarItensVendas(String vendaId) {
-        CollectionReference itensRef = firestore.collection("Compras")
+        CollectionReference itensRef = firestore.collection("VendasFinaliz")
                 .document(vendaId)
                 .collection("Itens");
 

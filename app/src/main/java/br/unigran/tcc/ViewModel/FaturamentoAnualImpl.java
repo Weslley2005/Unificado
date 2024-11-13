@@ -163,6 +163,7 @@ public class FaturamentoAnualImpl {
         public double getTotalPrecoVenda() {
             return totalPrecoVenda;
         }
+
     }
 
     public static class ItemFaturamento {

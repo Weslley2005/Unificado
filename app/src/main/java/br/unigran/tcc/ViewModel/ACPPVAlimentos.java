@@ -24,13 +24,13 @@ import br.unigran.tcc.R;
 
 public class ACPPVAlimentos extends AppCompatActivity {
 
-    private TextView nomeProduto;
-    private TextView precoVenda;
-    private EditText qtdParaVenda;
-    private TextView precoTotal;
+    public TextView nomeProduto;
+    public TextView precoVenda;
+    public EditText qtdParaVenda;
+    public TextView precoTotal;
     private Button btnAdicionarCarrinho;
 
-    private double precoUnitario;
+    public double precoUnitario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +71,7 @@ public class ACPPVAlimentos extends AppCompatActivity {
         btnAdicionarCarrinho.setOnClickListener(v -> adicionarAoCarrinho());
     }
 
-    private void atualizarPrecoTotal() {
+    public void atualizarPrecoTotal() {
         String textoQtd = qtdParaVenda.getText().toString();
         int quantidade = 0;
 

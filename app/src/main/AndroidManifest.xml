@@ -13,45 +13,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TCC"
-        tools:targetApi="31">
-        <activity
-            android:name=".ItemItemVendas"
-            android:exported="false" />
+        tools:targetApi="31"
+        >
+
         <activity
             android:name=".ViewModel.DetalhesVendas"
             android:exported="false" />
         <activity
             android:name=".ViewModel.TipoComandas"
             android:exported="false" />
-        <activity
-            android:name=".ItemFinalizarVendas"
-            android:exported="false" />
+
         <activity
             android:name=".ViewModel.FinalizarVendas"
             android:exported="false" />
-        <activity
-            android:name=".ItemFaturamentoDiarioAluguel"
-            android:exported="false" />
-        <activity
-            android:name=".ItemFaturamentoMensalAluguel"
-            android:exported="false" />
-        <activity
-            android:name=".ItemFaturamentoAnualAluguel"
-            android:exported="false" />
-        <activity
-            android:name=".ItemFaturamentoAnual"
-            android:exported="false" />
+
+
         <activity
             android:name=".ViewModel.FaturamentoAnual"
             android:exported="false" />
         <activity
-            android:name=".ItemFaturamentoMensal"
-            android:exported="false" />
-        <activity
             android:name=".ViewModel.FaturamentoMensal"
-            android:exported="false" />
-        <activity
-            android:name=".ItemFaturamentoDiario"
             android:exported="false" />
         <activity
             android:name=".ViewModel.FaturamentoDiario"
@@ -60,31 +41,16 @@
             android:name=".ViewModel.DetalhesHistoricoVendas"
             android:exported="false" />
         <activity
-            android:name=".ItemHistoricoVendas"
-            android:exported="false" />
-        <activity
             android:name=".ViewModel.HistoricoVendas"
-            android:exported="false" />
-        <activity
-            android:name=".ItemDetalhuesHistoricoAluguel"
             android:exported="false" />
         <activity
             android:name=".ViewModel.DetalhesHistoricoAluguel"
             android:exported="false" />
         <activity
-            android:name=".ItemHistoricoAluguel"
-            android:exported="false" />
-        <activity
             android:name=".ViewModel.HistoricoAluguel"
             android:exported="false" />
         <activity
-            android:name=".ViewModel.ItemItemAluguel"
-            android:exported="false" />
-        <activity
             android:name=".ViewModel.DetalhesAluguel"
-            android:exported="false" />
-        <activity
-            android:name=".itemFinalizarAluguel"
             android:exported="false" />
         <activity
             android:name=".ViewModel.FinalizarAluguel"

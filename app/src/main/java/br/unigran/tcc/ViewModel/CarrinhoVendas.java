@@ -232,7 +232,7 @@ public class CarrinhoVendas extends AppCompatActivity {
     private void atualizarSubtotal() {
         textSubtotal.setText(String.format("Subtotal: R$%.2f", subtotal));
 
-        String descontoStr = editDesconto.getText().toString();
+        String descontoStr = editDesconto.getText().toString().replace(",", ".");
         double desconto = 0.0;
 
         if (!descontoStr.isEmpty()) {
@@ -271,7 +271,7 @@ public class CarrinhoVendas extends AppCompatActivity {
             return;
         }
 
-        String descontoStr = editDesconto.getText().toString();
+        String descontoStr = editDesconto.getText().toString().replace(",", ".");
         double desconto = 0.0;
 
         if (!descontoStr.isEmpty()) {
@@ -303,7 +303,7 @@ public class CarrinhoVendas extends AppCompatActivity {
             compra.put("precoCompra", total); // Incluindo precoCompra
             compra.put("data", dataFormatada);
             compra.put("hora", horaFormatada);
-            compra.put("NomenAluguel", nomeAluguel);
+            compra.put("idNomenAluguel", nomeAluguel);
 
             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
             CollectionReference comprasRef = firestore.collection("Compras");

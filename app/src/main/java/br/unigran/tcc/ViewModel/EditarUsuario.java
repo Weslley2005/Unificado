@@ -143,7 +143,7 @@ public class EditarUsuario extends AppCompatActivity {
                                                 "numero", numeroText)
                                         .addOnSuccessListener(aVoid -> {
                                             Toast.makeText(EditarUsuario.this, "Dados salvos com sucesso", Toast.LENGTH_SHORT).show();
-                                            voltar();
+                                            finish();
                                         })
                                         .addOnFailureListener(e -> {
                                             Log.e("EditarUsuario", "Erro ao salvar dados", e);

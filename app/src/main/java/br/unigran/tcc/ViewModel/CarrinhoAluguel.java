@@ -246,7 +246,7 @@ public class CarrinhoAluguel extends AppCompatActivity {
     private void atualizarSubtotal() {
         textSubtotal.setText(String.format("Subtotal: R$%.2f", subtotal));
 
-        String descontoStr = editDesconto.getText().toString();
+        String descontoStr = editDesconto.getText().toString().replace(",", "."); // Substitui a vírgula por ponto
         double desconto = 0.0;
 
         if (!descontoStr.isEmpty()) {
@@ -260,6 +260,7 @@ public class CarrinhoAluguel extends AppCompatActivity {
         double total = subtotal - desconto;
         textTotal.setText(String.format("Total: R$%.2f", total));
     }
+
 
 
     private void finalizarCompra() {
@@ -302,7 +303,7 @@ public class CarrinhoAluguel extends AppCompatActivity {
             return;
         }
 
-        String descontoStr = editDesconto.getText().toString();
+        String descontoStr = editDesconto.getText().toString().replace(",", "."); // Substitui a vírgula por ponto
         double desconto = 0.0;
 
         if (!descontoStr.isEmpty()) {
@@ -314,6 +315,7 @@ public class CarrinhoAluguel extends AppCompatActivity {
         }
 
         double total = subtotal - desconto;
+
 
         FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
         if (usuarioAtual != null) {

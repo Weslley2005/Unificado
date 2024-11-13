@@ -1,6 +1,7 @@
 package br.unigran.tcc.ViewModel;
 
 
+import android.app.Activity;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -16,7 +17,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FaturamentoDiarioAlugueisImpl {
+public class FaturamentoDiarioAlugueisImpl extends Activity {
     private FirebaseFirestore db;
     private CollectionReference comprasRef;
 

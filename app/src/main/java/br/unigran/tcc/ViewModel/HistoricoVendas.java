@@ -101,7 +101,7 @@ public class HistoricoVendas extends AppCompatActivity {
         } else {
             String filtro = texto.toLowerCase();
             for (FinalizaVendas item : listaItensVendasFiltrados) {
-                if (item.getNomenAluguel().toLowerCase().contains(filtro)) {
+                if (item.getidNomenAluguel().toLowerCase().contains(filtro)) {
                     listaVendas.add(item);
                 }
             }
@@ -143,7 +143,7 @@ public class HistoricoVendas extends AppCompatActivity {
         FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
         if (usuarioAtual != null) {
             String userId = usuarioAtual.getUid();
-            FirebaseFirestore.getInstance().collection("Compras")
+            FirebaseFirestore.getInstance().collection("VendasFinaliz")
                     .whereEqualTo("usuarioId", userId)
                     .get()
                     .addOnCompleteListener(task -> {
@@ -177,7 +177,7 @@ public class HistoricoVendas extends AppCompatActivity {
         FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
         if (usuarioAtual != null) {
             String userId = usuarioAtual.getUid();
-            FirebaseFirestore.getInstance().collection("Compras")
+            FirebaseFirestore.getInstance().collection("VendasFinaliz")
                     .whereEqualTo("usuarioId", userId)
                     .get()
                     .addOnCompleteListener(task -> {

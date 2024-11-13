@@ -97,19 +97,39 @@ public class ACPVAlimento extends AppCompatActivity {
             int quantidadeDesejada = Integer.parseInt(qtdParaVenda.getText().toString());
 
             if (itemId != null) {
-                FirebaseFirestore.getInstance().collection("Carrinho").document(userId)
-                        .collection("Itens").document(itemId)
-                        .update("quantidade", quantidadeDesejada,
-                                "precoTotal", calcularPrecoTotalC(quantidadeDesejada))
-                        .addOnSuccessListener(aVoid -> {
-                            Toast.makeText(ACPVAlimento.this, "Produto atualizado no carrinho", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(ACPVAlimento.this, CarrinhoVendas.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
-                            finish();
+                // Buscar o produto no Firestore para verificar o estoque disponível
+                FirebaseFirestore.getInstance().collection("Produtos")
+                        .whereEqualTo("nome", nome)
+                        .get()
+                        .addOnSuccessListener(queryDocumentSnapshots -> {
+                            if (!queryDocumentSnapshots.isEmpty()) {
+                                QueryDocumentSnapshot documento = (QueryDocumentSnapshot) queryDocumentSnapshots.getDocuments().get(0);
+                                Produtos produtosEstoque = documento.toObject(Produtos.class);
+                                int qtdDisponivel = produtosEstoque.getQtdProduto();
+
+                                if (quantidadeDesejada <= qtdDisponivel) {
+                                    // Atualizar a quantidade e o preço total no carrinho
+                                    FirebaseFirestore.getInstance().collection("Carrinho").document(userId)
+                                            .collection("Itens").document(itemId)
+                                            .update("quantidade", quantidadeDesejada,
+                                                    "precoTotal", calcularPrecoTotalC(quantidadeDesejada))
+                                            .addOnSuccessListener(aVoid -> {
+                                                Toast.makeText(ACPVAlimento.this, "Produto atualizado no carrinho", Toast.LENGTH_SHORT).show();
+                                                Intent intent = new Intent(ACPVAlimento.this, CarrinhoVendas.class);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                startActivity(intent);
+                                                finish();
+                                            })
+                                            .addOnFailureListener(e -> {
+                                                Toast.makeText(ACPVAlimento.this, "Erro ao atualizar produto no carrinho", Toast.LENGTH_SHORT).show();
+                                            });
+                                } else {
+                                    Toast.makeText(ACPVAlimento.this, "Estoque insuficiente para a quantidade desejada.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
                         })
                         .addOnFailureListener(e -> {
-                            Toast.makeText(ACPVAlimento.this, "Erro ao atualizar produto no carrinho", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ACPVAlimento.this, "Erro ao verificar estoque", Toast.LENGTH_SHORT).show();
                         });
             } else {
                 FirebaseFirestore.getInstance().collection("Produtos")
@@ -123,7 +143,7 @@ public class ACPVAlimento extends AppCompatActivity {
 
                                 if (quantidadeDesejada <= qtdDisponivel) {
                                     double precoTotalCalculado = precoUnitario * quantidadeDesejada;
-                                    double precoCompra = produtosEstoque.getPrecoCompra(); // Adicionando precoCompra
+                                    double precoCompra = produtosEstoque.getPrecoCompra();
 
                                     Map<String, Object> produto = new HashMap<>();
                                     produto.put("id", documento.getId());
@@ -131,7 +151,7 @@ public class ACPVAlimento extends AppCompatActivity {
                                     produto.put("precoUnitario", precoUnitario);
                                     produto.put("quantidade", quantidadeDesejada);
                                     produto.put("precoTotal", precoTotalCalculado);
-                                    produto.put("precoCompra", precoCompra); // Salvando precoCompra
+                                    produto.put("precoCompra", precoCompra);
 
                                     FirebaseFirestore.getInstance().collection("Carrinho").document(userId)
                                             .collection("Itens")
@@ -156,6 +176,7 @@ public class ACPVAlimento extends AppCompatActivity {
             Toast.makeText(ACPVAlimento.this, "Você precisa estar logado para adicionar itens ao carrinho.", Toast.LENGTH_SHORT).show();
         }
     }
+
 
 
     private void buscarDadosDoBanco() {

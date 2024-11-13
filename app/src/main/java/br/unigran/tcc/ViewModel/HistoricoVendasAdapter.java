@@ -40,7 +40,7 @@ public class HistoricoVendasAdapter extends RecyclerView.Adapter<HistoricoVendas
         holder.textTotal.setText(String.format("Total: R$%.2f", vendas.getTotal()));
         holder.textData.setText("Data: " + vendas.getData());
         holder.textHora.setText("Hora: " + vendas.getHora());
-        holder.textIdNomeAluguel.setText("Nome: " + vendas.getNomenAluguel());
+        holder.textIdNomeAluguel.setText("Nome: " + vendas.getidNomenAluguel());
 
         holder.buttonDetalhes.setOnClickListener(v -> {
             Intent intent = new Intent(context, DetalhesHistoricoVendas.class);

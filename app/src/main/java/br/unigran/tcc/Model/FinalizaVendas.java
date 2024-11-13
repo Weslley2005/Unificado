@@ -5,7 +5,7 @@ public class FinalizaVendas {
     private double total;
     private String data;
     private String hora;
-    private String NomenAluguel;
+    private String idNomenAluguel;
     private double desconto;
     private double subTotal;
     private String usuarioId;
@@ -42,12 +42,12 @@ public class FinalizaVendas {
         this.hora = hora;
     }
 
-    public String getNomenAluguel() {
-        return NomenAluguel;
+    public String getidNomenAluguel() {
+        return idNomenAluguel;
     }
 
-    public void setNomenAluguel(String nomenAluguel) {
-        NomenAluguel = nomenAluguel;
+    public void setidNomenAluguel(String idnomenAluguel) {
+        idNomenAluguel = idnomenAluguel;
     }
 
     public double getDesconto() {
